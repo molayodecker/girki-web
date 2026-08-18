@@ -7,6 +7,7 @@ const links = [
   { to: '/chefs', label: 'Chefs' },
   { to: '/', hash: 'experiences', label: 'Experiences' },
   { to: '/', hash: 'menus', label: 'Menus' },
+  { to: '/chef-dashboard', label: 'Chef portal' },
 ] as const
 
 export default function SiteHeader({ overlay = false }: { overlay?: boolean }) {
