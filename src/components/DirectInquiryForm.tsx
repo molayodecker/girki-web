@@ -1,6 +1,6 @@
 import { type FormEvent, useState } from 'react'
 import type { Chef } from '../data/marketplace'
-import { marketplaceRepository } from '../lib/marketplace/mockRepository'
+import { marketplaceRepository } from '../lib/marketplace.functions'
 
 const inputClass =
   'min-h-12 w-full rounded-2xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none transition-colors focus:border-ploy-accent-tertiary'
@@ -57,8 +57,8 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
         <p className="typography-eyebrow">Inquiry sent</p>
         <h2 className="display-title mt-4 text-3xl">{chef.name} has your request.</h2>
         <p className="mt-4 max-w-xl leading-relaxed text-ploy-text-secondary">
-          Your inquiry is now in the chef dashboard. Girki will keep the conversation tied to this
-          request when live messaging and Supabase are connected.
+          We emailed {chef.name} and sent a WhatsApp copy. They can quote from the dashboard or by
+          replying on WhatsApp with the amount and any notes.
         </p>
         <p className="mt-5 text-sm text-ploy-text-secondary">Reference: {confirmationId}</p>
       </div>

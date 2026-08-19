@@ -8,7 +8,7 @@ import {
   UtensilsCrossed,
 } from 'lucide-react'
 import { getChef } from '../data/marketplace'
-import { marketplaceRepository } from '../lib/marketplace/mockRepository'
+import { marketplaceRepository } from '../lib/marketplace.functions'
 import type {
   BookingStatus,
   ChefDashboardData,
@@ -21,12 +21,6 @@ function money(amount: number) {
     currency: 'GHS',
     maximumFractionDigits: 0,
   }).format(amount)
-}
-
-function suggestedProposal(request: ChefRequestRecord) {
-  if (request.budget.toLowerCase().includes('exclusive')) return 3200
-  if (request.budget.toLowerCase().includes('gourmet')) return 2200
-  return request.serviceType.toLowerCase().includes('weekly') ? 1400 : 1700
 }
 
 function statusLabel(status: string) {
@@ -45,12 +39,21 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
   }
 
   useEffect(() => {
-    void marketplaceRepository.listChefDashboard(chefId).then(setData)
+    void marketplaceRepository
+      .listChefDashboard(chefId)
+      .then(setData)
+      .catch((loadError: unknown) => {
+        setError(loadError instanceof Error ? loadError.message : 'Unable to load the chef dashboard.')
+      })
   }, [chefId])
 
   if (!chef) return null
   if (!data) {
-    return <div className="mx-auto max-w-7xl px-5 py-24 text-ploy-text-secondary">Loading chef dashboard…</div>
+    return (
+      <div className="mx-auto max-w-7xl px-5 py-24 text-ploy-text-secondary">
+        {error || 'Loading chef dashboard…'}
+      </div>
+    )
   }
 
   async function sendQuote(inquiryId: string) {
@@ -72,6 +75,11 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
   }
 
   async function sendProposal(request: ChefRequestRecord) {
+    const amount = Number.parseInt(quoteDrafts[`request:${request.id}`] ?? '', 10)
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setError('Enter a valid quote amount before sending.')
+      return
+    }
     setBusyId(request.id)
     setError('')
     try {
@@ -79,7 +87,7 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
         requestId: request.id,
         chefId,
         message: `I can create a tailored ${request.cuisine || 'private chef'} experience for this request.`,
-        proposedPrice: suggestedProposal(request),
+        proposedPrice: amount,
         currency: 'GHS',
         menuDescription: 'Custom menu after customer confirmation',
         includedServices: ['Menu design', 'Grocery sourcing', 'Cooking', 'Kitchen cleanup'],
@@ -114,11 +122,11 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
     <div className="mx-auto max-w-7xl px-5 py-12 lg:px-8 lg:py-16">
       <div className="flex flex-col gap-6 border-b border-ploy-border-primary pb-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="typography-eyebrow">Chef portal · Demo mode</p>
+          <p className="typography-eyebrow">Chef portal</p>
           <h1 className="display-title mt-4 text-4xl sm:text-5xl">Welcome back, {chef.name}.</h1>
           <p className="mt-4 max-w-2xl text-ploy-text-secondary">
-            Manage incoming inquiries, respond to open chef requests, move bookings through service,
-            and track earnings. Data is stored locally until Supabase is connected.
+            Quote from here, or reply on WhatsApp with the amount and any notes. Requests also
+            arrive by email. Quotes you send are saved live for the customer.
           </p>
         </div>
         <a href={`/chefs/${chef.id}`} className="btn btn-outline min-h-11 px-5">
@@ -158,6 +166,11 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
               <span className="text-sm text-ploy-text-secondary">{data.inquiries.length} total</span>
             </div>
             <div className="mt-7 space-y-4">
+              {data.inquiries.length === 0 ? (
+                <p className="rounded-[1.6rem] border border-dashed border-ploy-border-primary px-6 py-8 text-sm text-ploy-text-secondary">
+                  No inquiries yet. Direct requests from your profile will appear here.
+                </p>
+              ) : null}
               {data.inquiries.map((inquiry) => (
                 <article key={inquiry.id} className="rounded-[1.6rem] border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
@@ -214,6 +227,11 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
               <span className="text-sm text-ploy-text-secondary">Matched to your market</span>
             </div>
             <div className="mt-7 space-y-4">
+              {data.openRequests.length === 0 ? (
+                <p className="rounded-[1.6rem] border border-dashed border-ploy-border-primary px-6 py-8 text-sm text-ploy-text-secondary">
+                  No open chef requests right now.
+                </p>
+              ) : null}
               {data.openRequests.map((request) => {
                 const existingProposal = data.proposals.find((proposal) => proposal.requestId === request.id)
                 return (
@@ -237,19 +255,33 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
                     </div>
                     {existingProposal ? (
                       <p className="mt-6 flex items-center gap-2 text-sm">
-                        Proposal sent for {money(existingProposal.proposedPrice)}
+                        Quote sent: {money(existingProposal.proposedPrice)}
                         <ArrowRight size={14} aria-hidden="true" />
                         {statusLabel(existingProposal.status)}
                       </p>
                     ) : (
-                      <button
-                        type="button"
-                        className="btn btn-primary mt-6 min-h-11 px-5"
-                        disabled={busyId === request.id}
-                        onClick={() => void sendProposal(request)}
-                      >
-                        Send {money(suggestedProposal(request))} proposal
-                      </button>
+                      <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                        <input
+                          inputMode="numeric"
+                          value={quoteDrafts[`request:${request.id}`] ?? ''}
+                          onChange={(event) =>
+                            setQuoteDrafts((current) => ({
+                              ...current,
+                              [`request:${request.id}`]: event.target.value,
+                            }))
+                          }
+                          placeholder="Quote amount in GHS"
+                          className="min-h-11 flex-1 rounded-xl border border-ploy-border-primary bg-ploy-background-primary px-4 outline-none focus:border-ploy-accent-tertiary"
+                        />
+                        <button
+                          type="button"
+                          className="btn btn-primary min-h-11 px-5"
+                          disabled={busyId === request.id}
+                          onClick={() => void sendProposal(request)}
+                        >
+                          Send quote
+                        </button>
+                      </div>
                     )}
                   </article>
                 )
