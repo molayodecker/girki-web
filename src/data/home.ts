@@ -106,22 +106,22 @@ export const trustItems = [
   {
     title: 'Identity-minded profiles',
     copy: 'Girki is designed around chef identity, experience, and transparent profiles.',
-    icon: 'badge' as const,
+    icon: '/images/trust/identity.png',
   },
   {
     title: 'Protected payments',
     copy: 'A clear booking journey with local payment methods and transparent price breakdowns.',
-    icon: 'card' as const,
+    icon: '/images/trust/payments.png',
   },
   {
     title: 'Quality standards',
     copy: 'Food-safety documentation and chef verification are core to the planned onboarding flow.',
-    icon: 'shield' as const,
+    icon: '/images/trust/quality.png',
   },
   {
     title: 'Human support',
     copy: 'Support for customers and chefs before, during, and after each experience.',
-    icon: 'headphones' as const,
+    icon: '/images/trust/support.png',
   },
 ] as const
 
