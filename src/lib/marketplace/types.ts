@@ -1,5 +1,12 @@
 export type Currency = 'GHS' | 'NGN' | 'KES' | 'ZAR' | 'USD'
 
+export type ChefSession = {
+  chefId: string
+  slug: string
+  displayName: string
+  email: string
+}
+
 export type InquiryStatus =
   | 'new'
   | 'viewed'

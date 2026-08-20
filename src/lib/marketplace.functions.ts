@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import type { MarketplaceRepository } from './marketplace/repository'
 import type {
   BookingStatus,
-  NewChefProposal,
+  ChefRequestRecord,
   NewChefRequest,
   NewDirectInquiry,
 } from './marketplace/types'
@@ -15,6 +15,8 @@ const bookingStatuses: BookingStatus[] = [
   'cancelled',
   'refunded',
 ]
+
+export type ChefRequestWithAccess = ChefRequestRecord & { accessToken: string }
 
 function asRecord(data: unknown) {
   if (typeof data !== 'object' || data === null) {
@@ -55,9 +57,13 @@ export const createInquiryFn = createServerFn({ method: 'POST' })
       location: requiredString(input.location, 'Location'),
       budget: optionalString(input.budget),
       message: optionalString(input.message),
-      currency: input.currency === 'USD' || input.currency === 'NGN' || input.currency === 'KES' || input.currency === 'ZAR'
-        ? input.currency
-        : 'GHS',
+      currency:
+        input.currency === 'USD' ||
+        input.currency === 'NGN' ||
+        input.currency === 'KES' ||
+        input.currency === 'ZAR'
+          ? input.currency
+          : 'GHS',
     }
   })
   .handler(async ({ data }) => {
@@ -91,7 +97,7 @@ export const createRequestFn = createServerFn({ method: 'POST' })
       notes: optionalString(input.notes),
     }
   })
-  .handler(async ({ data }) => {
+  .handler(async ({ data }): Promise<ChefRequestWithAccess> => {
     const live = await import('./marketplace.server')
     const request = await live.createRequest(data)
     try {
@@ -104,14 +110,12 @@ export const createRequestFn = createServerFn({ method: 'POST' })
   })
 
 export const createProposalFn = createServerFn({ method: 'POST' })
-  .validator((data: unknown): NewChefProposal => {
+  .validator((data: unknown) => {
     const input = asRecord(data)
     return {
       requestId: requiredString(input.requestId, 'Request'),
-      chefId: requiredString(input.chefId, 'Chef'),
       message: requiredString(input.message, 'Message'),
       proposedPrice: requiredNumber(input.proposedPrice, 'Quote'),
-      currency: 'GHS',
       menuDescription: optionalString(input.menuDescription),
       includedServices: Array.isArray(input.includedServices)
         ? input.includedServices.map(String)
@@ -119,8 +123,21 @@ export const createProposalFn = createServerFn({ method: 'POST' })
     }
   })
   .handler(async ({ data }) => {
+    const { requireChefSession } = await import('./auth-session.server')
+    const session = requireChefSession()
     const live = await import('./marketplace.server')
-    return live.createProposal(data)
+    return live.createProposal(
+      {
+        requestId: data.requestId,
+        chefId: session.slug,
+        message: data.message,
+        proposedPrice: data.proposedPrice,
+        currency: 'GHS',
+        menuDescription: data.menuDescription,
+        includedServices: data.includedServices,
+      },
+      session.slug,
+    )
   })
 
 export const quoteInquiryFn = createServerFn({ method: 'POST' })
@@ -132,36 +149,70 @@ export const quoteInquiryFn = createServerFn({ method: 'POST' })
     }
   })
   .handler(async ({ data }) => {
+    const { requireChefSession } = await import('./auth-session.server')
+    const session = requireChefSession()
     const live = await import('./marketplace.server')
-    return live.quoteInquiry(data.inquiryId, data.quotedPrice)
+    return live.quoteInquiry(data.inquiryId, data.quotedPrice, session.slug)
   })
 
 export const listProposalsForRequestFn = createServerFn({ method: 'POST' })
-  .validator((data: unknown) => ({
-    requestId: requiredString(asRecord(data).requestId, 'Request'),
-  }))
+  .validator((data: unknown) => {
+    const input = asRecord(data)
+    return {
+      requestId: requiredString(input.requestId, 'Request'),
+      accessToken: requiredString(input.accessToken, 'Access token'),
+    }
+  })
   .handler(async ({ data }) => {
     const live = await import('./marketplace.server')
-    return live.listProposalsForRequest(data.requestId)
+    return live.listProposalsForRequest(data.requestId, data.accessToken)
   })
 
 export const acceptProposalFn = createServerFn({ method: 'POST' })
-  .validator((data: unknown) => ({
-    proposalId: requiredString(asRecord(data).proposalId, 'Proposal'),
-  }))
+  .validator((data: unknown) => {
+    const input = asRecord(data)
+    return {
+      proposalId: requiredString(input.proposalId, 'Proposal'),
+      accessToken: requiredString(input.accessToken, 'Access token'),
+    }
+  })
   .handler(async ({ data }) => {
     const live = await import('./marketplace.server')
-    return live.acceptProposal(data.proposalId)
+    return live.acceptProposal(data.proposalId, data.accessToken)
   })
 
-export const listChefDashboardFn = createServerFn({ method: 'POST' })
-  .validator((data: unknown) => ({
-    chefId: requiredString(asRecord(data).chefId, 'Chef'),
-  }))
-  .handler(async ({ data }) => {
-    const live = await import('./marketplace.server')
-    return live.listChefDashboard(data.chefId)
+export const listChefDashboardFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const { requireChefSession } = await import('./auth-session.server')
+  const session = requireChefSession()
+  const live = await import('./marketplace.server')
+  return live.listChefDashboard(session.slug)
+})
+
+export const getChefSessionFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const { readChefSession } = await import('./auth-session.server')
+  return readChefSession()
+})
+
+export const chefLoginFn = createServerFn({ method: 'POST' })
+  .validator((data: unknown) => {
+    const input = asRecord(data)
+    return {
+      email: requiredString(input.email, 'Email'),
+      password: requiredString(input.password, 'Password'),
+    }
   })
+  .handler(async ({ data }) => {
+    const auth = await import('./auth-session.server')
+    const session = await auth.authenticateChef(data.email, data.password)
+    auth.issueChefSession(session)
+    return session
+  })
+
+export const chefLogoutFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const { clearChefSession } = await import('./auth-session.server')
+  clearChefSession()
+  return { ok: true as const }
+})
 
 export const updateBookingStatusFn = createServerFn({ method: 'POST' })
   .validator((data: unknown) => {
@@ -176,20 +227,23 @@ export const updateBookingStatusFn = createServerFn({ method: 'POST' })
     }
   })
   .handler(async ({ data }) => {
+    const { requireChefSession } = await import('./auth-session.server')
+    const session = requireChefSession()
     const live = await import('./marketplace.server')
-    return live.updateBookingStatus(data.bookingId, data.status)
+    return live.updateBookingStatus(data.bookingId, data.status, session.slug)
   })
 
 export const marketplaceRepository: MarketplaceRepository = {
   createInquiry: (input) => createInquiryFn({ data: input }),
   createRequest: (input) => createRequestFn({ data: input }),
   createProposal: (input) => createProposalFn({ data: input }),
-  listProposalsForRequest: (requestId) =>
-    listProposalsForRequestFn({ data: { requestId } }),
-  acceptProposal: (proposalId) => acceptProposalFn({ data: { proposalId } }),
+  listProposalsForRequest: (requestId, accessToken) =>
+    listProposalsForRequestFn({ data: { requestId, accessToken } }),
+  acceptProposal: (proposalId, accessToken) =>
+    acceptProposalFn({ data: { proposalId, accessToken } }),
   quoteInquiry: (inquiryId, quotedPrice) =>
     quoteInquiryFn({ data: { inquiryId, quotedPrice } }),
-  listChefDashboard: (chefId) => listChefDashboardFn({ data: { chefId } }),
+  listChefDashboard: () => listChefDashboardFn(),
   updateBookingStatus: (bookingId, status) =>
     updateBookingStatusFn({ data: { bookingId, status } }),
 }

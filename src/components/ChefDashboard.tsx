@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import {
   ArrowRight,
   CalendarDays,
@@ -8,11 +8,17 @@ import {
   UtensilsCrossed,
 } from 'lucide-react'
 import { getChef } from '../data/marketplace'
-import { marketplaceRepository } from '../lib/marketplace.functions'
+import {
+  chefLoginFn,
+  chefLogoutFn,
+  getChefSessionFn,
+  marketplaceRepository,
+} from '../lib/marketplace.functions'
 import type {
   BookingStatus,
   ChefDashboardData,
   ChefRequestRecord,
+  ChefSession,
 } from '../lib/marketplace/types'
 
 function money(amount: number) {
@@ -27,27 +33,115 @@ function statusLabel(status: string) {
   return status.replaceAll('_', ' ')
 }
 
-export default function ChefDashboard({ chefId }: { chefId: string }) {
-  const chef = getChef(chefId)
+function ChefLogin({
+  onSignedIn,
+}: {
+  onSignedIn: (session: ChefSession) => void
+}) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+
+  async function submit(event: FormEvent) {
+    event.preventDefault()
+    setBusy(true)
+    setError('')
+    try {
+      const session = await chefLoginFn({ data: { email, password } })
+      onSignedIn(session)
+    } catch (loginError) {
+      setError(loginError instanceof Error ? loginError.message : 'Unable to sign in.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="mx-auto max-w-md px-5 py-24">
+      <p className="typography-eyebrow">Chef portal</p>
+      <h1 className="display-title mt-4 text-4xl">Sign in to your kitchen.</h1>
+      <p className="mt-4 text-ploy-text-secondary">
+        Use the email Girki has on file for your chef profile. Quotes and bookings stay tied to
+        your account.
+      </p>
+      <form onSubmit={(event) => void submit(event)} className="mt-10 space-y-4">
+        <label className="block">
+          <span className="text-sm text-ploy-text-secondary">Email</span>
+          <input
+            type="email"
+            autoComplete="username"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            className="mt-2 min-h-11 w-full rounded-xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none focus:border-ploy-accent-tertiary"
+          />
+        </label>
+        <label className="block">
+          <span className="text-sm text-ploy-text-secondary">Password</span>
+          <input
+            type="password"
+            autoComplete="current-password"
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+            className="mt-2 min-h-11 w-full rounded-xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none focus:border-ploy-accent-tertiary"
+          />
+        </label>
+        {error ? <p className="text-sm text-ploy-accent-secondary">{error}</p> : null}
+        <button type="submit" className="btn btn-primary min-h-11 w-full" disabled={busy}>
+          {busy ? 'Signing in…' : 'Sign in'}
+        </button>
+      </form>
+    </div>
+  )
+}
+
+export default function ChefDashboard() {
+  const [session, setSession] = useState<ChefSession | null | undefined>(undefined)
   const [data, setData] = useState<ChefDashboardData | null>(null)
   const [quoteDrafts, setQuoteDrafts] = useState<Record<string, string>>({})
   const [busyId, setBusyId] = useState('')
   const [error, setError] = useState('')
 
+  const chef = session ? getChef(session.slug) : null
+  const displayName = chef?.name ?? session?.displayName ?? 'Chef'
+
   async function refresh() {
-    setData(await marketplaceRepository.listChefDashboard(chefId))
+    setData(await marketplaceRepository.listChefDashboard())
   }
 
   useEffect(() => {
+    void getChefSessionFn()
+      .then((next) => setSession(next))
+      .catch(() => setSession(null))
+  }, [])
+
+  useEffect(() => {
+    if (!session) {
+      setData(null)
+      return
+    }
     void marketplaceRepository
-      .listChefDashboard(chefId)
+      .listChefDashboard()
       .then(setData)
       .catch((loadError: unknown) => {
         setError(loadError instanceof Error ? loadError.message : 'Unable to load the chef dashboard.')
       })
-  }, [chefId])
+  }, [session])
 
-  if (!chef) return null
+  if (session === undefined) {
+    return (
+      <div className="mx-auto max-w-7xl px-5 py-24 text-ploy-text-secondary">
+        Checking chef session…
+      </div>
+    )
+  }
+
+  if (!session) {
+    return <ChefLogin onSignedIn={setSession} />
+  }
+
   if (!data) {
     return (
       <div className="mx-auto max-w-7xl px-5 py-24 text-ploy-text-secondary">
@@ -85,10 +179,8 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
     try {
       await marketplaceRepository.createProposal({
         requestId: request.id,
-        chefId,
         message: `I can create a tailored ${request.cuisine || 'private chef'} experience for this request.`,
         proposedPrice: amount,
-        currency: 'GHS',
         menuDescription: 'Custom menu after customer confirmation',
         includedServices: ['Menu design', 'Grocery sourcing', 'Cooking', 'Kitchen cleanup'],
       })
@@ -113,6 +205,12 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
     }
   }
 
+  async function signOut() {
+    await chefLogoutFn()
+    setSession(null)
+    setData(null)
+  }
+
   const activeBookings = data.bookings.filter((booking) =>
     ['awaiting_payment', 'confirmed', 'in_progress'].includes(booking.bookingStatus),
   )
@@ -123,15 +221,22 @@ export default function ChefDashboard({ chefId }: { chefId: string }) {
       <div className="flex flex-col gap-6 border-b border-ploy-border-primary pb-10 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="typography-eyebrow">Chef portal</p>
-          <h1 className="display-title mt-4 text-4xl sm:text-5xl">Welcome back, {chef.name}.</h1>
+          <h1 className="display-title mt-4 text-4xl sm:text-5xl">Welcome back, {displayName}.</h1>
           <p className="mt-4 max-w-2xl text-ploy-text-secondary">
             Quote from here, or reply on WhatsApp with the amount and any notes. Requests also
             arrive by email. Quotes you send are saved live for the customer.
           </p>
         </div>
-        <a href={`/chefs/${chef.id}`} className="btn btn-outline min-h-11 px-5">
-          View public profile
-        </a>
+        <div className="flex flex-wrap gap-3">
+          {chef ? (
+            <a href={`/chefs/${chef.id}`} className="btn btn-outline min-h-11 px-5">
+              View public profile
+            </a>
+          ) : null}
+          <button type="button" className="btn btn-outline min-h-11 px-5" onClick={() => void signOut()}>
+            Sign out
+          </button>
+        </div>
       </div>
 
       <section className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Chef overview">

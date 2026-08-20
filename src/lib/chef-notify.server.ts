@@ -429,7 +429,7 @@ export async function applyWhatsAppReply(from: string, body: string) {
 
   if (target.inquiryId) {
     const { quoteInquiry } = await import('./marketplace.server')
-    await quoteInquiry(target.inquiryId, parsed.amount)
+    await quoteInquiry(target.inquiryId, parsed.amount, chef.slug)
     return {
       reply: `Got it — GH₵${parsed.amount} is now live for the guest. You can still update it from ${appUrl()}/chef-dashboard`,
       ignored: false as const,
@@ -438,15 +438,18 @@ export async function applyWhatsAppReply(from: string, body: string) {
 
   if (target.requestId) {
     const { createProposal } = await import('./marketplace.server')
-    await createProposal({
-      requestId: target.requestId,
-      chefId: chef.slug,
-      message: notes,
-      proposedPrice: parsed.amount,
-      currency: 'GHS',
-      menuDescription: notes,
-      includedServices: ['Menu design', 'Grocery sourcing', 'Cooking', 'Kitchen cleanup'],
-    })
+    await createProposal(
+      {
+        requestId: target.requestId,
+        chefId: chef.slug,
+        message: notes,
+        proposedPrice: parsed.amount,
+        currency: 'GHS',
+        menuDescription: notes,
+        includedServices: ['Menu design', 'Grocery sourcing', 'Cooking', 'Kitchen cleanup'],
+      },
+      chef.slug,
+    )
     return {
       reply: `Got it — GH₵${parsed.amount} is now live for the guest. You can still update it from ${appUrl()}/chef-dashboard`,
       ignored: false as const,
