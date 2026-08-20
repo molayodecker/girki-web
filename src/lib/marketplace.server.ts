@@ -308,10 +308,15 @@ export async function createInquiry(input: NewDirectInquiry) {
 }
 
 export async function createRequest(input: NewChefRequest) {
+  const { createAccessToken, hashAccessToken } = await import('./auth-session.server')
+  const accessToken = createAccessToken()
+  const accessTokenHash = hashAccessToken(accessToken)
+
   const rows = await sql<{ id: string | number }[]>`
     insert into public.chef_requests (
       customer_name, email, phone, city, cuisine, occasion, service_type,
-      guest_summary, meal_time, event_date, budget, restrictions, notes, status
+      guest_summary, meal_time, event_date, budget, restrictions, notes, status,
+      access_token_hash
     ) values (
       ${input.customerName},
       ${input.email},
@@ -326,21 +331,22 @@ export async function createRequest(input: NewChefRequest) {
       ${input.budget},
       ${input.restrictions},
       ${input.notes},
-      'receiving_proposals'
+      'receiving_proposals',
+      ${accessTokenHash}
     )
     returning id
   `
   const created = await sql<RequestRow[]>`
     select * from public.chef_requests where id = ${rows[0].id} limit 1
   `
-  return mapRequest(created[0])
+  return { ...mapRequest(created[0]), accessToken }
 }
 
-export async function createProposal(input: NewChefProposal) {
+export async function createProposal(input: NewChefProposal, chefSlug: string) {
   if (!Number.isFinite(input.proposedPrice) || input.proposedPrice <= 0) {
     throw new Error('Enter a quote amount greater than zero.')
   }
-  const chefId = await chefRowId(input.chefId)
+  const chefId = await chefRowId(chefSlug)
   const rows = await sql<{ id: string | number }[]>`
     insert into public.proposals (
       request_id, chef_id, message, proposed_price, currency, menu_description, included_services, status
@@ -385,21 +391,34 @@ export async function createProposal(input: NewChefProposal) {
   return proposalById(proposalId)
 }
 
-export async function quoteInquiry(inquiryId: string, quotedPrice: number) {
+export async function quoteInquiry(inquiryId: string, quotedPrice: number, chefSlug: string) {
   if (!Number.isFinite(quotedPrice) || quotedPrice <= 0) {
     throw new Error('Enter a quote amount greater than zero.')
   }
+
   const updated = await sql`
-    update public.inquiries
+    update public.inquiries i
     set quoted_price = ${quotedPrice}, status = 'quoted', updated_at = now()
-    where id = ${inquiryId}
-    returning id
+    from public.chef_profiles c
+    where i.id = ${inquiryId}
+      and i.chef_id = c.id
+      and c.slug = ${chefSlug}
+    returning i.id
   `
   if (!updated[0]) throw new Error('Inquiry not found.')
   return inquiryById(inquiryId)
 }
 
-export async function listProposalsForRequest(requestId: string) {
+export async function listProposalsForRequest(requestId: string, accessToken: string) {
+  const { hashAccessToken } = await import('./auth-session.server')
+  const tokenHash = hashAccessToken(accessToken)
+  const allowed = await sql<{ id: string | number }[]>`
+    select id from public.chef_requests
+    where id = ${requestId} and access_token_hash = ${tokenHash}
+    limit 1
+  `
+  if (!allowed[0]) throw new Error('Unauthorized. This request token is invalid.')
+
   const rows = await sql<ProposalRow[]>`
     select
       p.id,
@@ -420,11 +439,9 @@ export async function listProposalsForRequest(requestId: string) {
   return rows.map(mapProposal)
 }
 
-export async function acceptProposal(proposalId: string) {
-  const existing = await sql<{ id: string | number }[]>`
-    select id from public.bookings where proposal_id = ${proposalId} limit 1
-  `
-  if (existing[0]) return bookingById(asId(existing[0].id))
+export async function acceptProposal(proposalId: string, accessToken: string) {
+  const { hashAccessToken } = await import('./auth-session.server')
+  const tokenHash = hashAccessToken(accessToken)
 
   return sql.begin(async (tx) => {
     const proposal = await tx<
@@ -440,14 +457,38 @@ export async function acceptProposal(proposalId: string) {
       select id, request_id, chef_id, proposed_price, currency, status
       from public.proposals
       where id = ${proposalId}
-      limit 1
+      for update
     `
     if (!proposal[0]) throw new Error('Proposal not found.')
+    if (!['submitted', 'viewed', 'shortlisted'].includes(proposal[0].status)) {
+      throw new Error('This proposal can no longer be accepted.')
+    }
 
-    const request = await tx<RequestRow[]>`
-      select * from public.chef_requests where id = ${proposal[0].request_id} limit 1
+    const request = await tx<
+      Array<RequestRow & { access_token_hash: string | null }>
+    >`
+      select * from public.chef_requests
+      where id = ${proposal[0].request_id}
+      for update
     `
     if (!request[0]) throw new Error('Chef request not found.')
+    if (request[0].access_token_hash !== tokenHash) {
+      throw new Error('Unauthorized. This request token is invalid.')
+    }
+    if (request[0].status === 'booked') {
+      const existing = await tx<{ id: string | number }[]>`
+        select id from public.bookings
+        where request_id = ${request[0].id}
+          and booking_status not in ('cancelled', 'refunded')
+        limit 1
+      `
+      if (existing[0]) return asId(existing[0].id)
+    }
+
+    const existingForProposal = await tx<{ id: string | number }[]>`
+      select id from public.bookings where proposal_id = ${proposalId} limit 1
+    `
+    if (existingForProposal[0]) return asId(existingForProposal[0].id)
 
     await tx`
       update public.proposals
@@ -467,10 +508,11 @@ export async function acceptProposal(proposalId: string) {
 
     const price = Number(proposal[0].proposed_price)
     const serviceFee = Math.round(price * 0.1)
-    const count = await tx<Array<{ n: string | number }>>`
-      select count(*) as n from public.bookings
+    const bookingNumberRows = await tx<Array<{ n: string }>>`
+      select public.next_booking_number() as n
     `
-    const bookingNumber = `GRK-${1000 + Number(count[0]?.n ?? 0) + 1}`
+    const bookingNumber = bookingNumberRows[0]?.n
+    if (!bookingNumber) throw new Error('Unable to allocate a booking number.')
     const eventDate = request[0].event_date ?? new Date()
 
     const inserted = await tx<{ id: string | number }[]>`
@@ -608,7 +650,36 @@ export async function listChefDashboard(chefSlug: string): Promise<ChefDashboard
   }
 }
 
-export async function updateBookingStatus(bookingId: string, status: BookingStatus) {
+export async function updateBookingStatus(
+  bookingId: string,
+  status: BookingStatus,
+  chefSlug: string,
+) {
+  const allowed: Record<BookingStatus, BookingStatus[]> = {
+    awaiting_payment: ['cancelled'],
+    confirmed: ['in_progress', 'cancelled'],
+    in_progress: ['completed'],
+    completed: [],
+    cancelled: [],
+    refunded: [],
+  }
+
+  const current = await sql<
+    Array<{ id: string | number; booking_status: BookingStatus; chef_slug: string }>
+  >`
+    select b.id, b.booking_status, c.slug as chef_slug
+    from public.bookings b
+    join public.chef_profiles c on c.id = b.chef_id
+    where b.id = ${bookingId}
+    limit 1
+  `
+  if (!current[0] || current[0].chef_slug !== chefSlug) {
+    throw new Error('Booking not found.')
+  }
+  if (!allowed[current[0].booking_status]?.includes(status)) {
+    throw new Error('Invalid booking status transition.')
+  }
+
   const updated = await sql`
     update public.bookings
     set booking_status = ${status}, updated_at = now()

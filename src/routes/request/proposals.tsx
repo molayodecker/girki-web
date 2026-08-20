@@ -55,6 +55,7 @@ function requestFingerprint(request: ChefRequest) {
 function ProposalsPage() {
   const [request, setRequest] = useState<ChefRequest>(emptyRequest)
   const [requestId, setRequestId] = useState('')
+  const [accessToken, setAccessToken] = useState('')
   const [quotes, setQuotes] = useState<ChefProposal[]>([])
   const [booking, setBooking] = useState<Booking | null>(null)
   const [busyChefId, setBusyChefId] = useState('')
@@ -71,9 +72,14 @@ function ProposalsPage() {
     const storedRecord = window.sessionStorage.getItem(persistedRequestKey)
     if (storedRecord) {
       try {
-        const parsed = JSON.parse(storedRecord) as { id?: string; fingerprint?: string }
-        if (parsed.id && parsed.fingerprint === fingerprint) {
+        const parsed = JSON.parse(storedRecord) as {
+          id?: string
+          fingerprint?: string
+          accessToken?: string
+        }
+        if (parsed.id && parsed.accessToken && parsed.fingerprint === fingerprint) {
           setRequestId(parsed.id)
+          setAccessToken(parsed.accessToken)
           return
         }
       } catch {
@@ -100,9 +106,14 @@ function ProposalsPage() {
       .then((record) => {
         window.sessionStorage.setItem(
           persistedRequestKey,
-          JSON.stringify({ id: record.id, fingerprint }),
+          JSON.stringify({
+            id: record.id,
+            fingerprint,
+            accessToken: record.accessToken,
+          }),
         )
         setRequestId(record.id)
+        setAccessToken(record.accessToken)
       })
       .catch((createError: unknown) => {
         setError(createError instanceof Error ? createError.message : 'Unable to save this request.')
@@ -110,19 +121,22 @@ function ProposalsPage() {
   }, [])
 
   useEffect(() => {
-    if (!requestId) return
+    if (!requestId || !accessToken) return
 
     let cancelled = false
 
     async function loadQuotes() {
       try {
-        const nextQuotes = await marketplaceRepository.listProposalsForRequest(requestId)
+        const nextQuotes = await marketplaceRepository.listProposalsForRequest(
+          requestId,
+          accessToken,
+        )
         if (cancelled) return
         setQuotes(nextQuotes)
 
         const accepted = nextQuotes.find((quote) => quote.status === 'accepted')
         if (accepted && !booking) {
-          setBooking(await marketplaceRepository.acceptProposal(accepted.id))
+          setBooking(await marketplaceRepository.acceptProposal(accepted.id, accessToken))
         }
       } catch (loadError: unknown) {
         if (!cancelled) {
@@ -140,7 +154,7 @@ function ProposalsPage() {
       cancelled = true
       window.clearInterval(timer)
     }
-  }, [requestId, booking])
+  }, [requestId, accessToken, booking])
 
   const matched = matchChefs(request)
   const hasRequest = Boolean(request.city || request.cuisine || request.lat)
@@ -150,10 +164,14 @@ function ProposalsPage() {
       : null
 
   async function acceptChef(chef: Chef, proposal: ChefProposal) {
+    if (!accessToken) {
+      setError('Missing request access token. Refresh and try again.')
+      return
+    }
     setBusyChefId(chef.id)
     setError('')
     try {
-      setBooking(await marketplaceRepository.acceptProposal(proposal.id))
+      setBooking(await marketplaceRepository.acceptProposal(proposal.id, accessToken))
     } catch (chooseError) {
       setError(chooseError instanceof Error ? chooseError.message : 'Unable to accept this quote.')
     } finally {

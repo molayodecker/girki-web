@@ -10,7 +10,7 @@ function ChefDashboardPage() {
   return (
     <PageShell tone="sand">
       <main>
-        <ChefDashboard chefId="nana" />
+        <ChefDashboard />
       </main>
     </PageShell>
   )
