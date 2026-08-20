@@ -89,6 +89,18 @@ export function readChefSession(): ChefSession | null {
   return decodeSession(token)
 }
 
+function chefMayOperate(row: {
+  profile_status: string
+  verification_state: string
+  account_status: string | null
+}) {
+  return (
+    row.profile_status === 'active' &&
+    row.verification_state === 'verified' &&
+    row.account_status !== 'disabled'
+  )
+}
+
 async function assertChefStillAuthorized(session: ChefSession): Promise<ChefSession> {
   const rows = await sql<
     Array<{
@@ -97,6 +109,7 @@ async function assertChefStillAuthorized(session: ChefSession): Promise<ChefSess
       display_name: string
       email: string | null
       profile_status: string
+      verification_state: string
       account_status: string | null
     }>
   >`
@@ -106,6 +119,7 @@ async function assertChefStillAuthorized(session: ChefSession): Promise<ChefSess
       c.display_name,
       t.email,
       c.profile_status,
+      c.verification_state,
       p.account_status
     from public.chef_profiles c
     join private.chef_contacts t on t.chef_id = c.id
@@ -120,9 +134,9 @@ async function assertChefStillAuthorized(session: ChefSession): Promise<ChefSess
     clearChefSession()
     throw new Error('Unauthorized. Sign in as a chef to continue.')
   }
-  if (row.profile_status === 'paused' || row.account_status === 'disabled') {
+  if (!chefMayOperate(row)) {
     clearChefSession()
-    throw new Error('This chef account is suspended.')
+    throw new Error('This chef account is not approved for portal access yet.')
   }
 
   return {
@@ -205,6 +219,7 @@ export async function authenticateChef(email: string, password: string): Promise
       email: string | null
       password_hash: string | null
       profile_status: string
+      verification_state: string
       account_status: string | null
     }>
   >`
@@ -215,6 +230,7 @@ export async function authenticateChef(email: string, password: string): Promise
       t.email,
       t.password_hash,
       c.profile_status,
+      c.verification_state,
       p.account_status
     from private.chef_contacts t
     join public.chef_profiles c on c.id = t.chef_id
@@ -227,8 +243,8 @@ export async function authenticateChef(email: string, password: string): Promise
   if (!row?.password_hash || !verifyPassword(password, row.password_hash)) {
     throw new Error('Invalid email or password.')
   }
-  if (row.profile_status === 'paused' || row.account_status === 'disabled') {
-    throw new Error('This chef account is suspended.')
+  if (!chefMayOperate(row)) {
+    throw new Error('This chef account is not approved for portal access yet.')
   }
 
   return {
