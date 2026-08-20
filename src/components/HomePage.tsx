@@ -3,12 +3,8 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import {
   ArrowRight,
   ArrowUpRight,
-  BadgeCheck,
   Check,
-  CreditCard,
-  Headphones,
   Search,
-  ShieldCheck,
   Users,
   X,
 } from 'lucide-react'
@@ -30,13 +26,6 @@ import {
   type SampleMenu,
 } from '../data/marketplace'
 
-const trustIcons = {
-  badge: BadgeCheck,
-  card: CreditCard,
-  shield: ShieldCheck,
-  headphones: Headphones,
-} as const
-
 const guestSearchMap: Record<string, string> = {
   '2 guests': '2',
   '4 guests': '3-6',
@@ -46,19 +35,22 @@ const guestSearchMap: Record<string, string> = {
 
 const howItWorks = [
   {
-    n: '01',
     title: 'Tell us what you want',
     copy: 'City, date, guests, and the kind of table you have in mind. No commitment.',
+    icon: '/images/how-it-works/tell-us.png',
+    iconAlt: 'Compose your request',
   },
   {
-    n: '02',
     title: 'Compare and customize',
     copy: 'Chefs propose menus around your evening. You refine every course.',
+    icon: '/images/how-it-works/compare.png',
+    iconAlt: 'Compare chef proposals',
   },
   {
-    n: '03',
     title: 'Host, and do nothing else',
     copy: 'Groceries, cooking, service, and cleanup are theirs. The table is yours.',
+    icon: '/images/how-it-works/host.png',
+    iconAlt: 'Host at home',
   },
 ]
 
@@ -197,10 +189,14 @@ export default function HomePage() {
             </div>
             <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
               {howItWorks.map((step) => (
-                <article key={step.n} className="relative pt-2">
-                  <p className="font-heading text-6xl text-ploy-accent-tertiary/70">
-                    {step.n}
-                  </p>
+                <article key={step.title} className="relative pt-2">
+                  <img
+                    src={step.icon}
+                    alt={step.iconAlt}
+                    width={72}
+                    height={72}
+                    className="size-[4.5rem] rounded-[1.15rem] object-contain"
+                  />
                   <h3 className="mt-6 font-heading text-2xl tracking-tight">{step.title}</h3>
                   <p className="mt-3 max-w-sm leading-relaxed text-ploy-text-secondary">
                     {step.copy}
@@ -413,18 +409,22 @@ export default function HomePage() {
               </p>
             </div>
             <div className="mt-14 grid gap-px overflow-hidden rounded-[1.6rem] border border-ploy-border-primary bg-ploy-border-primary md:grid-cols-2 lg:grid-cols-4">
-              {trustItems.map((item) => {
-                const Icon = trustIcons[item.icon]
-                return (
-                  <article key={item.title} className="bg-ploy-background-primary p-8">
-                    <Icon size={22} className="text-ploy-accent-tertiary" aria-hidden="true" />
-                    <h3 className="mt-8 font-heading text-2xl tracking-tight">{item.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-ploy-text-secondary">
-                      {item.copy}
-                    </p>
-                  </article>
-                )
-              })}
+              {trustItems.map((item) => (
+                <article key={item.title} className="bg-ploy-background-primary p-8">
+                  <img
+                    src={item.icon}
+                    alt=""
+                    width={48}
+                    height={48}
+                    className="size-12 rounded-[0.9rem] object-contain"
+                    aria-hidden="true"
+                  />
+                  <h3 className="mt-8 font-heading text-2xl tracking-tight">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ploy-text-secondary">
+                    {item.copy}
+                  </p>
+                </article>
+              ))}
             </div>
           </div>
         </section>

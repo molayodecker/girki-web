@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChefDashboardRouteImport } from './routes/chef-dashboard'
 import { Route as ChefsRouteRouteImport } from './routes/chefs/route'
 import { Route as RequestRouteRouteImport } from './routes/request/route'
+import { Route as ApiWhatsappRouteImport } from './routes/api/whatsapp'
 import { Route as ChefsIndexRouteImport } from './routes/chefs/index'
 import { Route as ChefsChefIdRouteImport } from './routes/chefs/$chefId'
 import { Route as RequestIndexRouteImport } from './routes/request/index'
@@ -22,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChefDashboardRoute = ChefDashboardRouteImport.update({
+  id: '/chef-dashboard',
+  path: '/chef-dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChefsRouteRoute = ChefsRouteRouteImport.update({
   id: '/chefs',
   path: '/chefs',
@@ -30,6 +37,11 @@ const ChefsRouteRoute = ChefsRouteRouteImport.update({
 const RequestRouteRoute = RequestRouteRouteImport.update({
   id: '/request',
   path: '/request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWhatsappRoute = ApiWhatsappRouteImport.update({
+  id: '/api/whatsapp',
+  path: '/api/whatsapp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChefsIndexRoute = ChefsIndexRouteImport.update({
@@ -57,6 +69,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chefs': typeof ChefsRouteRouteWithChildren
   '/request': typeof RequestRouteRouteWithChildren
+  '/chef-dashboard': typeof ChefDashboardRoute
+  '/api/whatsapp': typeof ApiWhatsappRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
   '/chefs/': typeof ChefsIndexRoute
@@ -64,6 +78,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/chef-dashboard': typeof ChefDashboardRoute
+  '/api/whatsapp': typeof ApiWhatsappRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
   '/chefs': typeof ChefsIndexRoute
@@ -74,6 +90,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/chefs': typeof ChefsRouteRouteWithChildren
   '/request': typeof RequestRouteRouteWithChildren
+  '/chef-dashboard': typeof ChefDashboardRoute
+  '/api/whatsapp': typeof ApiWhatsappRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
   '/chefs/': typeof ChefsIndexRoute
@@ -85,17 +103,28 @@ export interface FileRouteTypes {
     | '/'
     | '/chefs'
     | '/request'
+    | '/chef-dashboard'
+    | '/api/whatsapp'
     | '/chefs/$chefId'
     | '/request/proposals'
     | '/chefs/'
     | '/request/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/chefs/$chefId' | '/request/proposals' | '/chefs' | '/request'
+  to:
+    | '/'
+    | '/chef-dashboard'
+    | '/api/whatsapp'
+    | '/chefs/$chefId'
+    | '/request/proposals'
+    | '/chefs'
+    | '/request'
   id:
     | '__root__'
     | '/'
     | '/chefs'
     | '/request'
+    | '/chef-dashboard'
+    | '/api/whatsapp'
     | '/chefs/$chefId'
     | '/request/proposals'
     | '/chefs/'
@@ -106,6 +135,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChefsRouteRoute: typeof ChefsRouteRouteWithChildren
   RequestRouteRoute: typeof RequestRouteRouteWithChildren
+  ChefDashboardRoute: typeof ChefDashboardRoute
+  ApiWhatsappRoute: typeof ApiWhatsappRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -115,6 +146,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chef-dashboard': {
+      id: '/chef-dashboard'
+      path: '/chef-dashboard'
+      fullPath: '/chef-dashboard'
+      preLoaderRoute: typeof ChefDashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chefs': {
@@ -129,6 +167,13 @@ declare module '@tanstack/react-router' {
       path: '/request'
       fullPath: '/request'
       preLoaderRoute: typeof RequestRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/whatsapp': {
+      id: '/api/whatsapp'
+      path: '/api/whatsapp'
+      fullPath: '/api/whatsapp'
+      preLoaderRoute: typeof ApiWhatsappRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chefs/': {
@@ -194,6 +239,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChefsRouteRoute: ChefsRouteRouteWithChildren,
   RequestRouteRoute: RequestRouteRouteWithChildren,
+  ChefDashboardRoute: ChefDashboardRoute,
+  ApiWhatsappRoute: ApiWhatsappRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
