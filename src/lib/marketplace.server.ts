@@ -664,28 +664,32 @@ export async function updateBookingStatus(
     refunded: [],
   }
 
-  const current = await sql<
-    Array<{ id: string | number; booking_status: BookingStatus; chef_slug: string }>
-  >`
-    select b.id, b.booking_status, c.slug as chef_slug
-    from public.bookings b
-    join public.chef_profiles c on c.id = b.chef_id
-    where b.id = ${bookingId}
-    limit 1
-  `
-  if (!current[0] || current[0].chef_slug !== chefSlug) {
-    throw new Error('Booking not found.')
-  }
-  if (!allowed[current[0].booking_status]?.includes(status)) {
-    throw new Error('Invalid booking status transition.')
-  }
+  const bookingIdResult = await sql.begin(async (tx) => {
+    const current = await tx<
+      Array<{ id: string | number; booking_status: BookingStatus; chef_slug: string }>
+    >`
+      select b.id, b.booking_status, c.slug as chef_slug
+      from public.bookings b
+      join public.chef_profiles c on c.id = b.chef_id
+      where b.id = ${bookingId}
+      for update of b
+    `
+    if (!current[0] || current[0].chef_slug !== chefSlug) {
+      throw new Error('Booking not found.')
+    }
+    if (!allowed[current[0].booking_status]?.includes(status)) {
+      throw new Error('Invalid booking status transition.')
+    }
 
-  const updated = await sql`
-    update public.bookings
-    set booking_status = ${status}, updated_at = now()
-    where id = ${bookingId}
-    returning id
-  `
-  if (!updated[0]) throw new Error('Booking not found.')
-  return bookingById(bookingId)
+    const updated = await tx<{ id: string | number }[]>`
+      update public.bookings
+      set booking_status = ${status}, updated_at = now()
+      where id = ${bookingId}
+      returning id
+    `
+    if (!updated[0]) throw new Error('Booking not found.')
+    return String(updated[0].id)
+  })
+
+  return bookingById(bookingIdResult)
 }

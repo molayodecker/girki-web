@@ -123,8 +123,8 @@ export const createProposalFn = createServerFn({ method: 'POST' })
     }
   })
   .handler(async ({ data }) => {
-    const { requireChefSession } = await import('./auth-session.server')
-    const session = requireChefSession()
+    const { requireActiveChefSession } = await import('./auth-session.server')
+    const session = await requireActiveChefSession()
     const live = await import('./marketplace.server')
     return live.createProposal(
       {
@@ -149,8 +149,8 @@ export const quoteInquiryFn = createServerFn({ method: 'POST' })
     }
   })
   .handler(async ({ data }) => {
-    const { requireChefSession } = await import('./auth-session.server')
-    const session = requireChefSession()
+    const { requireActiveChefSession } = await import('./auth-session.server')
+    const session = await requireActiveChefSession()
     const live = await import('./marketplace.server')
     return live.quoteInquiry(data.inquiryId, data.quotedPrice, session.slug)
   })
@@ -182,15 +182,15 @@ export const acceptProposalFn = createServerFn({ method: 'POST' })
   })
 
 export const listChefDashboardFn = createServerFn({ method: 'POST' }).handler(async () => {
-  const { requireChefSession } = await import('./auth-session.server')
-  const session = requireChefSession()
+  const { requireActiveChefSession } = await import('./auth-session.server')
+  const session = await requireActiveChefSession()
   const live = await import('./marketplace.server')
   return live.listChefDashboard(session.slug)
 })
 
 export const getChefSessionFn = createServerFn({ method: 'POST' }).handler(async () => {
-  const { readChefSession } = await import('./auth-session.server')
-  return readChefSession()
+  const { getActiveChefSession } = await import('./auth-session.server')
+  return getActiveChefSession()
 })
 
 export const chefLoginFn = createServerFn({ method: 'POST' })
@@ -227,8 +227,8 @@ export const updateBookingStatusFn = createServerFn({ method: 'POST' })
     }
   })
   .handler(async ({ data }) => {
-    const { requireChefSession } = await import('./auth-session.server')
-    const session = requireChefSession()
+    const { requireActiveChefSession } = await import('./auth-session.server')
+    const session = await requireActiveChefSession()
     const live = await import('./marketplace.server')
     return live.updateBookingStatus(data.bookingId, data.status, session.slug)
   })

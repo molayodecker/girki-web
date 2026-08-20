@@ -9,7 +9,7 @@ const CHEF_COOKIE = 'girki_chef_session'
 const SESSION_DAYS = 14
 
 function sessionSecret() {
-  const secret = process.env.CHEF_SESSION_SECRET ?? process.env.TWILIO_AUTH_TOKEN
+  const secret = process.env.CHEF_SESSION_SECRET
   if (!secret) {
     throw new Error('CHEF_SESSION_SECRET is not configured.')
   }
@@ -89,10 +89,71 @@ export function readChefSession(): ChefSession | null {
   return decodeSession(token)
 }
 
+async function assertChefStillAuthorized(session: ChefSession): Promise<ChefSession> {
+  const rows = await sql<
+    Array<{
+      chef_id: string | number
+      slug: string
+      display_name: string
+      email: string | null
+      profile_status: string
+      account_status: string | null
+    }>
+  >`
+    select
+      c.id as chef_id,
+      c.slug,
+      c.display_name,
+      t.email,
+      c.profile_status,
+      p.account_status
+    from public.chef_profiles c
+    join private.chef_contacts t on t.chef_id = c.id
+    left join public.profiles p on p.id = c.user_id
+    where c.id = ${session.chefId}
+      and c.slug = ${session.slug}
+    limit 1
+  `
+
+  const row = rows[0]
+  if (!row) {
+    clearChefSession()
+    throw new Error('Unauthorized. Sign in as a chef to continue.')
+  }
+  if (row.profile_status === 'paused' || row.account_status === 'disabled') {
+    clearChefSession()
+    throw new Error('This chef account is suspended.')
+  }
+
+  return {
+    chefId: String(row.chef_id),
+    slug: row.slug,
+    displayName: row.display_name,
+    email: row.email ?? session.email,
+  }
+}
+
+/** Cookie decode only — do not use for mutations. */
 export function requireChefSession(): ChefSession {
   const session = readChefSession()
   if (!session) throw new Error('Unauthorized. Sign in as a chef to continue.')
   return session
+}
+
+/** Validates signature and that the chef is still allowed to act. */
+export async function requireActiveChefSession(): Promise<ChefSession> {
+  const session = requireChefSession()
+  return assertChefStillAuthorized(session)
+}
+
+export async function getActiveChefSession(): Promise<ChefSession | null> {
+  const session = readChefSession()
+  if (!session) return null
+  try {
+    return await assertChefStillAuthorized(session)
+  } catch {
+    return null
+  }
 }
 
 export function issueChefSession(session: ChefSession) {
@@ -143,6 +204,8 @@ export async function authenticateChef(email: string, password: string): Promise
       display_name: string
       email: string | null
       password_hash: string | null
+      profile_status: string
+      account_status: string | null
     }>
   >`
     select
@@ -150,9 +213,12 @@ export async function authenticateChef(email: string, password: string): Promise
       c.slug,
       c.display_name,
       t.email,
-      t.password_hash
+      t.password_hash,
+      c.profile_status,
+      p.account_status
     from private.chef_contacts t
     join public.chef_profiles c on c.id = t.chef_id
+    left join public.profiles p on p.id = c.user_id
     where lower(coalesce(t.email, '')) = ${normalized}
     limit 1
   `
@@ -160,6 +226,9 @@ export async function authenticateChef(email: string, password: string): Promise
   const row = rows[0]
   if (!row?.password_hash || !verifyPassword(password, row.password_hash)) {
     throw new Error('Invalid email or password.')
+  }
+  if (row.profile_status === 'paused' || row.account_status === 'disabled') {
+    throw new Error('This chef account is suspended.')
   }
 
   return {
