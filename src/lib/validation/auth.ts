@@ -16,6 +16,13 @@ export const otpSchema = z.object({
 
 export type OtpFormValues = z.infer<typeof otpSchema>
 
+export const emailPasswordSchema = z.object({
+  email: z.string().email('Enter a valid email'),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+})
+
+export type EmailPasswordValues = z.infer<typeof emailPasswordSchema>
+
 export const chefPersonalSchema = z.object({
   fullName: z.string().min(2, 'Enter your full name'),
   email: z.union([z.string().email('Enter a valid email'), z.literal('')]).optional(),

@@ -2,11 +2,12 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import OtpVerifyForm from '../components/auth/OtpVerifyForm'
 import PageShell, { PageIntro } from '../components/layout/PageShell'
-import { syncPhoneProfileFn } from '../lib/auth.functions'
+import { ensureAuthProfileFn } from '../lib/auth.functions'
 import {
   clearPendingPhone,
   getPendingPhone,
   getSignupIntent,
+  postAuthPath,
   sendPhoneOtp,
   verifyPhoneOtp,
 } from '../lib/auth-client'
@@ -23,7 +24,7 @@ function VerifyPhonePage() {
   useEffect(() => {
     const pending = getPendingPhone()
     if (!pending) {
-      void navigate({ to: '/sign-in' })
+      void navigate({ to: '/sign-in', search: { intent: getSignupIntent() } })
       return
     }
     setPhone(pending)
@@ -52,14 +53,9 @@ function VerifyPhonePage() {
             <OtpVerifyForm
               onSubmit={async ({ otp }) => {
                 await verifyPhoneOtp(phone, otp)
-                await syncPhoneProfileFn({ data: { phone } })
+                await ensureAuthProfileFn({ data: { phone } })
                 clearPendingPhone()
-                const intent = getSignupIntent()
-                if (intent === 'chef') {
-                  await navigate({ to: '/chef/onboarding' })
-                } else {
-                  await navigate({ to: '/request' })
-                }
+                await navigate({ to: postAuthPath(getSignupIntent()) })
               }}
               onResend={async () => {
                 await sendPhoneOtp(phone)

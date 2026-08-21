@@ -13,38 +13,62 @@ function requiredString(value: unknown, label: string) {
   return text
 }
 
+async function upsertAuthProfile(phoneInput = '') {
+  const { requireSupabaseUser } = await import('./supabase/server')
+  const { user } = await requireSupabaseUser()
+
+  const phoneFromAuth = user.phone ? normalizePhone(user.phone) : ''
+  const phone = phoneInput ? normalizePhone(phoneInput) : phoneFromAuth
+  const email = user.email ?? null
+  const displayName =
+    (typeof user.user_metadata?.full_name === 'string' && user.user_metadata.full_name) ||
+    (typeof user.user_metadata?.name === 'string' && user.user_metadata.name) ||
+    ''
+
+  await sql`
+    insert into public.profiles (id, phone, email, display_name, account_role, account_status)
+    values (
+      ${user.id},
+      ${phone || null},
+      ${email},
+      ${displayName},
+      'customer',
+      'active'
+    )
+    on conflict (id) do update set
+      phone = coalesce(excluded.phone, public.profiles.phone),
+      email = coalesce(excluded.email, public.profiles.email),
+      display_name = case
+        when public.profiles.display_name = '' then excluded.display_name
+        else public.profiles.display_name
+      end,
+      updated_at = now()
+  `
+
+  return {
+    userId: user.id,
+    phone: phone || null,
+    email,
+    accountRole: 'customer' as const,
+  }
+}
+
+export const ensureAuthProfileFn = createServerFn({ method: 'POST' })
+  .validator((data: unknown) => {
+    if (data == null) return { phone: '' }
+    const input = asRecord(data)
+    return {
+      phone: typeof input.phone === 'string' ? input.phone.trim() : '',
+    }
+  })
+  .handler(async ({ data }) => upsertAuthProfile(data.phone))
+
 export const syncPhoneProfileFn = createServerFn({ method: 'POST' })
   .validator((data: unknown) => {
     const input = asRecord(data)
     return { phone: requiredString(input.phone, 'Phone') }
   })
-  .handler(async ({ data }) => {
-    const phone = normalizePhone(data.phone)
-    const { requireSupabaseUser } = await import('./supabase/server')
-    const { user } = await requireSupabaseUser()
-
-    await sql`
-      insert into public.profiles (id, phone, email, display_name, account_role, account_status)
-      values (
-        ${user.id},
-        ${phone},
-        ${user.email ?? null},
-        ${''},
-        'customer',
-        'active'
-      )
-      on conflict (id) do update set
-        phone = excluded.phone,
-        email = coalesce(excluded.email, public.profiles.email),
-        updated_at = now()
-    `
-
-    return {
-      userId: user.id,
-      phone,
-      accountRole: 'customer' as const,
-    }
-  })
+  .handler(async ({ data }) => upsertAuthProfile(data.phone))
 
 export const getAuthProfileFn = createServerFn({ method: 'POST' }).handler(async () => {
   const { createSupabaseServerClient } = await import('./supabase/server')

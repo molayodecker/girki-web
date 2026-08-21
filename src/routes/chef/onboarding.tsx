@@ -55,7 +55,7 @@ function ChefOnboardingPage() {
     void getAuthProfileFn()
       .then((profile) => {
         if (!profile) {
-          void navigate({ to: '/become-a-chef' })
+          void navigate({ to: '/sign-in', search: { intent: 'chef' } })
           return
         }
         setPhone(profile.phone ?? undefined)
@@ -74,7 +74,7 @@ function ChefOnboardingPage() {
           setStep(map[profile.chefApplication.onboardingStatus] ?? 'personal')
         }
       })
-      .catch(() => navigate({ to: '/become-a-chef' }))
+      .catch(() => navigate({ to: '/sign-in', search: { intent: 'chef' } }))
       .finally(() => setLoading(false))
   }, [navigate])
 

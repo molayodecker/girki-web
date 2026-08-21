@@ -17,6 +17,11 @@ export function getSignupIntent(): SignupIntent {
   return value === 'chef' ? 'chef' : 'customer'
 }
 
+export function clearSignupIntent() {
+  if (typeof window === 'undefined') return
+  window.sessionStorage.removeItem(SIGNUP_INTENT_KEY)
+}
+
 export function setPendingPhone(phone: string) {
   window.sessionStorage.setItem(PENDING_PHONE_KEY, phone)
 }
@@ -27,6 +32,10 @@ export function getPendingPhone() {
 
 export function clearPendingPhone() {
   window.sessionStorage.removeItem(PENDING_PHONE_KEY)
+}
+
+export function postAuthPath(intent: SignupIntent = getSignupIntent()) {
+  return intent === 'chef' ? '/chef/onboarding' : '/request'
 }
 
 export async function sendPhoneOtp(rawPhone: string) {
@@ -48,5 +57,54 @@ export async function verifyPhoneOtp(rawPhone: string, token: string) {
   })
   if (error) throw new Error(error.message)
   if (!data.session || !data.user) throw new Error('Verification failed. Try again.')
+  return data
+}
+
+export async function signInWithGoogle(intent: SignupIntent) {
+  setSignupIntent(intent)
+  const supabase = createSupabaseBrowserClient()
+  const redirectTo = `${window.location.origin}/auth/callback`
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo,
+      queryParams: { access_type: 'offline', prompt: 'consent' },
+    },
+  })
+  if (error) throw new Error(error.message)
+}
+
+export async function signInWithEmailPassword(email: string, password: string) {
+  const supabase = createSupabaseBrowserClient()
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+  if (error) throw new Error(error.message)
+  if (!data.session || !data.user) throw new Error('Sign in failed. Try again.')
+  return data
+}
+
+export async function signUpWithEmailPassword(email: string, password: string) {
+  const supabase = createSupabaseBrowserClient()
+  const emailRedirectTo = `${window.location.origin}/auth/callback`
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo },
+  })
+  if (error) throw new Error(error.message)
+  return data
+}
+
+export async function exchangeAuthCode(url: string) {
+  const supabase = createSupabaseBrowserClient()
+  const parsed = new URL(url)
+  const code = parsed.searchParams.get('code')
+  if (code) {
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) throw new Error(error.message)
+    return data
+  }
+  const { data, error } = await supabase.auth.getSession()
+  if (error) throw new Error(error.message)
+  if (!data.session) throw new Error('No session returned from provider.')
   return data
 }

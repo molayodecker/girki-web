@@ -17,6 +17,7 @@ import { Route as RequestRouteRouteImport } from './routes/request/route'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as VerifyPhoneRouteImport } from './routes/verify-phone'
 import { Route as ApiWhatsappRouteImport } from './routes/api/whatsapp'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as ChefOnboardingRouteImport } from './routes/chef/onboarding'
 import { Route as ChefsIndexRouteImport } from './routes/chefs/index'
 import { Route as ChefsChefIdRouteImport } from './routes/chefs/$chefId'
@@ -65,6 +66,11 @@ const ApiWhatsappRoute = ApiWhatsappRouteImport.update({
   path: '/api/whatsapp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ChefOnboardingRoute = ChefOnboardingRouteImport.update({
   id: '/chef/onboarding',
   path: '/chef/onboarding',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof SignInRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/sign-in': typeof SignInRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/sign-in': typeof SignInRoute
   '/verify-phone': typeof VerifyPhoneRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/verify-phone'
     | '/api/whatsapp'
+    | '/auth/callback'
     | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/verify-phone'
     | '/api/whatsapp'
+    | '/auth/callback'
     | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/verify-phone'
     | '/api/whatsapp'
+    | '/auth/callback'
     | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   SignInRoute: typeof SignInRoute
   VerifyPhoneRoute: typeof VerifyPhoneRoute
   ApiWhatsappRoute: typeof ApiWhatsappRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
   ChefOnboardingRoute: typeof ChefOnboardingRoute
   ApiSumsubAccessTokenRoute: typeof ApiSumsubAccessTokenRoute
   ApiSumsubWebhookRoute: typeof ApiSumsubWebhookRoute
@@ -273,6 +286,13 @@ declare module '@tanstack/react-router' {
       path: '/api/whatsapp'
       fullPath: '/api/whatsapp'
       preLoaderRoute: typeof ApiWhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chef/onboarding': {
@@ -364,6 +384,7 @@ const rootRouteChildren: RootRouteChildren = {
   SignInRoute: SignInRoute,
   VerifyPhoneRoute: VerifyPhoneRoute,
   ApiWhatsappRoute: ApiWhatsappRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
   ChefOnboardingRoute: ChefOnboardingRoute,
   ApiSumsubAccessTokenRoute: ApiSumsubAccessTokenRoute,
   ApiSumsubWebhookRoute: ApiSumsubWebhookRoute,
