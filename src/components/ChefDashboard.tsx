@@ -62,8 +62,8 @@ function ChefLogin({
       <p className="typography-eyebrow">Chef portal</p>
       <h1 className="display-title mt-4 text-4xl">Sign in to your kitchen.</h1>
       <p className="mt-4 text-ploy-text-secondary">
-        Use your phone, Google, or email. Portal access still requires an approved Girki chef
-        profile.
+        Use your phone, Google, Facebook, or email. Portal access still requires an approved Girki
+        chef profile.
       </p>
       {portalError ? (
         <p className="mt-4 text-sm text-ploy-accent-secondary">{portalError}</p>
@@ -105,7 +105,7 @@ function ChefLogin({
 }
 
 export default function ChefDashboard() {
-  const [session, setSession] = useState<ChefSession | null | undefined>(undefined)
+  const [session, setSession] = useState<ChefSession | null>(null)
   const [data, setData] = useState<ChefDashboardData | null>(null)
   const [quoteDrafts, setQuoteDrafts] = useState<Record<string, string>>({})
   const [busyId, setBusyId] = useState('')
@@ -120,20 +120,33 @@ export default function ChefDashboard() {
   }
 
   useEffect(() => {
+    let cancelled = false
     void (async () => {
       try {
         const existing = await getChefSessionFn()
+        if (cancelled) return
         if (existing) {
           setSession(existing)
           return
         }
+
+        const supabase = createSupabaseBrowserClient()
+        const { data: auth } = await supabase.auth.getSession()
+        if (!auth.session) return
+
         const established = await establishChefPortalSessionFn()
-        setSession(established)
+        if (!cancelled) setSession(established)
       } catch (err) {
-        setPortalError(err instanceof Error ? err.message : '')
-        setSession(null)
+        if (cancelled) return
+        const message = err instanceof Error ? err.message : ''
+        if (message && !message.toLowerCase().includes('unauthorized')) {
+          setPortalError(message)
+        }
       }
     })()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {
@@ -149,22 +162,10 @@ export default function ChefDashboard() {
       })
   }, [session])
 
-  if (session === undefined) {
-    return (
-      <div className="mx-auto max-w-7xl px-5 py-24 text-ploy-text-secondary">
-        Checking chef session…
-      </div>
-    )
-  }
-
   if (!session) {
     return (
       <ChefLogin
-        portalError={
-          portalError && !portalError.toLowerCase().includes('unauthorized')
-            ? portalError
-            : undefined
-        }
+        portalError={portalError || undefined}
         onSignedIn={(next) => {
           setPortalError('')
           setSession(next)

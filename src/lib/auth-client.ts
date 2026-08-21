@@ -63,18 +63,31 @@ export async function verifyPhoneOtp(rawPhone: string, token: string) {
   return data
 }
 
-export async function signInWithGoogle(intent: SignupIntent) {
+export async function signInWithOAuthProvider(
+  provider: 'google' | 'facebook',
+  intent: SignupIntent,
+) {
   setSignupIntent(intent)
   const supabase = createSupabaseBrowserClient()
   const redirectTo = `${window.location.origin}/auth/callback`
   const { error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
+    provider,
     options: {
       redirectTo,
-      queryParams: { access_type: 'offline', prompt: 'consent' },
+      ...(provider === 'google'
+        ? { queryParams: { access_type: 'offline', prompt: 'consent' } }
+        : {}),
     },
   })
   if (error) throw new Error(error.message)
+}
+
+export async function signInWithGoogle(intent: SignupIntent) {
+  return signInWithOAuthProvider('google', intent)
+}
+
+export async function signInWithFacebook(intent: SignupIntent) {
+  return signInWithOAuthProvider('facebook', intent)
 }
 
 export async function signInWithEmailPassword(email: string, password: string) {

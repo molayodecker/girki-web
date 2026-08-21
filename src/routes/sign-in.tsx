@@ -55,8 +55,8 @@ function SignInPage() {
             title={isChef ? 'Sign in to apply.' : 'Welcome to Girki.'}
             copy={
               isChef
-                ? 'Enter your mobile number to start your chef application. You can also use Google or email. Roles stay server-controlled.'
-                : 'Enter your mobile number. We’ll text a 6-digit code. No password required. Google and email are available if you prefer.'
+                ? 'Enter your mobile number to start your chef application. You can also use Google, Facebook, or email. Roles stay server-controlled.'
+                : 'Enter your mobile number. We’ll text a 6-digit code. No password required. Google, Facebook, and email are available if you prefer.'
             }
           />
           <div className="mt-10 rounded-[1.8rem] border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-6 sm:p-8">

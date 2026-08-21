@@ -6,6 +6,7 @@ import {
   sendPhoneOtp,
   setSignupIntent,
   signInWithEmailPassword,
+  signInWithFacebook,
   signInWithGoogle,
   signUpWithEmailPassword,
 } from '../../lib/auth-client'
@@ -27,8 +28,20 @@ export default function AuthLoginPanel({
 }) {
   const [showEmail, setShowEmail] = useState(false)
   const [message, setMessage] = useState('')
-  const [googleBusy, setGoogleBusy] = useState(false)
+  const [oauthBusy, setOauthBusy] = useState<'google' | 'facebook' | null>(null)
   const [altError, setAltError] = useState('')
+
+  async function startOAuth(provider: 'google' | 'facebook') {
+    setAltError('')
+    setOauthBusy(provider)
+    try {
+      if (provider === 'google') await signInWithGoogle(intent)
+      else await signInWithFacebook(intent)
+    } catch (error) {
+      setOauthBusy(null)
+      setAltError(error instanceof Error ? error.message : `${provider} sign-in failed.`)
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -47,22 +60,26 @@ export default function AuthLoginPanel({
         <span className="h-px flex-1 bg-ploy-border-primary" />
       </div>
 
-      <button
-        type="button"
-        className="btn btn-outline min-h-11 w-full gap-2"
-        disabled={googleBusy}
-        onClick={() => {
-          setAltError('')
-          setGoogleBusy(true)
-          void signInWithGoogle(intent).catch((error) => {
-            setGoogleBusy(false)
-            setAltError(error instanceof Error ? error.message : 'Google sign-in failed.')
-          })
-        }}
-      >
-        <GoogleMark />
-        {googleBusy ? 'Redirecting…' : 'Continue with Google'}
-      </button>
+      <div className="grid gap-3">
+        <button
+          type="button"
+          className="btn btn-outline min-h-11 w-full gap-2"
+          disabled={oauthBusy !== null}
+          onClick={() => void startOAuth('google')}
+        >
+          <GoogleMark />
+          {oauthBusy === 'google' ? 'Redirecting…' : 'Continue with Google'}
+        </button>
+        <button
+          type="button"
+          className="btn btn-outline min-h-11 w-full gap-2"
+          disabled={oauthBusy !== null}
+          onClick={() => void startOAuth('facebook')}
+        >
+          <FacebookMark />
+          {oauthBusy === 'facebook' ? 'Redirecting…' : 'Continue with Facebook'}
+        </button>
+      </div>
 
       <button
         type="button"
@@ -128,6 +145,17 @@ function GoogleMark() {
       <path
         fill="#EA4335"
         d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z"
+      />
+    </svg>
+  )
+}
+
+function FacebookMark() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+      <path
+        fill="#1877F2"
+        d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073"
       />
     </svg>
   )
