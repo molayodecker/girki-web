@@ -20,7 +20,7 @@ const columns = [
   },
   {
     title: 'Chefs',
-    links: [{ label: 'Become a chef', to: '/', hash: 'become-a-chef' }],
+    links: [{ label: 'Become a chef', to: '/become-a-chef' }],
   },
   {
     title: 'Company',
@@ -85,7 +85,7 @@ export default function SiteFooter() {
           { to: '/', hash: 'experiences', label: 'Explore', Icon: Search },
           { to: '/request', label: 'Request', Icon: CalendarDays },
           { to: '/chefs', label: 'Chefs', Icon: Utensils },
-          { to: '/', hash: 'become-a-chef', label: 'Join', Icon: UserRound },
+          { to: '/become-a-chef', label: 'Join', Icon: UserRound },
         ].map(({ to, hash, label, Icon }) => (
           <Link
             key={label}

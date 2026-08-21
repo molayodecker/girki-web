@@ -110,8 +110,7 @@ export default function HomePage() {
                     </Link>
                     <Link
                       className="btn btn-ghost min-h-12 border border-white/20 px-6"
-                      to="/"
-                      hash="become-a-chef"
+                      to="/become-a-chef"
                     >
                       Become a chef
                     </Link>
@@ -453,12 +452,9 @@ export default function HomePage() {
                   </span>
                 ))}
               </div>
-              <a
-                className="btn btn-primary mt-10"
-                href="mailto:chefs@girki.africa?subject=Girki chef application"
-              >
+              <Link className="btn btn-primary mt-10" to="/become-a-chef">
                 Apply as a chef
-              </a>
+              </Link>
             </div>
           </div>
         </section>
