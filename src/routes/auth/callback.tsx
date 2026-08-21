@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import PageShell from '../../components/layout/PageShell'
 import { ensureAuthProfileFn } from '../../lib/auth.functions'
+import { establishChefPortalSessionFn } from '../../lib/marketplace.functions'
 import { exchangeAuthCode, getSignupIntent, postAuthPath } from '../../lib/auth-client'
 
 export const Route = createFileRoute('/auth/callback')({
@@ -20,7 +21,11 @@ function AuthCallbackPage() {
           await exchangeAuthCode(url)
         }
         await ensureAuthProfileFn({ data: {} })
-        await navigate({ to: postAuthPath(getSignupIntent()), replace: true })
+        const intent = getSignupIntent()
+        if (intent === 'chef-portal') {
+          await establishChefPortalSessionFn()
+        }
+        await navigate({ to: postAuthPath(intent), replace: true })
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Sign-in callback failed.')
       }

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import OtpVerifyForm from '../components/auth/OtpVerifyForm'
 import PageShell, { PageIntro } from '../components/layout/PageShell'
 import { ensureAuthProfileFn } from '../lib/auth.functions'
+import { establishChefPortalSessionFn } from '../lib/marketplace.functions'
 import {
   clearPendingPhone,
   getPendingPhone,
@@ -55,7 +56,11 @@ function VerifyPhonePage() {
                 await verifyPhoneOtp(phone, otp)
                 await ensureAuthProfileFn({ data: { phone } })
                 clearPendingPhone()
-                await navigate({ to: postAuthPath(getSignupIntent()) })
+                const intent = getSignupIntent()
+                if (intent === 'chef-portal') {
+                  await establishChefPortalSessionFn()
+                }
+                await navigate({ to: postAuthPath(intent) })
               }}
               onResend={async () => {
                 await sendPhoneOtp(phone)

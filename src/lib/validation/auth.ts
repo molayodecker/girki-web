@@ -41,7 +41,7 @@ export const chefProfileSchema = z.object({
 
 export type ChefProfileValues = z.infer<typeof chefProfileSchema>
 
-export type SignupIntent = 'customer' | 'chef'
+export type SignupIntent = 'customer' | 'chef' | 'chef-portal'
 
 export const SIGNUP_INTENT_KEY = 'girki_signup_intent'
 export const PENDING_PHONE_KEY = 'girki_pending_phone'

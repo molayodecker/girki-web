@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PhoneContinueForm from './PhoneContinueForm'
 import EmailAuthForm from './EmailAuthForm'
-import type { SignupIntent } from '../../lib/validation/auth'
+import type { EmailPasswordValues, SignupIntent } from '../../lib/validation/auth'
 import {
   sendPhoneOtp,
   setSignupIntent,
@@ -15,11 +15,15 @@ export default function AuthLoginPanel({
   phoneSubmitLabel = 'Continue',
   onPhoneContinue,
   onSessionReady,
+  onEmailSignIn,
+  onEmailSignUp,
 }: {
   intent: SignupIntent
   phoneSubmitLabel?: string
   onPhoneContinue: () => Promise<void>
   onSessionReady: () => Promise<void>
+  onEmailSignIn?: (values: EmailPasswordValues) => Promise<void>
+  onEmailSignUp?: (values: EmailPasswordValues) => Promise<void>
 }) {
   const [showEmail, setShowEmail] = useState(false)
   const [message, setMessage] = useState('')
@@ -74,15 +78,23 @@ export default function AuthLoginPanel({
 
       {showEmail ? (
         <EmailAuthForm
-          onSignIn={async ({ email, password }) => {
+          onSignIn={async (values) => {
             setSignupIntent(intent)
             setMessage('')
-            await signInWithEmailPassword(email, password)
+            if (onEmailSignIn) {
+              await onEmailSignIn(values)
+              return
+            }
+            await signInWithEmailPassword(values.email, values.password)
             await onSessionReady()
           }}
-          onSignUp={async ({ email, password }) => {
+          onSignUp={async (values) => {
             setSignupIntent(intent)
-            const data = await signUpWithEmailPassword(email, password)
+            if (onEmailSignUp) {
+              await onEmailSignUp(values)
+              return
+            }
+            const data = await signUpWithEmailPassword(values.email, values.password)
             if (data.session) {
               await onSessionReady()
               return

@@ -254,3 +254,55 @@ export async function authenticateChef(email: string, password: string): Promise
     email: row.email ?? normalized,
   }
 }
+
+/** Issue portal cookie from the current Supabase user (linked chef_profiles.user_id). */
+export async function authenticateChefFromSupabaseUser(): Promise<ChefSession> {
+  const { requireSupabaseUser } = await import('./supabase/server')
+  const { user } = await requireSupabaseUser()
+
+  const rows = await sql<
+    Array<{
+      chef_id: string | number
+      slug: string
+      display_name: string
+      email: string | null
+      profile_status: string
+      verification_state: string
+      account_status: string | null
+    }>
+  >`
+    select
+      c.id as chef_id,
+      c.slug,
+      c.display_name,
+      coalesce(t.email, p.email) as email,
+      c.profile_status,
+      c.verification_state,
+      p.account_status
+    from public.chef_profiles c
+    left join private.chef_contacts t on t.chef_id = c.id
+    left join public.profiles p on p.id = c.user_id
+    where c.user_id = ${user.id}
+    order by
+      case when c.profile_status = 'active' then 0 else 1 end,
+      c.updated_at desc nulls last
+    limit 1
+  `
+
+  const row = rows[0]
+  if (!row) {
+    throw new Error(
+      'No chef profile is linked to this account yet. Finish applying as a chef, or sign in with the email Girki has on file.',
+    )
+  }
+  if (!chefMayOperate(row)) {
+    throw new Error('This chef account is not approved for portal access yet.')
+  }
+
+  return {
+    chefId: String(row.chef_id),
+    slug: row.slug,
+    displayName: row.display_name,
+    email: row.email ?? user.email ?? '',
+  }
+}

@@ -14,7 +14,8 @@ export function setSignupIntent(intent: SignupIntent) {
 export function getSignupIntent(): SignupIntent {
   if (typeof window === 'undefined') return 'customer'
   const value = window.sessionStorage.getItem(SIGNUP_INTENT_KEY)
-  return value === 'chef' ? 'chef' : 'customer'
+  if (value === 'chef' || value === 'chef-portal') return value
+  return 'customer'
 }
 
 export function clearSignupIntent() {
@@ -35,7 +36,9 @@ export function clearPendingPhone() {
 }
 
 export function postAuthPath(intent: SignupIntent = getSignupIntent()) {
-  return intent === 'chef' ? '/chef/onboarding' : '/request'
+  if (intent === 'chef') return '/chef/onboarding'
+  if (intent === 'chef-portal') return '/chef-dashboard'
+  return '/request'
 }
 
 export async function sendPhoneOtp(rawPhone: string) {
