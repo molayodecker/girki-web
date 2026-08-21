@@ -32,7 +32,7 @@ export const Route = createFileRoute('/api/sumsub/webhook')({
         } catch (error) {
           console.error('Sumsub webhook handler failed', error)
           // Still 200 to avoid endless retries on permanent data issues;
-          // Sumsub will retry on non-2xx — log for ops.
+          // Sumsub will retry on non-2xx. Log for ops.
           return new Response('handler error', { status: 500 })
         }
 

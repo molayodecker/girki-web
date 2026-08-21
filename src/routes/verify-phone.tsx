@@ -47,7 +47,7 @@ function VerifyPhonePage() {
           <PageIntro
             eyebrow="Verify"
             title="Enter the code we sent."
-            copy={`Sent to ${phone}. Codes expire quickly — request a new one if needed.`}
+            copy={`Sent to ${phone}. Codes expire quickly. Request a new one if needed.`}
           />
           <div className="mt-10 rounded-[1.8rem] border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-6 sm:p-8">
             <OtpVerifyForm

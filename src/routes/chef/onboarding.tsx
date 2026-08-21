@@ -93,7 +93,7 @@ function ChefOnboardingPage() {
           <PageIntro
             eyebrow="Chef onboarding"
             title="Build your Girki kitchen."
-            copy="Verify identity with Sumsub, then Girki reviews your profile before you go live. Roles stay server-controlled — this never sets you to verified from the browser."
+            copy="Verify identity with Sumsub, then Girki reviews your profile before you go live. Roles stay server-controlled. This never sets you to verified from the browser."
           />
 
           <ol className="mt-8 flex flex-wrap gap-2 text-xs uppercase tracking-[0.08em] text-ploy-text-secondary">
@@ -185,7 +185,7 @@ function ChefOnboardingPage() {
                   <h2 className="font-heading text-2xl tracking-tight">Identity verification</h2>
                   <p className="mt-2 text-sm text-ploy-text-secondary">
                     Upload a government ID and complete the selfie check. Approval comes from
-                    Sumsub webhooks on the server — not from this browser session.
+                    Sumsub webhooks on the server, not from this browser session.
                   </p>
                 </div>
                 <SumsubWebSdk

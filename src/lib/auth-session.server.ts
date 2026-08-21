@@ -147,7 +147,7 @@ async function assertChefStillAuthorized(session: ChefSession): Promise<ChefSess
   }
 }
 
-/** Cookie decode only — do not use for mutations. */
+/** Cookie decode only. Do not use for mutations. */
 export function requireChefSession(): ChefSession {
   const session = readChefSession()
   if (!session) throw new Error('Unauthorized. Sign in as a chef to continue.')
