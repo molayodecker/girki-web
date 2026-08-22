@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
 import type { GirkiShapeId } from '../../data/patterns'
-import { girkiShapes } from '../../data/patterns'
+import { girkiBrand, girkiShapes } from '../../data/patterns'
 
 type CropAnchor =
   | 'top-left'
@@ -36,7 +36,7 @@ const anchorPosition: Record<CropAnchor, string> = {
 
 /**
  * Oversized Girki shape meant to be cropped by its parent overflow.
- * Black PNG grounds disappear on dark surfaces via screen blend.
+ * With `fill`, the PNG alpha masks a solid brand color (plum on photo cards).
  */
 export default function GirkiCroppedShape({
   shape,
@@ -45,28 +45,57 @@ export default function GirkiCroppedShape({
   opacity = 0.55,
   rotate = 0,
   blend = 'screen',
+  fill,
   pushX = '0%',
   pushY = '0%',
   className = '',
 }: {
   shape: GirkiShapeId
-  /** CSS length for width/height (e.g. 28rem, 55vw). */
   size?: string
   anchor?: CropAnchor
   opacity?: number
   rotate?: number
   blend?: 'screen' | 'normal' | 'lighten' | 'multiply'
-  /** Extra nudge after anchor offset — pushes shape further off-canvas for aggressive crops. */
+  /** Solid brand color — shape silhouette from PNG mask. */
+  fill?: string
   pushX?: string
   pushY?: string
   className?: string
 }) {
+  const transform = `${anchorTransform[anchor]} translate(${pushX}, ${pushY})${rotate ? ` rotate(${rotate}deg)` : ''}`
+
+  if (fill) {
+    const maskStyle = {
+      width: size,
+      height: size,
+      opacity,
+      backgroundColor: fill,
+      transform,
+      maskImage: `url(${girkiShapes[shape]})`,
+      WebkitMaskImage: `url(${girkiShapes[shape]})`,
+      maskSize: 'contain',
+      WebkitMaskSize: 'contain',
+      maskRepeat: 'no-repeat',
+      WebkitMaskRepeat: 'no-repeat',
+      maskPosition: 'center',
+      WebkitMaskPosition: 'center',
+    } as CSSProperties
+
+    return (
+      <div
+        className={`pointer-events-none absolute z-0 ${anchorPosition[anchor]} ${className}`}
+        style={maskStyle}
+        aria-hidden="true"
+      />
+    )
+  }
+
   const style = {
     width: size,
     height: size,
     opacity,
     mixBlendMode: blend,
-    transform: `${anchorTransform[anchor]} translate(${pushX}, ${pushY})${rotate ? ` rotate(${rotate}deg)` : ''}`,
+    transform,
   } as CSSProperties
 
   return (
@@ -80,3 +109,5 @@ export default function GirkiCroppedShape({
     />
   )
 }
+
+export const girkiGestureColor = girkiBrand.plum
