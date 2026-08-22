@@ -262,49 +262,23 @@ export default function HomePage() {
           <GirkiBorderStrip />
         </section>
 
-        <section id="experiences" className="relative overflow-hidden bg-ploy-background-secondary">
-          <div
-            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(20vw,13rem)] overflow-hidden lg:block"
-            aria-hidden="true"
-          >
-            <div className="absolute inset-0 bg-girki-charcoal" />
-            <GirkiCroppedShape
-              shape="tableArch"
-              anchor="top-right"
-              size="min(28vw, 22rem)"
-              opacity={0.42}
-              blend="screen"
-              pushX="22%"
-              pushY="-18%"
-            />
-            <GirkiCroppedShape
-              shape="wovenDiamond"
-              anchor="bottom-center"
-              size="min(26vw, 20rem)"
-              opacity={0.34}
-              blend="screen"
-              pushY="28%"
-            />
-            <div className="absolute inset-0 bg-linear-to-l from-transparent via-ploy-background-secondary/25 to-ploy-background-secondary" />
-          </div>
-          <div className="relative z-10 section-pad">
-            <div className="mx-auto max-w-7xl">
-              <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                  <p className="typography-eyebrow">Occasions</p>
-                  <h2 className="display-title mt-5 max-w-xl text-4xl sm:text-5xl">
-                    Your table. Your night. Your chef.
-                  </h2>
-                </div>
-                <Link
-                  to="/request"
-                  className="inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase"
-                >
-                  Explore all <ArrowUpRight size={16} aria-hidden="true" />
-                </Link>
+        <section id="experiences" className="section-pad bg-ploy-background-secondary">
+          <div className="mx-auto max-w-7xl">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="typography-eyebrow">Occasions</p>
+                <h2 className="display-title mt-5 max-w-xl text-4xl sm:text-5xl">
+                  Your table. Your night. Your chef.
+                </h2>
               </div>
-              <ExperiencesGrid />
+              <Link
+                to="/request"
+                className="inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase"
+              >
+                Explore all <ArrowUpRight size={16} aria-hidden="true" />
+              </Link>
             </div>
+            <ExperiencesGrid />
           </div>
         </section>
 
