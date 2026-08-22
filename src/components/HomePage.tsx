@@ -10,6 +10,10 @@ import {
 } from 'lucide-react'
 import ChefCard from './ChefCard'
 import ExperiencesGrid from './ExperiencesGrid'
+import GirkiBorderStrip from './patterns/GirkiBorderStrip'
+import GirkiPatternBand from './patterns/GirkiPatternBand'
+import GirkiShapeIcon from './patterns/GirkiShapeIcon'
+import type { GirkiShapeId } from '../data/patterns'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
 import SearchSelect from './SearchSelect'
@@ -37,19 +41,19 @@ const howItWorks = [
   {
     title: 'Tell us what you want',
     copy: 'City, date, guests, and the kind of table you have in mind. No commitment.',
-    icon: '/images/how-it-works/tell-us.png',
-    iconAlt: 'Compose your request',
+    shape: 'conversationArc' as const,
+    iconAlt: 'Start your request',
   },
   {
     title: 'Compare and customize',
     copy: 'Chefs propose menus around your evening. You refine every course.',
-    icon: '/images/how-it-works/compare.png',
+    shape: 'cloche' as const,
     iconAlt: 'Compare chef proposals',
   },
   {
     title: 'Host, and do nothing else',
     copy: 'Groceries, cooking, service, and cleanup are theirs. The table is yours.',
-    icon: '/images/how-it-works/host.png',
+    shape: 'tableArch' as const,
     iconAlt: 'Host at home',
   },
 ]
@@ -172,6 +176,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <GirkiBorderStrip tone="dark" />
+
         <section id="how-it-works" className="section-pad">
           <div className="mx-auto max-w-7xl">
             <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
@@ -189,13 +195,7 @@ export default function HomePage() {
             <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
               {howItWorks.map((step) => (
                 <article key={step.title} className="relative pt-2">
-                  <img
-                    src={step.icon}
-                    alt={step.iconAlt}
-                    width={72}
-                    height={72}
-                    className="size-[4.5rem] rounded-[1.15rem] object-contain"
-                  />
+                  <GirkiShapeIcon shape={step.shape} alt={step.iconAlt} size={72} />
                   <h3 className="mt-6 font-heading text-2xl tracking-tight">{step.title}</h3>
                   <p className="mt-3 max-w-sm leading-relaxed text-ploy-text-secondary">
                     {step.copy}
@@ -211,6 +211,8 @@ export default function HomePage() {
             </Link>
           </div>
         </section>
+
+        <GirkiBorderStrip />
 
         <section id="experiences" className="section-pad bg-ploy-background-secondary">
           <div className="mx-auto max-w-7xl">
@@ -231,6 +233,8 @@ export default function HomePage() {
             <ExperiencesGrid />
           </div>
         </section>
+
+        <GirkiPatternBand pattern="woven" height="sm" />
 
         <section id="featured-chefs" className="section-pad">
           <div className="mx-auto max-w-7xl">
@@ -290,6 +294,8 @@ export default function HomePage() {
           </div>
         </section>
 
+        <GirkiPatternBand pattern="gathering" height="md" overlay />
+
         <section id="reviews" className="section-pad bg-ploy-neutral-inverse text-ploy-text-inverse">
           <div className="mx-auto max-w-7xl">
             <p className="typography-eyebrow">Guest notes</p>
@@ -319,6 +325,8 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        <GirkiBorderStrip tone="light" />
 
         <section id="menus" className="section-pad">
           <div className="mx-auto max-w-7xl">
@@ -408,16 +416,16 @@ export default function HomePage() {
               </p>
             </div>
             <div className="mt-14 grid gap-px overflow-hidden rounded-[1.6rem] border border-ploy-border-primary bg-ploy-border-primary md:grid-cols-2 lg:grid-cols-4">
-              {trustItems.map((item) => (
+              {(
+                [
+                  { ...trustItems[0], shape: 'plate' as GirkiShapeId },
+                  { ...trustItems[1], shape: 'wovenDiamond' as GirkiShapeId },
+                  { ...trustItems[2], shape: 'flameDrop' as GirkiShapeId },
+                  { ...trustItems[3], shape: 'conversationArc' as GirkiShapeId },
+                ] as const
+              ).map((item) => (
                 <article key={item.title} className="bg-ploy-background-primary p-8">
-                  <img
-                    src={item.icon}
-                    alt=""
-                    width={48}
-                    height={48}
-                    className="size-12 rounded-[0.9rem] object-contain"
-                    aria-hidden="true"
-                  />
+                  <GirkiShapeIcon shape={item.shape} alt="" size={48} />
                   <h3 className="mt-8 font-heading text-2xl tracking-tight">{item.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-ploy-text-secondary">
                     {item.copy}
@@ -429,6 +437,8 @@ export default function HomePage() {
         </section>
 
         <section id="become-a-chef" className="section-pad pt-0 lg:pt-0">
+          <GirkiPatternBand pattern="flavor" height="sm" />
+          <GirkiBorderStrip className="mb-8" />
           <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-ploy-accent-primary text-ploy-text-on-accent-primary lg:grid-cols-2">
             <img
               src={images.opportunity}

@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CalendarDays, House, Search, UserRound, Utensils } from 'lucide-react'
+import GirkiPatternBand from '../patterns/GirkiPatternBand'
 
 const columns = [
   {
@@ -34,6 +35,7 @@ const columns = [
 export default function SiteFooter() {
   return (
     <>
+      <GirkiPatternBand pattern="service" height="md" />
       <footer className="bg-ploy-neutral-inverse px-5 pb-28 pt-20 text-ploy-text-inverse lg:px-8 lg:pb-12">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-14 border-b border-white/10 pb-16 lg:grid-cols-[1.4fr_2.2fr]">

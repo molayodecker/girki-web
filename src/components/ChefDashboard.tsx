@@ -9,6 +9,8 @@ import {
   UtensilsCrossed,
 } from 'lucide-react'
 import AuthLoginPanel from './auth/AuthLoginPanel'
+import GirkiBorderStrip from './patterns/GirkiBorderStrip'
+import GirkiPatternBand from './patterns/GirkiPatternBand'
 import { getChef } from '../data/marketplace'
 import { ensureAuthProfileFn } from '../lib/auth.functions'
 import {
@@ -58,7 +60,9 @@ function ChefLogin({
   }
 
   return (
-    <div className="mx-auto max-w-md px-5 py-24">
+    <div className="mx-auto max-w-md px-5 py-16 sm:py-24">
+      <GirkiPatternBand pattern="service" height="sm" className="mb-8 rounded-[1.4rem]" />
+      <GirkiBorderStrip className="mb-10" tone="dark" />
       <p className="typography-eyebrow">Chef portal</p>
       <h1 className="display-title mt-4 text-4xl">Sign in to your kitchen.</h1>
       <p className="mt-4 text-ploy-text-secondary">
