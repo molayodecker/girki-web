@@ -264,11 +264,28 @@ export default function HomePage() {
 
         <section id="experiences" className="relative overflow-hidden bg-ploy-background-secondary">
           <div
-            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(28vw,18rem)] overflow-hidden lg:block"
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(20vw,13rem)] overflow-hidden lg:block"
             aria-hidden="true"
           >
-            <GirkiComposition composition="tableRhythm" scale={0.85} opacity={0.9} />
-            <div className="absolute inset-0 bg-linear-to-l from-transparent via-ploy-background-secondary/20 to-ploy-background-secondary" />
+            <div className="absolute inset-0 bg-girki-charcoal" />
+            <GirkiCroppedShape
+              shape="tableArch"
+              anchor="top-right"
+              size="min(28vw, 22rem)"
+              opacity={0.42}
+              blend="screen"
+              pushX="22%"
+              pushY="-18%"
+            />
+            <GirkiCroppedShape
+              shape="wovenDiamond"
+              anchor="bottom-center"
+              size="min(26vw, 20rem)"
+              opacity={0.34}
+              blend="screen"
+              pushY="28%"
+            />
+            <div className="absolute inset-0 bg-linear-to-l from-transparent via-ploy-background-secondary/25 to-ploy-background-secondary" />
           </div>
           <div className="relative z-10 section-pad">
             <div className="mx-auto max-w-7xl">

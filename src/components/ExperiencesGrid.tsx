@@ -3,17 +3,14 @@ import { ArrowUpRight } from 'lucide-react'
 import { experiences } from '../data/home'
 import type { GirkiShapeId } from '../data/patterns'
 import GirkiCroppedShape from './patterns/GirkiCroppedShape'
-import GirkiPatternFill from './patterns/GirkiPatternFill'
 
 type Accent = {
   shape: GirkiShapeId
   anchor: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'center-right'
   size: string
-  /** Keep accents secondary — typically 0.18–0.35 over photography. */
   opacity: number
-  /** Optional narrow pattern edge band (never a full-card fill). */
-  edge?: 'top' | 'bottom' | 'left' | 'right'
-  edgePattern?: 'woven' | 'gathering' | 'service' | 'flavor'
+  pushX?: string
+  pushY?: string
 }
 
 const layout = [
@@ -26,58 +23,45 @@ const layout = [
 ] as const
 
 /**
- * Photo-first occasion cards. Patterns are secondary accents only (~20% visual weight).
- * Never replace photography with full-card pattern fills.
+ * Photo-first occasion cards — one geometric gesture max per card (~20% visual weight).
+ * Patterns frame the experience; they do not become the experience.
  */
-const accents: Accent[] = [
+const accents: (Accent | null)[] = [
   {
     shape: 'plate',
     anchor: 'bottom-right',
-    size: '18rem',
-    opacity: 0.28,
+    size: '24rem',
+    opacity: 0.17,
+    pushX: '20%',
+    pushY: '24%',
   },
-  {
-    shape: 'wovenDiamond',
-    anchor: 'top-right',
-    size: '11rem',
-    opacity: 0.22,
-    edge: 'top',
-    edgePattern: 'woven',
-  },
+  null,
   {
     shape: 'conversationArc',
-    anchor: 'center-right',
-    size: '14rem',
-    opacity: 0.26,
+    anchor: 'bottom-right',
+    size: '13rem',
+    opacity: 0.19,
+    pushX: '14%',
+    pushY: '16%',
   },
   {
     shape: 'flameDrop',
-    anchor: 'top-right',
-    size: '10rem',
-    opacity: 0.24,
+    anchor: 'bottom-right',
+    size: '9rem',
+    opacity: 0.18,
+    pushX: '12%',
+    pushY: '14%',
   },
-  {
-    shape: 'tableArch',
-    anchor: 'bottom-left',
-    size: '12rem',
-    opacity: 0.22,
-    edge: 'left',
-    edgePattern: 'service',
-  },
+  null,
   {
     shape: 'cloche',
     anchor: 'bottom-left',
-    size: '14rem',
-    opacity: 0.26,
+    size: '13rem',
+    opacity: 0.2,
+    pushX: '-10%',
+    pushY: '20%',
   },
 ]
-
-const edgeClass = {
-  top: 'inset-x-0 top-0 h-10',
-  bottom: 'inset-x-0 bottom-0 h-10',
-  left: 'inset-y-0 left-0 w-10',
-  right: 'inset-y-0 right-0 w-10',
-} as const
 
 export default function ExperiencesGrid() {
   return (
@@ -98,26 +82,6 @@ export default function ExperiencesGrid() {
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/28 to-black/5" />
 
-            {accent?.edge && accent.edgePattern ? (
-              <div
-                className={`absolute z-[1] overflow-hidden opacity-55 ${edgeClass[accent.edge]}`}
-                aria-hidden="true"
-              >
-                <GirkiPatternFill pattern={accent.edgePattern} scale={0.55} />
-                <div
-                  className={`absolute inset-0 ${
-                    accent.edge === 'top'
-                      ? 'bg-linear-to-b from-transparent to-black/40'
-                      : accent.edge === 'bottom'
-                        ? 'bg-linear-to-t from-transparent to-black/40'
-                        : accent.edge === 'left'
-                          ? 'bg-linear-to-r from-transparent to-black/50'
-                          : 'bg-linear-to-l from-transparent to-black/50'
-                  }`}
-                />
-              </div>
-            ) : null}
-
             {accent ? (
               <GirkiCroppedShape
                 shape={accent.shape}
@@ -125,6 +89,8 @@ export default function ExperiencesGrid() {
                 size={accent.size}
                 opacity={accent.opacity}
                 blend="screen"
+                pushX={accent.pushX}
+                pushY={accent.pushY}
               />
             ) : null}
 
