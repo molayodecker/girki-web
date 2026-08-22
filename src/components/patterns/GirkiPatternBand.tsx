@@ -1,5 +1,5 @@
 import type { GirkiPatternId } from '../../data/patterns'
-import { girkiPatternBackgroundStyle, girkiPatternMeta } from '../../data/patterns'
+import { girkiPatternMeta, girkiPatterns } from '../../data/patterns'
 
 /** Full-width decorative pattern field (hero bands, footer lead-in). */
 export default function GirkiPatternBand({
@@ -15,18 +15,24 @@ export default function GirkiPatternBand({
   bleed?: boolean
 }) {
   const meta = girkiPatternMeta[pattern]
-  const tileRows =
-    height === 'sm' ? 1 : height === 'lg' ? 3 : height === 'fill' ? 1 : 2
-  const bandHeight =
-    height === 'fill' ? undefined : meta.tileHeight * tileRows
+  const heightClass =
+    height === 'sm'
+      ? 'h-28 sm:h-32'
+      : height === 'lg'
+        ? 'h-44 sm:h-52'
+        : height === 'fill'
+          ? 'min-h-full'
+          : 'h-36 sm:h-40'
 
   return (
     <div
-      className={`girki-pattern-band w-full overflow-hidden ${bleed ? '' : ''} ${className}`}
+      className={`girki-pattern-band ${bleed ? '' : ''} ${heightClass} ${className}`}
       style={{
-        ...girkiPatternBackgroundStyle(pattern, 'repeat'),
-        height: bandHeight,
-        minHeight: height === 'fill' ? meta.tileHeight * 2 : undefined,
+        backgroundColor: meta.ground,
+        backgroundImage: `url(${girkiPatterns[pattern]})`,
+        backgroundRepeat: 'repeat',
+        backgroundSize: `${meta.tileWidth}px ${meta.tileHeight}px`,
+        backgroundPosition: 'center',
       }}
       aria-hidden="true"
     />

@@ -1,4 +1,4 @@
-import { girkiPatternBackgroundStyle, girkiPatternMeta } from '../../data/patterns'
+import { girkiPatternMeta, girkiPatterns } from '../../data/patterns'
 
 /** SweepSouth-style repeating icon strip between sections. */
 export default function GirkiBorderStrip({
@@ -6,14 +6,18 @@ export default function GirkiBorderStrip({
 }: {
   className?: string
 }) {
-  const { tileHeight } = girkiPatternMeta.borderStrip
+  const meta = girkiPatternMeta.borderStrip
 
   return (
     <div
       className={`girki-border-strip w-full overflow-hidden leading-none ${className}`}
       style={{
-        ...girkiPatternBackgroundStyle('borderStrip', 'repeat-x'),
-        height: tileHeight,
+        height: meta.tileHeight,
+        backgroundColor: meta.ground,
+        backgroundImage: `url(${girkiPatterns.borderStrip})`,
+        backgroundRepeat: 'repeat-x',
+        backgroundSize: `${meta.tileWidth}px 100%`,
+        backgroundPosition: 'center',
       }}
       aria-hidden="true"
     />
