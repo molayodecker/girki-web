@@ -17,12 +17,12 @@ export default function GirkiPatternBand({
   const meta = girkiPatternMeta[pattern]
   const heightClass =
     height === 'sm'
-      ? 'h-28 sm:h-32'
+      ? 'h-40 sm:h-48'
       : height === 'lg'
-        ? 'h-44 sm:h-52'
+        ? 'h-56 sm:h-64'
         : height === 'fill'
           ? 'min-h-full'
-          : 'h-36 sm:h-40'
+          : 'h-48 sm:h-56'
 
   return (
     <div
