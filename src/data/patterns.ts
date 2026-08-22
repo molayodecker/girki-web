@@ -42,30 +42,37 @@ export const girkiPatternMeta: Record<
 }
 
 /**
- * Four reusable Girki master compositions built from existing tiles + shapes.
- * Prefer these over inventing one-off pattern treatments per page.
+ * Named composition IDs for the true shape-assembled pattern system.
+ * Prefer GirkiComposition over inventing one-off treatments.
  */
-export const girkiCompositions = {
+export type GirkiCompositionId =
+  | 'gathering'
+  | 'feast'
+  | 'tableRhythm'
+  | 'celebration'
+
+export const girkiCompositions: Record<
+  GirkiCompositionId,
+  { ground: string; shapes: readonly GirkiShapeId[]; note: string }
+> = {
   gathering: {
-    pattern: 'gathering' as const,
     ground: girkiBrand.plum,
-    shapes: ['plate', 'conversationArc', 'flameDrop'] as const,
+    shapes: ['plate', 'conversationArc', 'wovenDiamond'],
+    note: 'Plate + conversation arc + woven diamond',
   },
-  table: {
-    pattern: 'woven' as const,
+  feast: {
+    ground: girkiBrand.charcoal,
+    shapes: ['cloche', 'flameDrop'],
+    note: 'Repeating cloche domes with gold and terracotta accents',
+  },
+  tableRhythm: {
     ground: girkiBrand.palm,
-    shapes: ['tableArch', 'wovenDiamond'] as const,
+    shapes: ['tableArch', 'plate', 'wovenDiamond'],
+    note: 'Interlocking table arches with plates and diamonds',
   },
   celebration: {
-    pattern: 'flavor' as const,
-    ground: girkiBrand.cream,
-    shapes: ['cloche', 'plate', 'wovenDiamond'] as const,
+    ground: girkiBrand.plum,
+    shapes: ['cloche', 'plate', 'flameDrop', 'wovenDiamond', 'conversationArc'],
+    note: 'Expressive partial forms with negative space',
   },
-  quiet: {
-    pattern: 'service' as const,
-    ground: girkiBrand.charcoal,
-    shapes: ['conversationArc'] as const,
-  },
-} as const
-
-export type GirkiCompositionId = keyof typeof girkiCompositions
+}

@@ -11,9 +11,8 @@ import {
 import ChefCard from './ChefCard'
 import ExperiencesGrid from './ExperiencesGrid'
 import GirkiBorderStrip from './patterns/GirkiBorderStrip'
+import GirkiComposition from './patterns/GirkiComposition'
 import GirkiCroppedShape from './patterns/GirkiCroppedShape'
-import GirkiPatternBand from './patterns/GirkiPatternBand'
-import GirkiPatternFill from './patterns/GirkiPatternFill'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
 import SearchSelect from './SearchSelect'
@@ -92,16 +91,24 @@ export default function HomePage() {
             <GirkiCroppedShape
               shape="conversationArc"
               anchor="center-right"
-              size="min(72vw, 44rem)"
-              opacity={0.55}
+              size="min(90vw, 56rem)"
+              opacity={0.5}
               blend="screen"
               className="hidden sm:block"
             />
             <GirkiCroppedShape
+              shape="plate"
+              anchor="bottom-right"
+              size="min(70vw, 38rem)"
+              opacity={0.35}
+              blend="screen"
+              className="hidden md:block"
+            />
+            <GirkiCroppedShape
               shape="cloche"
               anchor="bottom-left"
-              size="min(48vw, 26rem)"
-              opacity={0.4}
+              size="min(58vw, 32rem)"
+              opacity={0.42}
               blend="screen"
               rotate={-8}
             />
@@ -188,53 +195,57 @@ export default function HomePage() {
 
         <GirkiBorderStrip />
 
-        <section id="how-it-works" className="relative overflow-hidden bg-girki-charcoal text-ploy-text-inverse">
-          <GirkiPatternFill pattern="service" scale={0.55} opacity={0.55} />
+        <section id="how-it-works" className="relative overflow-hidden bg-girki-charcoal text-girki-cream">
           <GirkiCroppedShape
             shape="conversationArc"
             anchor="top-left"
-            size="28rem"
-            opacity={0.45}
+            size="min(72vw, 54rem)"
+            opacity={0.52}
             blend="screen"
-          />
-          <GirkiCroppedShape
-            shape="cloche"
-            anchor="bottom-center"
-            size="34rem"
-            opacity={0.35}
-            blend="screen"
+            pushX="-12%"
+            pushY="-10%"
           />
           <GirkiCroppedShape
             shape="tableArch"
             anchor="top-right"
-            size="22rem"
-            opacity={0.4}
+            size="min(68vw, 50rem)"
+            opacity={0.42}
             blend="screen"
+            pushX="14%"
+            pushY="-8%"
           />
-          <div className="relative z-10 section-pad">
+          <GirkiCroppedShape
+            shape="plate"
+            anchor="bottom-center"
+            size="min(80vw, 58rem)"
+            opacity={0.38}
+            blend="screen"
+            pushY="18%"
+          />
+          <div className="relative z-10 section-pad pb-20 sm:pb-24">
             <div className="mx-auto max-w-7xl">
               <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
                 <div>
-                  <p className="typography-eyebrow text-ploy-accent-tertiary">The experience</p>
-                  <h2 className="display-title mt-5 text-4xl sm:text-5xl">
+                  <p className="typography-eyebrow text-girki-saffron">The experience</p>
+                  <h2 className="display-title mt-5 text-4xl text-girki-cream sm:text-5xl">
                     A restaurant, without leaving home.
                   </h2>
                 </div>
-                <p className="max-w-xl text-lg leading-relaxed text-white/65 lg:justify-self-end">
+                <p className="max-w-xl text-lg leading-relaxed text-girki-cream/70 lg:justify-self-end">
                   Girki brings chef discovery, a tailored menu, and African
                   hospitality into one quiet booking.
                 </p>
               </div>
-              <div className="mt-16 grid gap-10 border-t border-white/10 pt-12 md:grid-cols-3 md:gap-8">
+              <div className="mt-16 grid gap-10 border-t border-girki-cream/10 pt-12 md:grid-cols-3 md:gap-8">
                 {howItWorks.map((step, index) => (
                   <article key={step.title} className="relative">
-                    <p className="typography-eyebrow text-ploy-accent-tertiary">
+                    <p className="typography-eyebrow text-girki-saffron">
                       {String(index + 1).padStart(2, '0')}
                     </p>
-                    <h3 className="mt-4 font-heading text-2xl tracking-tight text-white">
+                    <h3 className="mt-4 font-heading text-2xl tracking-tight text-girki-cream">
                       {step.title}
                     </h3>
-                    <p className="mt-3 max-w-sm leading-relaxed text-white/60">
+                    <p className="mt-3 max-w-sm leading-relaxed text-girki-cream/65">
                       {step.copy}
                     </p>
                   </article>
@@ -242,31 +253,41 @@ export default function HomePage() {
               </div>
               <Link
                 to="/request"
-                className="mt-14 inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase text-white"
+                className="mt-14 inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase text-girki-cream"
               >
                 Start a request <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
           </div>
+          <GirkiBorderStrip />
         </section>
 
-        <section id="experiences" className="section-pad bg-ploy-background-secondary">
-          <div className="mx-auto max-w-7xl">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <p className="typography-eyebrow">Occasions</p>
-                <h2 className="display-title mt-5 max-w-xl text-4xl sm:text-5xl">
-                  Your table. Your night. Your chef.
-                </h2>
+        <section id="experiences" className="relative overflow-hidden bg-ploy-background-secondary">
+          <div
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[min(28vw,18rem)] overflow-hidden lg:block"
+            aria-hidden="true"
+          >
+            <GirkiComposition composition="tableRhythm" scale={0.85} opacity={0.9} />
+            <div className="absolute inset-0 bg-linear-to-l from-transparent via-ploy-background-secondary/20 to-ploy-background-secondary" />
+          </div>
+          <div className="relative z-10 section-pad">
+            <div className="mx-auto max-w-7xl">
+              <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="typography-eyebrow">Occasions</p>
+                  <h2 className="display-title mt-5 max-w-xl text-4xl sm:text-5xl">
+                    Your table. Your night. Your chef.
+                  </h2>
+                </div>
+                <Link
+                  to="/request"
+                  className="inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase"
+                >
+                  Explore all <ArrowUpRight size={16} aria-hidden="true" />
+                </Link>
               </div>
-              <Link
-                to="/request"
-                className="inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase"
-              >
-                Explore all <ArrowUpRight size={16} aria-hidden="true" />
-              </Link>
+              <ExperiencesGrid />
             </div>
-            <ExperiencesGrid />
           </div>
         </section>
 
@@ -305,16 +326,16 @@ export default function HomePage() {
               <GirkiCroppedShape
                 shape="plate"
                 anchor="bottom-right"
-                size="18rem"
-                opacity={0.65}
+                size="min(55vw, 28rem)"
+                opacity={0.7}
                 blend="screen"
               />
               <div
-                className="absolute inset-y-0 left-0 w-1/4 overflow-hidden"
+                className="absolute inset-y-0 left-0 w-[32%] overflow-hidden"
                 aria-hidden="true"
               >
-                <GirkiPatternFill pattern="flavor" scale={0.7} />
-                <div className="absolute inset-0 bg-linear-to-r from-transparent to-black/20" />
+                <GirkiComposition composition="gathering" scale={0.7} />
+                <div className="absolute inset-0 bg-linear-to-r from-transparent to-black/25" />
               </div>
             </div>
             <div>
@@ -342,8 +363,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="reviews" className="bg-girki-plum text-ploy-text-inverse">
-          <GirkiPatternBand pattern="gathering" height="sm" bleed />
+        <section id="reviews" className="relative overflow-hidden bg-girki-plum text-ploy-text-inverse">
+          <div className="relative h-28 overflow-hidden sm:h-32" aria-hidden="true">
+            <GirkiComposition composition="celebration" scale={0.8} />
+          </div>
           <div className="section-pad">
             <p className="typography-eyebrow">Guest notes</p>
             <h2 className="display-title mt-5 max-w-3xl text-4xl sm:text-5xl">
@@ -503,13 +526,13 @@ export default function HomePage() {
               <GirkiCroppedShape
                 shape="cloche"
                 anchor="bottom-right"
-                size="20rem"
-                opacity={0.55}
+                size="min(70vw, 30rem)"
+                opacity={0.6}
                 blend="screen"
               />
             </div>
             <div className="relative overflow-hidden p-8 sm:p-12 lg:p-16">
-              <GirkiPatternFill pattern="gathering" scale={0.7} opacity={0.35} />
+              <GirkiComposition composition="feast" scale={0.75} opacity={0.55} />
               <div className="relative z-10">
                 <p className="typography-eyebrow text-ploy-accent-tertiary">For chefs</p>
                 <h2 className="display-title mt-5 text-4xl sm:text-5xl">

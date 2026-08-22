@@ -45,6 +45,8 @@ export default function GirkiCroppedShape({
   opacity = 0.55,
   rotate = 0,
   blend = 'screen',
+  pushX = '0%',
+  pushY = '0%',
   className = '',
 }: {
   shape: GirkiShapeId
@@ -54,6 +56,9 @@ export default function GirkiCroppedShape({
   opacity?: number
   rotate?: number
   blend?: 'screen' | 'normal' | 'lighten' | 'multiply'
+  /** Extra nudge after anchor offset — pushes shape further off-canvas for aggressive crops. */
+  pushX?: string
+  pushY?: string
   className?: string
 }) {
   const style = {
@@ -61,7 +66,7 @@ export default function GirkiCroppedShape({
     height: size,
     opacity,
     mixBlendMode: blend,
-    transform: `${anchorTransform[anchor]}${rotate ? ` rotate(${rotate}deg)` : ''}`,
+    transform: `${anchorTransform[anchor]} translate(${pushX}, ${pushY})${rotate ? ` rotate(${rotate}deg)` : ''}`,
   } as CSSProperties
 
   return (
