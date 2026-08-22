@@ -36,18 +36,19 @@ const anchorPosition: Record<CropAnchor, string> = {
 
 export const girkiGestureColor = girkiBrand.plum
 
-const stroke = '5px'
+/** Thin editorial stroke — never bold enough to read as illustration. */
+const stroke = '2.5px'
 
 /**
- * Solid plum CSS gestures — readable on photography without PNG mask artifacts.
- * One per card: arc, circle, drop, or cloche silhouette.
+ * CSS stroke gestures derived from Girki shapes. One per photo card:
+ * thin, low-opacity, cropped at edges — never over faces or copy.
  */
 export default function GirkiGestureAccent({
   shape,
   size = '12rem',
   anchor = 'bottom-right',
   color = girkiGestureColor,
-  opacity = 0.62,
+  opacity = 0.38,
   rotate = 0,
   pushX = '0%',
   pushY = '0%',
@@ -92,7 +93,7 @@ export default function GirkiGestureAccent({
         className="h-full w-full rounded-t-full"
         style={{ borderTop: `${stroke} solid ${color}` }}
       />,
-      '2.2 / 1',
+      '2.4 / 1',
     )
   }
 
@@ -105,49 +106,78 @@ export default function GirkiGestureAccent({
     )
   }
 
-  if (shape === 'flameDrop') {
+  if (shape === 'tableArch') {
     return shell(
-      <div
-        className="h-[88%] w-[62%]"
-        style={{
-          backgroundColor: color,
-          borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-        }}
-      />,
-    )
-  }
-
-  if (shape === 'cloche') {
-    return shell(
-      <div className="flex h-full w-full flex-col items-center justify-end pb-[6%]">
+      <div className="flex h-full w-full flex-col items-center justify-end pb-[2%]">
         <div
-          className="mb-[3%] rounded-full"
+          className="w-[88%] rounded-t-full"
           style={{
-            width: '14%',
-            height: '14%',
-            backgroundColor: color,
+            height: '72%',
+            borderTop: `${stroke} solid ${color}`,
+            borderLeft: `${stroke} solid transparent`,
+            borderRight: `${stroke} solid transparent`,
           }}
         />
         <div
-          className="w-[78%] rounded-t-full"
-          style={{
-            height: '58%',
-            backgroundColor: color,
-          }}
-        />
-        <div
-          className="mt-[2%] rounded-full"
-          style={{
-            width: '86%',
-            height: stroke,
-            backgroundColor: color,
-          }}
+          className="w-full rounded-full"
+          style={{ height: stroke, backgroundColor: color }}
         />
       </div>,
     )
   }
 
-  // Fallback: simple circle ring
+  if (shape === 'wovenDiamond') {
+    return shell(
+      <div
+        className="h-[58%] w-[58%] rotate-45"
+        style={{ border: `${stroke} solid ${color}` }}
+      />,
+    )
+  }
+
+  if (shape === 'flameDrop') {
+    return shell(
+      <div
+        className="h-[80%] w-[50%]"
+        style={{
+          border: `${stroke} solid ${color}`,
+          borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+          backgroundColor: 'transparent',
+        }}
+      />,
+      '3 / 4',
+    )
+  }
+
+  if (shape === 'cloche') {
+    return shell(
+      <div className="flex h-full w-full flex-col items-center justify-end pb-[4%]">
+        <div
+          className="mb-[2%] rounded-full"
+          style={{
+            width: '12%',
+            height: '12%',
+            border: `${stroke} solid ${color}`,
+            backgroundColor: 'transparent',
+          }}
+        />
+        <div
+          className="w-[76%] rounded-t-full"
+          style={{
+            height: '56%',
+            borderTop: `${stroke} solid ${color}`,
+            borderLeft: `${stroke} solid transparent`,
+            borderRight: `${stroke} solid transparent`,
+          }}
+        />
+        <div
+          className="mt-[3%] w-[84%] rounded-full"
+          style={{ height: stroke, backgroundColor: color }}
+        />
+      </div>,
+    )
+  }
+
   return shell(
     <div
       className="h-full w-full rounded-full"

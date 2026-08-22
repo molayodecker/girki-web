@@ -1,16 +1,18 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { experiences } from '../data/home'
-import type { GirkiShapeId } from '../data/patterns'
+import { girkiBrand } from '../data/patterns'
 import GirkiGestureAccent from './patterns/GirkiGestureAccent'
 
-type Accent = {
-  shape: GirkiShapeId
-  anchor: 'bottom-right' | 'bottom-left' | 'top-right'
+type StrokeAccent = {
+  shape: 'conversationArc' | 'plate' | 'tableArch' | 'wovenDiamond' | 'cloche'
+  anchor: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
+  color: string
   size: string
   opacity: number
   pushX?: string
   pushY?: string
+  rotate?: number
 }
 
 const layout = [
@@ -22,41 +24,65 @@ const layout = [
   'md:col-span-1 md:min-h-[14rem]',
 ] as const
 
-/** One solid plum gesture per card — corner placement, visible on photography. */
-const accents: (Accent | null)[] = [
-  {
-    shape: 'plate',
-    anchor: 'bottom-right',
-    size: '11rem',
-    opacity: 0.58,
-    pushX: '10%',
-    pushY: '12%',
-  },
-  null,
+/**
+ * Photo-first cards with one thin Girki stroke each (photo → text → stroke).
+ * Strokes sit at cropped edges — never over faces, food, or titles.
+ */
+const strokes: StrokeAccent[] = [
   {
     shape: 'conversationArc',
     anchor: 'bottom-right',
-    size: '9rem',
-    opacity: 0.55,
-    pushX: '8%',
-    pushY: '10%',
+    color: girkiBrand.terracotta,
+    size: '14rem',
+    opacity: 0.42,
+    pushX: '14%',
+    pushY: '16%',
   },
   {
-    shape: 'flameDrop',
+    shape: 'wovenDiamond',
+    anchor: 'top-right',
+    color: girkiBrand.saffron,
+    size: '8rem',
+    opacity: 0.32,
+    pushX: '12%',
+    pushY: '-10%',
+  },
+  {
+    shape: 'conversationArc',
+    anchor: 'top-right',
+    color: girkiBrand.plum,
+    size: '11rem',
+    opacity: 0.38,
+    pushX: '10%',
+    pushY: '-12%',
+    rotate: 180,
+  },
+  {
+    shape: 'plate',
     anchor: 'bottom-right',
-    size: '7rem',
-    opacity: 0.52,
-    pushX: '6%',
-    pushY: '8%',
+    color: girkiBrand.saffron,
+    size: '10rem',
+    opacity: 0.35,
+    pushX: '12%',
+    pushY: '14%',
   },
-  null,
   {
-    shape: 'cloche',
+    shape: 'tableArch',
     anchor: 'bottom-left',
+    color: girkiBrand.palm,
     size: '9rem',
-    opacity: 0.55,
-    pushX: '-6%',
-    pushY: '10%',
+    opacity: 0.34,
+    pushX: '-10%',
+    pushY: '12%',
+  },
+  {
+    shape: 'conversationArc',
+    anchor: 'bottom-left',
+    color: girkiBrand.terracotta,
+    size: '12rem',
+    opacity: 0.4,
+    pushX: '-14%',
+    pushY: '18%',
   },
 ]
 
@@ -64,7 +90,7 @@ export default function ExperiencesGrid() {
   return (
     <div className="mt-14 grid grid-cols-1 gap-3 md:grid-cols-4 md:auto-rows-fr">
       {experiences.map((experience, index) => {
-        const accent = accents[index]
+        const stroke = strokes[index]
 
         return (
           <Link
@@ -77,18 +103,18 @@ export default function ExperiencesGrid() {
               alt=""
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/5" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/28 to-black/5" />
 
-            {accent ? (
-              <GirkiGestureAccent
-                shape={accent.shape}
-                anchor={accent.anchor}
-                size={accent.size}
-                opacity={accent.opacity}
-                pushX={accent.pushX}
-                pushY={accent.pushY}
-              />
-            ) : null}
+            <GirkiGestureAccent
+              shape={stroke.shape}
+              anchor={stroke.anchor}
+              color={stroke.color}
+              size={stroke.size}
+              opacity={stroke.opacity}
+              pushX={stroke.pushX}
+              pushY={stroke.pushY}
+              rotate={stroke.rotate}
+            />
 
             <div className="absolute inset-x-0 top-0 z-10 flex items-start justify-between p-5 md:p-6">
               <span className="typography-eyebrow text-white/55">
