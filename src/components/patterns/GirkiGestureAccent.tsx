@@ -36,8 +36,8 @@ const anchorPosition: Record<CropAnchor, string> = {
 
 export const girkiGestureColor = girkiBrand.plum
 
-/** Thin editorial stroke — never bold enough to read as illustration. */
-const stroke = '2.5px'
+/** Editorial stroke weight — visible on photography without becoming illustration. */
+const stroke = '3.5px'
 
 /**
  * CSS stroke gestures derived from Girki shapes. One per photo card:
@@ -48,7 +48,7 @@ export default function GirkiGestureAccent({
   size = '12rem',
   anchor = 'bottom-right',
   color = girkiGestureColor,
-  opacity = 0.38,
+  opacity = 0.62,
   rotate = 0,
   pushX = '0%',
   pushY = '0%',
