@@ -11,10 +11,9 @@ import {
 import ChefCard from './ChefCard'
 import ExperiencesGrid from './ExperiencesGrid'
 import GirkiBorderStrip from './patterns/GirkiBorderStrip'
+import GirkiCroppedShape from './patterns/GirkiCroppedShape'
 import GirkiPatternBand from './patterns/GirkiPatternBand'
-import GirkiShapeIcon from './patterns/GirkiShapeIcon'
-import type { GirkiShapeId } from '../data/patterns'
-import { girkiBrand } from '../data/patterns'
+import GirkiPatternFill from './patterns/GirkiPatternFill'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
 import SearchSelect from './SearchSelect'
@@ -42,20 +41,14 @@ const howItWorks = [
   {
     title: 'Tell us what you want',
     copy: 'City, date, guests, and the kind of table you have in mind. No commitment.',
-    shape: 'conversationArc' as const,
-    iconAlt: 'Start your request',
   },
   {
     title: 'Compare and customize',
     copy: 'Chefs propose menus around your evening. You refine every course.',
-    shape: 'cloche' as const,
-    iconAlt: 'Compare chef proposals',
   },
   {
     title: 'Host, and do nothing else',
     copy: 'Groceries, cooking, service, and cleanup are theirs. The table is yours.',
-    shape: 'tableArch' as const,
-    iconAlt: 'Host at home',
   },
 ]
 
@@ -96,7 +89,23 @@ export default function HomePage() {
               className="absolute inset-0 h-full w-full object-cover object-[66%_center] scale-105"
             />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,13,16,0.88)_0%,rgba(18,13,16,0.55)_42%,rgba(18,13,16,0.12)_78%,transparent_100%)]" />
-            <div className="relative mx-auto flex min-h-svh max-w-7xl items-end px-5 pb-28 pt-32 lg:items-center lg:px-8 lg:pb-24 lg:pt-24">
+            <GirkiCroppedShape
+              shape="conversationArc"
+              anchor="center-right"
+              size="min(72vw, 44rem)"
+              opacity={0.55}
+              blend="screen"
+              className="hidden sm:block"
+            />
+            <GirkiCroppedShape
+              shape="cloche"
+              anchor="bottom-left"
+              size="min(48vw, 26rem)"
+              opacity={0.4}
+              blend="screen"
+              rotate={-8}
+            />
+            <div className="relative z-10 mx-auto flex min-h-svh max-w-7xl items-end px-5 pb-28 pt-32 lg:items-center lg:px-8 lg:pb-24 lg:pt-24">
               <div className="grid w-full items-end gap-12 lg:grid-cols-[1.1fr_.9fr]">
                 <div className="max-w-2xl">
                   <p className="typography-eyebrow text-ploy-accent-tertiary">
@@ -179,37 +188,65 @@ export default function HomePage() {
 
         <GirkiBorderStrip />
 
-        <section id="how-it-works" className="section-pad">
-          <div className="mx-auto max-w-7xl">
-            <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
-              <div>
-                <p className="typography-eyebrow">The experience</p>
-                <h2 className="display-title mt-5 text-4xl sm:text-5xl">
-                  A restaurant, without leaving home.
-                </h2>
+        <section id="how-it-works" className="relative overflow-hidden bg-girki-charcoal text-ploy-text-inverse">
+          <GirkiPatternFill pattern="service" scale={0.55} opacity={0.55} />
+          <GirkiCroppedShape
+            shape="conversationArc"
+            anchor="top-left"
+            size="28rem"
+            opacity={0.45}
+            blend="screen"
+          />
+          <GirkiCroppedShape
+            shape="cloche"
+            anchor="bottom-center"
+            size="34rem"
+            opacity={0.35}
+            blend="screen"
+          />
+          <GirkiCroppedShape
+            shape="tableArch"
+            anchor="top-right"
+            size="22rem"
+            opacity={0.4}
+            blend="screen"
+          />
+          <div className="relative z-10 section-pad">
+            <div className="mx-auto max-w-7xl">
+              <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-end">
+                <div>
+                  <p className="typography-eyebrow text-ploy-accent-tertiary">The experience</p>
+                  <h2 className="display-title mt-5 text-4xl sm:text-5xl">
+                    A restaurant, without leaving home.
+                  </h2>
+                </div>
+                <p className="max-w-xl text-lg leading-relaxed text-white/65 lg:justify-self-end">
+                  Girki brings chef discovery, a tailored menu, and African
+                  hospitality into one quiet booking.
+                </p>
               </div>
-              <p className="max-w-xl text-lg leading-relaxed text-ploy-text-secondary lg:justify-self-end">
-                Girki brings chef discovery, a tailored menu, and African
-                hospitality into one quiet booking.
-              </p>
+              <div className="mt-16 grid gap-10 border-t border-white/10 pt-12 md:grid-cols-3 md:gap-8">
+                {howItWorks.map((step, index) => (
+                  <article key={step.title} className="relative">
+                    <p className="typography-eyebrow text-ploy-accent-tertiary">
+                      {String(index + 1).padStart(2, '0')}
+                    </p>
+                    <h3 className="mt-4 font-heading text-2xl tracking-tight text-white">
+                      {step.title}
+                    </h3>
+                    <p className="mt-3 max-w-sm leading-relaxed text-white/60">
+                      {step.copy}
+                    </p>
+                  </article>
+                ))}
+              </div>
+              <Link
+                to="/request"
+                className="mt-14 inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase text-white"
+              >
+                Start a request <ArrowRight size={16} aria-hidden="true" />
+              </Link>
             </div>
-            <div className="mt-16 grid gap-10 md:grid-cols-3 md:gap-8">
-              {howItWorks.map((step) => (
-                <article key={step.title} className="relative pt-2">
-                  <GirkiShapeIcon shape={step.shape} alt={step.iconAlt} size={72} />
-                  <h3 className="mt-6 font-heading text-2xl tracking-tight">{step.title}</h3>
-                  <p className="mt-3 max-w-sm leading-relaxed text-ploy-text-secondary">
-                    {step.copy}
-                  </p>
-                </article>
-              ))}
-            </div>
-            <Link
-              to="/request"
-              className="mt-14 inline-flex items-center gap-2 text-sm tracking-[0.08em] uppercase"
-            >
-              Start a request <ArrowRight size={16} aria-hidden="true" />
-            </Link>
           </div>
         </section>
 
@@ -265,6 +302,20 @@ export default function HomePage() {
                 alt="A table of colorful African dishes"
                 className="aspect-4/3 h-full w-full object-cover"
               />
+              <GirkiCroppedShape
+                shape="plate"
+                anchor="bottom-right"
+                size="18rem"
+                opacity={0.65}
+                blend="screen"
+              />
+              <div
+                className="absolute inset-y-0 left-0 w-1/4 overflow-hidden"
+                aria-hidden="true"
+              >
+                <GirkiPatternFill pattern="flavor" scale={0.7} />
+                <div className="absolute inset-0 bg-linear-to-r from-transparent to-black/20" />
+              </div>
             </div>
             <div>
               <p className="typography-eyebrow">Cuisine</p>
@@ -397,83 +448,89 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="trust" className="section-pad">
-          <div className="mx-auto max-w-7xl">
-            <div className="max-w-2xl">
-              <p className="typography-eyebrow">Trust</p>
-              <h2 className="display-title mt-5 text-4xl sm:text-5xl">
-                Good food starts with trust.
-              </h2>
-              <p className="mt-6 text-lg leading-relaxed text-ploy-text-secondary">
-                Girki is being built so chef discovery feels personal, and the
-                booking standards stay clear.
-              </p>
-            </div>
-            <div className="mt-14 grid gap-px overflow-hidden rounded-[1.6rem] border border-ploy-border-primary bg-ploy-border-primary md:grid-cols-2 lg:grid-cols-4">
-              {(
-                [
-                  { ...trustItems[0], shape: 'plate' as GirkiShapeId, wellColor: girkiBrand.plum },
-                  {
-                    ...trustItems[1],
-                    shape: 'wovenDiamond' as GirkiShapeId,
-                    wellColor: girkiBrand.palm,
-                  },
-                  {
-                    ...trustItems[2],
-                    shape: 'flameDrop' as GirkiShapeId,
-                    wellColor: girkiBrand.terracotta,
-                  },
-                  {
-                    ...trustItems[3],
-                    shape: 'conversationArc' as GirkiShapeId,
-                    wellColor: girkiBrand.charcoal,
-                  },
-                ] as const
-              ).map((item) => (
-                <article key={item.title} className="bg-girki-cream p-8">
-                  <GirkiShapeIcon
-                    shape={item.shape}
-                    alt=""
-                    size={48}
-                    wellColor={item.wellColor}
-                  />
-                  <h3 className="mt-8 font-heading text-2xl tracking-tight">{item.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ploy-text-secondary">
-                    {item.copy}
-                  </p>
-                </article>
-              ))}
+        <section id="trust" className="relative overflow-hidden bg-girki-cream">
+          <GirkiCroppedShape
+            shape="wovenDiamond"
+            anchor="top-right"
+            size="26rem"
+            opacity={0.22}
+            blend="multiply"
+          />
+          <GirkiCroppedShape
+            shape="flameDrop"
+            anchor="bottom-left"
+            size="18rem"
+            opacity={0.2}
+            blend="multiply"
+          />
+          <div className="relative z-10 section-pad">
+            <div className="mx-auto max-w-7xl">
+              <div className="max-w-2xl">
+                <p className="typography-eyebrow">Trust</p>
+                <h2 className="display-title mt-5 text-4xl sm:text-5xl">
+                  Good food starts with trust.
+                </h2>
+                <p className="mt-6 text-lg leading-relaxed text-ploy-text-secondary">
+                  Girki is being built so chef discovery feels personal, and the
+                  booking standards stay clear.
+                </p>
+              </div>
+              <div className="mt-14 grid gap-10 border-t border-ploy-border-primary pt-12 md:grid-cols-2 lg:grid-cols-4">
+                {trustItems.map((item, index) => (
+                  <article key={item.title}>
+                    <p className="typography-eyebrow text-ploy-accent-secondary">
+                      {String(index + 1).padStart(2, '0')}
+                    </p>
+                    <h3 className="mt-4 font-heading text-2xl tracking-tight">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-ploy-text-secondary">
+                      {item.copy}
+                    </p>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
         <section id="become-a-chef" className="section-pad pt-0 lg:pt-0">
-          <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-girki-plum text-ploy-text-on-accent-primary lg:grid-cols-2">
-            <img
-              src={images.opportunity}
-              alt="A private chef welcoming guests to a prepared dining experience"
-              className="h-full min-h-105 w-full object-cover object-left"
-            />
-            <div className="p-8 sm:p-12 lg:p-16">
-              <p className="typography-eyebrow text-ploy-accent-tertiary">For chefs</p>
-              <h2 className="display-title mt-5 text-4xl sm:text-5xl">
-                Turn your talent into a house.
-              </h2>
-              <p className="mt-6 leading-relaxed text-white/65">
-                Join Girki and build a business creating meaningful food
-                experiences for guests across Africa.
-              </p>
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
-                {chefBenefits.map((benefit) => (
-                  <span key={benefit} className="flex items-center gap-2 text-sm text-white/80">
-                    <Check size={15} className="text-ploy-accent-tertiary" aria-hidden="true" />
-                    {benefit}
-                  </span>
-                ))}
+          <div className="relative mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-girki-plum text-ploy-text-on-accent-primary lg:grid-cols-2">
+            <div className="relative min-h-105 overflow-hidden">
+              <img
+                src={images.opportunity}
+                alt="A private chef welcoming guests to a prepared dining experience"
+                className="h-full min-h-105 w-full object-cover object-left"
+              />
+              <GirkiCroppedShape
+                shape="cloche"
+                anchor="bottom-right"
+                size="20rem"
+                opacity={0.55}
+                blend="screen"
+              />
+            </div>
+            <div className="relative overflow-hidden p-8 sm:p-12 lg:p-16">
+              <GirkiPatternFill pattern="gathering" scale={0.7} opacity={0.35} />
+              <div className="relative z-10">
+                <p className="typography-eyebrow text-ploy-accent-tertiary">For chefs</p>
+                <h2 className="display-title mt-5 text-4xl sm:text-5xl">
+                  Turn your talent into a house.
+                </h2>
+                <p className="mt-6 leading-relaxed text-white/65">
+                  Join Girki and build a business creating meaningful food
+                  experiences for guests across Africa.
+                </p>
+                <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                  {chefBenefits.map((benefit) => (
+                    <span key={benefit} className="flex items-center gap-2 text-sm text-white/80">
+                      <Check size={15} className="text-ploy-accent-tertiary" aria-hidden="true" />
+                      {benefit}
+                    </span>
+                  ))}
+                </div>
+                <Link className="btn btn-primary mt-10" to="/become-a-chef">
+                  Apply as a chef
+                </Link>
               </div>
-              <Link className="btn btn-primary mt-10" to="/become-a-chef">
-                Apply as a chef
-              </Link>
             </div>
           </div>
         </section>

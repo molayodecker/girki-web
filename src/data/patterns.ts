@@ -40,3 +40,32 @@ export const girkiPatternMeta: Record<
   woven: { ground: girkiBrand.palm, tileWidth: 640, tileHeight: 320 },
   gathering: { ground: girkiBrand.plum, tileWidth: 640, tileHeight: 320 },
 }
+
+/**
+ * Four reusable Girki master compositions built from existing tiles + shapes.
+ * Prefer these over inventing one-off pattern treatments per page.
+ */
+export const girkiCompositions = {
+  gathering: {
+    pattern: 'gathering' as const,
+    ground: girkiBrand.plum,
+    shapes: ['plate', 'conversationArc', 'flameDrop'] as const,
+  },
+  table: {
+    pattern: 'woven' as const,
+    ground: girkiBrand.palm,
+    shapes: ['tableArch', 'wovenDiamond'] as const,
+  },
+  celebration: {
+    pattern: 'flavor' as const,
+    ground: girkiBrand.cream,
+    shapes: ['cloche', 'plate', 'wovenDiamond'] as const,
+  },
+  quiet: {
+    pattern: 'service' as const,
+    ground: girkiBrand.charcoal,
+    shapes: ['conversationArc'] as const,
+  },
+} as const
+
+export type GirkiCompositionId = keyof typeof girkiCompositions
