@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { experiences } from '../data/home'
 import type { GirkiShapeId } from '../data/patterns'
-import GirkiCroppedShape, { girkiGestureColor } from './patterns/GirkiCroppedShape'
+import GirkiGestureAccent from './patterns/GirkiGestureAccent'
 
 type Accent = {
   shape: GirkiShapeId
@@ -22,41 +22,41 @@ const layout = [
   'md:col-span-1 md:min-h-[14rem]',
 ] as const
 
-/** One plum gesture per card max — corner crops only, never over the focal subject. */
+/** One solid plum gesture per card — corner placement, visible on photography. */
 const accents: (Accent | null)[] = [
   {
     shape: 'plate',
     anchor: 'bottom-right',
-    size: '24rem',
-    opacity: 0.34,
-    pushX: '22%',
-    pushY: '26%',
+    size: '11rem',
+    opacity: 0.58,
+    pushX: '10%',
+    pushY: '12%',
   },
   null,
   {
     shape: 'conversationArc',
     anchor: 'bottom-right',
-    size: '13rem',
-    opacity: 0.32,
-    pushX: '16%',
-    pushY: '18%',
+    size: '9rem',
+    opacity: 0.55,
+    pushX: '8%',
+    pushY: '10%',
   },
   {
     shape: 'flameDrop',
     anchor: 'bottom-right',
-    size: '9rem',
-    opacity: 0.3,
-    pushX: '14%',
-    pushY: '16%',
+    size: '7rem',
+    opacity: 0.52,
+    pushX: '6%',
+    pushY: '8%',
   },
   null,
   {
     shape: 'cloche',
     anchor: 'bottom-left',
-    size: '13rem',
-    opacity: 0.32,
-    pushX: '-12%',
-    pushY: '22%',
+    size: '9rem',
+    opacity: 0.55,
+    pushX: '-6%',
+    pushY: '10%',
   },
 ]
 
@@ -77,15 +77,14 @@ export default function ExperiencesGrid() {
               alt=""
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/28 to-black/5" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-black/5" />
 
             {accent ? (
-              <GirkiCroppedShape
+              <GirkiGestureAccent
                 shape={accent.shape}
                 anchor={accent.anchor}
                 size={accent.size}
                 opacity={accent.opacity}
-                fill={girkiGestureColor}
                 pushX={accent.pushX}
                 pushY={accent.pushY}
               />
