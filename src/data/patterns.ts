@@ -34,9 +34,9 @@ export const girkiPatternMeta: Record<
   GirkiPatternId,
   { ground: string; tileWidth: number; tileHeight: number }
 > = {
-  borderStrip: { ground: girkiBrand.charcoal, tileWidth: 640, tileHeight: 44 },
-  service: { ground: girkiBrand.charcoal, tileWidth: 640, tileHeight: 320 },
-  flavor: { ground: girkiBrand.cream, tileWidth: 640, tileHeight: 320 },
-  woven: { ground: girkiBrand.palm, tileWidth: 640, tileHeight: 320 },
-  gathering: { ground: girkiBrand.plum, tileWidth: 640, tileHeight: 320 },
+  borderStrip: { ground: girkiBrand.charcoal, tileWidth: 320, tileHeight: 22 },
+  service: { ground: girkiBrand.charcoal, tileWidth: 320, tileHeight: 160 },
+  flavor: { ground: girkiBrand.cream, tileWidth: 320, tileHeight: 160 },
+  woven: { ground: girkiBrand.palm, tileWidth: 320, tileHeight: 160 },
+  gathering: { ground: girkiBrand.plum, tileWidth: 320, tileHeight: 160 },
 }
