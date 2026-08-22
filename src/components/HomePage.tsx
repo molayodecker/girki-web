@@ -14,6 +14,7 @@ import GirkiBorderStrip from './patterns/GirkiBorderStrip'
 import GirkiPatternBand from './patterns/GirkiPatternBand'
 import GirkiShapeIcon from './patterns/GirkiShapeIcon'
 import type { GirkiShapeId } from '../data/patterns'
+import { girkiBrand } from '../data/patterns'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
 import SearchSelect from './SearchSelect'
@@ -176,7 +177,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <GirkiBorderStrip tone="dark" />
+        <GirkiBorderStrip />
 
         <section id="how-it-works" className="section-pad">
           <div className="mx-auto max-w-7xl">
@@ -212,8 +213,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <GirkiBorderStrip />
-
         <section id="experiences" className="section-pad bg-ploy-background-secondary">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -233,8 +232,6 @@ export default function HomePage() {
             <ExperiencesGrid />
           </div>
         </section>
-
-        <GirkiPatternBand pattern="woven" height="sm" />
 
         <section id="featured-chefs" className="section-pad">
           <div className="mx-auto max-w-7xl">
@@ -294,10 +291,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <GirkiPatternBand pattern="gathering" height="md" overlay />
-
-        <section id="reviews" className="section-pad bg-ploy-neutral-inverse text-ploy-text-inverse">
-          <div className="mx-auto max-w-7xl">
+        <section id="reviews" className="bg-girki-plum text-ploy-text-inverse">
+          <GirkiPatternBand pattern="gathering" height="sm" bleed />
+          <div className="section-pad">
             <p className="typography-eyebrow">Guest notes</p>
             <h2 className="display-title mt-5 max-w-3xl text-4xl sm:text-5xl">
               The table is the review.
@@ -325,8 +321,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-
-        <GirkiBorderStrip tone="light" />
 
         <section id="menus" className="section-pad">
           <div className="mx-auto max-w-7xl">
@@ -418,14 +412,31 @@ export default function HomePage() {
             <div className="mt-14 grid gap-px overflow-hidden rounded-[1.6rem] border border-ploy-border-primary bg-ploy-border-primary md:grid-cols-2 lg:grid-cols-4">
               {(
                 [
-                  { ...trustItems[0], shape: 'plate' as GirkiShapeId },
-                  { ...trustItems[1], shape: 'wovenDiamond' as GirkiShapeId },
-                  { ...trustItems[2], shape: 'flameDrop' as GirkiShapeId },
-                  { ...trustItems[3], shape: 'conversationArc' as GirkiShapeId },
+                  { ...trustItems[0], shape: 'plate' as GirkiShapeId, wellColor: girkiBrand.plum },
+                  {
+                    ...trustItems[1],
+                    shape: 'wovenDiamond' as GirkiShapeId,
+                    wellColor: girkiBrand.palm,
+                  },
+                  {
+                    ...trustItems[2],
+                    shape: 'flameDrop' as GirkiShapeId,
+                    wellColor: girkiBrand.terracotta,
+                  },
+                  {
+                    ...trustItems[3],
+                    shape: 'conversationArc' as GirkiShapeId,
+                    wellColor: girkiBrand.charcoal,
+                  },
                 ] as const
               ).map((item) => (
-                <article key={item.title} className="bg-ploy-background-primary p-8">
-                  <GirkiShapeIcon shape={item.shape} alt="" size={48} />
+                <article key={item.title} className="bg-girki-cream p-8">
+                  <GirkiShapeIcon
+                    shape={item.shape}
+                    alt=""
+                    size={48}
+                    wellColor={item.wellColor}
+                  />
                   <h3 className="mt-8 font-heading text-2xl tracking-tight">{item.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed text-ploy-text-secondary">
                     {item.copy}
@@ -437,9 +448,7 @@ export default function HomePage() {
         </section>
 
         <section id="become-a-chef" className="section-pad pt-0 lg:pt-0">
-          <GirkiPatternBand pattern="flavor" height="sm" />
-          <GirkiBorderStrip className="mb-8" />
-          <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-ploy-accent-primary text-ploy-text-on-accent-primary lg:grid-cols-2">
+          <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] bg-girki-plum text-ploy-text-on-accent-primary lg:grid-cols-2">
             <img
               src={images.opportunity}
               alt="A private chef welcoming guests to a prepared dining experience"

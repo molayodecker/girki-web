@@ -1,26 +1,21 @@
-import { girkiPatterns } from '../../data/patterns'
+import { girkiPatternBackgroundStyle, girkiPatternMeta } from '../../data/patterns'
 
 /** SweepSouth-style repeating icon strip between sections. */
 export default function GirkiBorderStrip({
   className = '',
-  tone = 'light',
 }: {
   className?: string
-  /** light = cream page edge; dark = charcoal edge */
-  tone?: 'light' | 'dark'
 }) {
+  const { tileHeight } = girkiPatternMeta.borderStrip
+
   return (
     <div
-      className={`w-full overflow-hidden leading-none ${className}`}
+      className={`girki-border-strip w-full overflow-hidden leading-none ${className}`}
+      style={{
+        ...girkiPatternBackgroundStyle('borderStrip', 'repeat-x'),
+        height: tileHeight,
+      }}
       aria-hidden="true"
-    >
-      <img
-        src={girkiPatterns.borderStrip}
-        alt=""
-        className={`block h-10 w-full min-w-full object-cover object-center sm:h-12 ${
-          tone === 'dark' ? 'opacity-95' : 'opacity-100'
-        }`}
-      />
-    </div>
+    />
   )
 }

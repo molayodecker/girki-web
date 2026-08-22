@@ -2,8 +2,6 @@ import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import AuthLoginPanel from '../components/auth/AuthLoginPanel'
 import PageShell, { PageIntro } from '../components/layout/PageShell'
-import GirkiBorderStrip from '../components/patterns/GirkiBorderStrip'
-import GirkiPatternBand from '../components/patterns/GirkiPatternBand'
 import { ensureAuthProfileFn, getAuthProfileFn } from '../lib/auth.functions'
 import { postAuthPath, setSignupIntent } from '../lib/auth-client'
 import type { SignupIntent } from '../lib/validation/auth'
@@ -50,8 +48,6 @@ function SignInPage() {
 
   return (
     <PageShell tone={isChef ? 'sand' : undefined}>
-      <GirkiPatternBand pattern="flavor" height="sm" />
-      <GirkiBorderStrip />
       <main className="section-pad">
         <div className="mx-auto max-w-md">
           <PageIntro

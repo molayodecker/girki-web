@@ -1,32 +1,34 @@
 import type { GirkiPatternId } from '../../data/patterns'
-import { girkiPatterns } from '../../data/patterns'
+import { girkiPatternBackgroundStyle, girkiPatternMeta } from '../../data/patterns'
 
 /** Full-width decorative pattern field (hero bands, footer lead-in). */
 export default function GirkiPatternBand({
   pattern = 'service',
   height = 'md',
   className = '',
-  overlay = false,
+  bleed = false,
 }: {
-  pattern?: GirkiPatternId
-  height?: 'sm' | 'md' | 'lg'
+  pattern?: Exclude<GirkiPatternId, 'borderStrip'>
+  height?: 'sm' | 'md' | 'lg' | 'fill'
   className?: string
-  overlay?: boolean
+  /** Edge-to-edge band without rounding (footer, section caps). */
+  bleed?: boolean
 }) {
-  const heightClass =
-    height === 'sm' ? 'h-24 sm:h-28' : height === 'lg' ? 'h-40 sm:h-48' : 'h-32 sm:h-36'
+  const meta = girkiPatternMeta[pattern]
+  const tileRows =
+    height === 'sm' ? 1 : height === 'lg' ? 3 : height === 'fill' ? 1 : 2
+  const bandHeight =
+    height === 'fill' ? undefined : meta.tileHeight * tileRows
 
   return (
     <div
-      className={`relative w-full overflow-hidden ${heightClass} ${className}`}
+      className={`girki-pattern-band w-full overflow-hidden ${bleed ? '' : ''} ${className}`}
+      style={{
+        ...girkiPatternBackgroundStyle(pattern, 'repeat'),
+        height: bandHeight,
+        minHeight: height === 'fill' ? meta.tileHeight * 2 : undefined,
+      }}
       aria-hidden="true"
-    >
-      <img
-        src={girkiPatterns[pattern]}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-center"
-      />
-      {overlay ? <div className="absolute inset-0 bg-ploy-neutral-inverse/25" /> : null}
-    </div>
+    />
   )
 }
