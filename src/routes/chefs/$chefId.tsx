@@ -1,10 +1,15 @@
 import { useState } from 'react'
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
-import { Check, MapPin, MessageCircle } from 'lucide-react'
+import { Check, Instagram, MapPin, MessageCircle } from 'lucide-react'
 import DirectInquiryForm from '../../components/DirectInquiryForm'
 import PageShell from '../../components/layout/PageShell'
 import StarRating from '../../components/StarRating'
 import { getChef, menusForChef } from '../../data/marketplace'
+import {
+  SHOWCASE_ONLY_CHEFS,
+  getChefInstagramUrl,
+  isShowcaseChef,
+} from '../../lib/feature-flags'
 
 export const Route = createFileRoute('/chefs/$chefId')({
   loader: ({ params }) => {
@@ -18,6 +23,11 @@ export const Route = createFileRoute('/chefs/$chefId')({
 function ChefProfilePage() {
   const { chef, menus } = Route.useLoaderData()
   const [showInquiry, setShowInquiry] = useState(false)
+  const showcase = isShowcaseChef(chef.id)
+  const instagramUrl = getChefInstagramUrl(chef.id)
+  const showcaseLabel = showcase
+    ? SHOWCASE_ONLY_CHEFS[chef.id].label
+    : undefined
 
   return (
     <PageShell>
@@ -27,7 +37,7 @@ function ChefProfilePage() {
             <img src={chef.image} alt={chef.alt} className="aspect-3/4 w-full object-cover" />
           </div>
           <div className="lg:pt-6">
-            <p className="typography-eyebrow">Private chef</p>
+            <p className="typography-eyebrow">{showcase ? 'Featured chef' : 'Private chef'}</p>
             <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
               <h1 className="display-title text-5xl lg:text-6xl">{chef.name}</h1>
               <StarRating rating={chef.rating} />
@@ -35,11 +45,11 @@ function ChefProfilePage() {
             <p className="mt-5 flex items-center gap-2 text-ploy-text-secondary">
               <MapPin size={16} aria-hidden="true" /> {chef.location}
               <span className="text-ploy-accent-tertiary">·</span>
-              {chef.services} services
+              {showcase ? 'Coming soon on Girki' : `${chef.services} services`}
             </p>
             <p className="mt-8 max-w-xl text-lg leading-relaxed text-ploy-text-secondary">{chef.bio}</p>
             <p className="mt-4 text-sm tracking-[0.04em] text-ploy-text-secondary">{chef.specialties}</p>
-            <p className="mt-8 font-heading text-xl">{chef.pricing}</p>
+            {!showcase ? <p className="mt-8 font-heading text-xl">{chef.pricing}</p> : null}
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {chef.included.map((item) => (
                 <span key={item} className="flex items-center gap-2 text-sm">
@@ -49,27 +59,41 @@ function ChefProfilePage() {
               ))}
             </div>
             <div className="mt-10 flex flex-wrap gap-3">
-              <button
-                type="button"
-                className="btn btn-primary min-h-12 px-7"
-                aria-expanded={showInquiry}
-                onClick={() => setShowInquiry((open) => !open)}
-              >
-                <MessageCircle size={16} aria-hidden="true" />
-                Request to book
-              </button>
-              <Link
-                to="/request"
-                search={{ city: chef.city, cuisine: chef.cuisines[0] }}
-                className="btn btn-outline min-h-12 px-7"
-              >
-                Request any chef
-              </Link>
+              {showcase && instagramUrl ? (
+                <a
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary min-h-12 px-7"
+                >
+                  <Instagram size={16} aria-hidden="true" />
+                  {showcaseLabel}
+                </a>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-primary min-h-12 px-7"
+                    aria-expanded={showInquiry}
+                    onClick={() => setShowInquiry((open) => !open)}
+                  >
+                    <MessageCircle size={16} aria-hidden="true" />
+                    Request to book
+                  </button>
+                  <Link
+                    to="/request"
+                    search={{ city: chef.city, cuisine: chef.cuisines[0] }}
+                    className="btn btn-outline min-h-12 px-7"
+                  >
+                    Request any chef
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
 
-        {showInquiry ? (
+        {showInquiry && !showcase ? (
           <div id="inquiry" className="mx-auto mt-16 max-w-4xl">
             <DirectInquiryForm chef={chef} />
           </div>

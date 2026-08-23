@@ -366,9 +366,9 @@ export default function HomePage() {
             <h2 className="display-title mt-5 max-w-3xl text-4xl sm:text-5xl">
               The table is the review.
             </h2>
-            <div className="mt-14 grid gap-8 border-y border-white/10 py-10 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-14 flex flex-wrap gap-x-10 gap-y-8 border-y border-white/10 py-10">
               {reviewStats.map((stat) => (
-                <article key={stat.label}>
+                <article key={stat.label} className="w-[calc(50%-1.25rem)] sm:w-auto sm:flex-1 sm:min-w-[9rem]">
                   <p className="font-heading text-5xl text-ploy-accent-tertiary">{stat.value}</p>
                   <p className="mt-2 text-sm text-white/50">{stat.label}</p>
                 </article>

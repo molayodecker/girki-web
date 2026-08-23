@@ -1,4 +1,5 @@
 import { images } from './home'
+import { isChefBookable } from '../lib/feature-flags'
 
 export const cities = [
   { slug: 'accra', name: 'Accra', country: 'Ghana' },
@@ -103,19 +104,19 @@ export type Chef = {
 export const chefs: Chef[] = [
   {
     id: 'nana',
-    name: 'Chef Nana K.',
+    name: 'Chef Selasie Atadika',
     location: 'Accra, Ghana',
     city: 'Accra',
     lat: 5.6037,
     lng: -0.187,
-    specialties: 'Ghanaian · Continental · Fine dining',
+    specialties: 'Ghanaian · Pan-African · New African cuisine',
     cuisines: ['Ghanaian', 'Continental', "Chef's special"],
     pricing: 'From GH₵450',
     rating: 4.9,
     services: 24,
-    image: images.nana,
-    alt: 'Chef Nana K., private chef in Accra, Ghana',
-    bio: 'Nana builds tasting menus around Ghanaian produce, coastal seafood, and the kind of hospitality that makes a home feel like the best table in Accra.',
+    image: images.selasieAtadika,
+    alt: 'Chef Selasie Atadika, private chef in Accra, Ghana',
+    bio: 'Selasie builds tasting menus around Ghanaian produce and New African flavors—the kind of hospitality that makes a home feel like the best table in Accra.',
     included: [
       'Menu design',
       'Grocery sourcing',
@@ -125,20 +126,19 @@ export const chefs: Chef[] = [
   },
   {
     id: 'youssef',
-    name: 'Chef Youssef B.',
-    location: 'Casablanca, Morocco',
-    city: 'Casablanca',
-    lat: 33.5731,
-    lng: -7.5898,
-    specialties: 'Moroccan · North African · Grill',
-    cuisines: ['Moroccan', 'Seafood', "Chef's special"],
+    name: 'Chef Luke Dale-Roberts',
+    location: 'Cape Town, South Africa',
+    city: 'Cape Town',
+    lat: -33.9249,
+    lng: 18.4241,
+    specialties: 'South African · Fine dining · Contemporary',
+    cuisines: ['Continental', 'Seafood', "Chef's special"],
     pricing: 'Pricing by experience',
     rating: 4.8,
     services: 18,
-    image:
-      'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=1200&q=80',
-    alt: 'Chef Youssef B., private chef in Casablanca, Morocco',
-    bio: 'Youssef cooks with fire and spice from the Maghreb: tagines, charcoal grill, and plating that feels like a Casablanca restaurant brought home.',
+    image: images.lukeDaleRoberts,
+    alt: 'Chef Luke Dale-Roberts, private chef in Cape Town, South Africa',
+    bio: 'Luke brings refined South African cooking home: inventive menus, precise technique, and the warmth of a world-class kitchen brought to your table.',
     included: [
       'Menu design',
       'Grocery sourcing',
@@ -426,15 +426,15 @@ export const reviews = [
     date: 'Aug 12, 2026',
     rating: 5,
     city: 'Accra',
-    copy: 'Nana cooked a birthday dinner that felt like a restaurant without any of the fuss. The menu was personal, the pacing was perfect, and the kitchen was left better than she found it.',
+    copy: 'Selasie cooked a birthday dinner that felt like a restaurant without any of the fuss. The menu was personal, the pacing was perfect, and the kitchen was left better than she found it.',
   },
   {
     id: 'chidi',
     name: 'Amira Benali',
     date: 'Aug 9, 2026',
     rating: 4.8,
-    city: 'Casablanca',
-    copy: 'We booked Youssef for a date night at home. The lamb tagine was extraordinary, and he was easy to talk to while still giving us the evening to ourselves.',
+    city: 'Cape Town',
+    copy: 'We booked Luke for a date night at home. Every course was extraordinary, and he was easy to talk to while still giving us the evening to ourselves.',
   },
   {
     id: 'wambui',
@@ -536,6 +536,7 @@ export function matchChefs(request: Partial<ChefRequest>, limit = 3) {
       : null
 
   const scored = chefs
+    .filter((chef) => isChefBookable(chef.id))
     .map((chef) => {
       let score = 0
       const km = origin ? distanceKm(origin, chef) : undefined
@@ -559,7 +560,6 @@ export function matchChefs(request: Partial<ChefRequest>, limit = 3) {
       ) {
         score += 3
       }
-      if (request.occasion === 'date-night' && chef.id === 'nana') score += 1
       return { chef, score, km }
     })
     .sort((a, b) => {
