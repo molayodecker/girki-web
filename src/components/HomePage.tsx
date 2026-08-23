@@ -358,7 +358,7 @@ export default function HomePage() {
         </section>
 
         <section id="reviews" className="relative overflow-hidden bg-girki-charcoal text-girki-cream">
-          <div className="relative h-44 overflow-hidden sm:h-52" aria-hidden="true">
+          <div className="relative h-48 overflow-hidden sm:h-56" aria-hidden="true">
             <GirkiCroppedShape
               shape="plate"
               anchor="top-left"
