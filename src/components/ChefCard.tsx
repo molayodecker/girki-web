@@ -40,7 +40,7 @@ export default function ChefCard({
       <div className="absolute inset-x-0 bottom-0 p-5 text-white">
         <div className="flex items-end justify-between gap-3">
           <h3 className="font-heading text-2xl tracking-tight">{chef.name}</h3>
-          <StarRating rating={chef.rating} light />
+          {!showcase ? <StarRating rating={chef.rating} light /> : null}
         </div>
         <p className="mt-2 flex items-center gap-1.5 text-sm text-white/75">
           <MapPin size={14} aria-hidden="true" /> {chef.location}

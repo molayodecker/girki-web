@@ -1,6 +1,6 @@
 /**
  * Showcase chefs appear in marketing but are not bookable yet.
- * Clicks open their Instagram profile instead of the booking flow.
+ * When an Instagram URL is set, clicks open that profile instead of booking.
  *
  * Toggle with SHOWCASE_ONLY_CHEFS=true in .env / Vercel.
  */
@@ -12,6 +12,18 @@ export const SHOWCASE_CHEFS = {
   youssef: {
     instagramUrl: 'https://www.instagram.com/lukedaleroberts/',
     label: 'Follow on Instagram',
+  },
+  amani: {
+    label: 'Coming soon',
+  },
+  zuri: {
+    label: 'Coming soon',
+  },
+  kofi: {
+    label: 'Coming soon',
+  },
+  ibrahim: {
+    label: 'Coming soon',
   },
 } as const
 
@@ -37,7 +49,13 @@ export function isChefBookable(chefId: string) {
 export function getChefInstagramUrl(chefId: string): string | undefined {
   if (!isShowcaseOnlyChefsEnabled()) return undefined
   if (!(chefId in SHOWCASE_CHEFS)) return undefined
-  return SHOWCASE_CHEFS[chefId as ShowcaseChefId].instagramUrl
+  const config = SHOWCASE_CHEFS[chefId as ShowcaseChefId]
+  return 'instagramUrl' in config ? config.instagramUrl : undefined
+}
+
+export function getShowcaseChefLabel(chefId: string): string | undefined {
+  if (!isShowcaseChef(chefId)) return undefined
+  return SHOWCASE_CHEFS[chefId].label
 }
 
 export function isShowcaseChef(chefId: string): chefId is ShowcaseChefId {

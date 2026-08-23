@@ -6,8 +6,8 @@ import PageShell from '../../components/layout/PageShell'
 import StarRating from '../../components/StarRating'
 import { getChef, menusForChef } from '../../data/marketplace'
 import {
-  SHOWCASE_CHEFS,
   getChefInstagramUrl,
+  getShowcaseChefLabel,
   isShowcaseChef,
 } from '../../lib/feature-flags'
 
@@ -25,7 +25,7 @@ function ChefProfilePage() {
   const [showInquiry, setShowInquiry] = useState(false)
   const showcase = isShowcaseChef(chef.id)
   const instagramUrl = getChefInstagramUrl(chef.id)
-  const showcaseLabel = showcase ? SHOWCASE_CHEFS[chef.id].label : undefined
+  const showcaseLabel = getShowcaseChefLabel(chef.id)
 
   return (
     <PageShell>
@@ -38,7 +38,7 @@ function ChefProfilePage() {
             <p className="typography-eyebrow">{showcase ? 'Featured chef' : 'Private chef'}</p>
             <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
               <h1 className="display-title text-5xl lg:text-6xl">{chef.name}</h1>
-              <StarRating rating={chef.rating} />
+              {!showcase ? <StarRating rating={chef.rating} /> : null}
             </div>
             <p className="mt-5 flex items-center gap-2 text-ploy-text-secondary">
               <MapPin size={16} aria-hidden="true" /> {chef.location}
@@ -67,6 +67,10 @@ function ChefProfilePage() {
                   <ExternalLink size={16} aria-hidden="true" />
                   {showcaseLabel}
                 </a>
+              ) : showcase ? (
+                <span className="btn btn-outline min-h-12 cursor-default px-7 opacity-80">
+                  {showcaseLabel ?? 'Coming soon'}
+                </span>
               ) : (
                 <>
                   <button
