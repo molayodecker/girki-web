@@ -526,7 +526,32 @@ export default function HomePage() {
               />
             </div>
             <div className="relative overflow-hidden p-8 sm:p-12 lg:p-16">
-              <GirkiComposition composition="feast" scale={0.75} opacity={0.55} />
+              <GirkiCroppedShape
+                shape="tableArch"
+                anchor="top-right"
+                size="min(68vw, 44rem)"
+                opacity={0.38}
+                blend="screen"
+                pushX="16%"
+                pushY="-10%"
+              />
+              <GirkiCroppedShape
+                shape="wovenDiamond"
+                anchor="bottom-left"
+                size="min(58vw, 36rem)"
+                opacity={0.3}
+                blend="screen"
+                pushX="-14%"
+                pushY="12%"
+              />
+              <GirkiCroppedShape
+                shape="flameDrop"
+                anchor="center-right"
+                size="min(48vw, 30rem)"
+                opacity={0.24}
+                blend="screen"
+                pushX="20%"
+              />
               <div className="relative z-10">
                 <p className="typography-eyebrow text-ploy-accent-tertiary">For chefs</p>
                 <h2 className="display-title mt-5 text-4xl sm:text-5xl">
