@@ -13,6 +13,7 @@ import ExperiencesGrid from './ExperiencesGrid'
 import GirkiBorderStrip from './patterns/GirkiBorderStrip'
 import GirkiComposition from './patterns/GirkiComposition'
 import GirkiCroppedShape from './patterns/GirkiCroppedShape'
+import HeroHeadlineAccent from './patterns/HeroHeadlineAccent'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
 import SearchSelect from './SearchSelect'
@@ -111,6 +112,7 @@ export default function HomePage() {
               opacity={0.42}
               blend="screen"
               rotate={-8}
+              className="hidden sm:block"
             />
             <div className="relative z-10 mx-auto flex min-h-svh max-w-7xl items-end px-5 pb-28 pt-32 lg:items-center lg:px-8 lg:pb-24 lg:pt-24">
               <div className="grid w-full items-end gap-12 lg:grid-cols-[1.1fr_.9fr]">
@@ -119,7 +121,8 @@ export default function HomePage() {
                     Private chefs across Africa
                   </p>
                   <h1 className="display-title mt-6 text-5xl sm:text-6xl lg:text-[5.4rem]">
-                    Unforgettable meals, at your table.
+                    Unforgettable <HeroHeadlineAccent>meals</HeroHeadlineAccent>, at your
+                    table.
                   </h1>
                   <p className="mt-7 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
                     Book a private chef for date night, celebrations, weekly meals,
