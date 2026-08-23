@@ -357,13 +357,13 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="reviews" className="relative overflow-hidden bg-girki-plum text-ploy-text-inverse">
+        <section id="reviews" className="relative overflow-hidden bg-girki-charcoal text-girki-cream">
           <div className="relative h-28 overflow-hidden sm:h-32" aria-hidden="true">
             <GirkiComposition composition="celebration" scale={0.8} />
           </div>
           <div className="section-pad">
-            <p className="typography-eyebrow">Guest notes</p>
-            <h2 className="display-title mt-5 max-w-3xl text-4xl sm:text-5xl">
+            <p className="typography-eyebrow text-girki-saffron">Guest notes</p>
+            <h2 className="display-title mt-5 max-w-3xl text-4xl text-girki-cream sm:text-5xl">
               The table is the review.
             </h2>
             <div className="mt-14 flex flex-wrap gap-x-10 gap-y-8 border-y border-white/10 py-10">
