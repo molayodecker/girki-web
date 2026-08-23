@@ -358,8 +358,33 @@ export default function HomePage() {
         </section>
 
         <section id="reviews" className="relative overflow-hidden bg-girki-charcoal text-girki-cream">
-          <div className="relative h-28 overflow-hidden sm:h-32" aria-hidden="true">
-            <GirkiComposition composition="celebration" scale={0.8} />
+          <div className="relative h-44 overflow-hidden sm:h-52" aria-hidden="true">
+            <GirkiCroppedShape
+              shape="plate"
+              anchor="top-left"
+              size="min(62vw, 34rem)"
+              opacity={0.34}
+              blend="screen"
+              pushX="-16%"
+              pushY="-18%"
+            />
+            <GirkiCroppedShape
+              shape="conversationArc"
+              anchor="top-right"
+              size="min(68vw, 38rem)"
+              opacity={0.3}
+              blend="screen"
+              pushX="14%"
+              pushY="-14%"
+            />
+            <GirkiCroppedShape
+              shape="wovenDiamond"
+              anchor="bottom-center"
+              size="min(44vw, 22rem)"
+              opacity={0.22}
+              blend="screen"
+              pushY="24%"
+            />
           </div>
           <div className="section-pad">
             <p className="typography-eyebrow text-girki-saffron">Guest notes</p>
