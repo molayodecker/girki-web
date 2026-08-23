@@ -6,7 +6,7 @@ import PageShell from '../../components/layout/PageShell'
 import StarRating from '../../components/StarRating'
 import { getChef, menusForChef } from '../../data/marketplace'
 import {
-  SHOWCASE_ONLY_CHEFS,
+  SHOWCASE_CHEFS,
   getChefInstagramUrl,
   isShowcaseChef,
 } from '../../lib/feature-flags'
@@ -25,9 +25,7 @@ function ChefProfilePage() {
   const [showInquiry, setShowInquiry] = useState(false)
   const showcase = isShowcaseChef(chef.id)
   const instagramUrl = getChefInstagramUrl(chef.id)
-  const showcaseLabel = showcase
-    ? SHOWCASE_ONLY_CHEFS[chef.id].label
-    : undefined
+  const showcaseLabel = showcase ? SHOWCASE_CHEFS[chef.id].label : undefined
 
   return (
     <PageShell>
