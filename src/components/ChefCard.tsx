@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Instagram, MapPin } from 'lucide-react'
+import { ExternalLink, MapPin } from 'lucide-react'
 import type { Chef } from '../data/marketplace'
 import { getChefInstagramUrl, isShowcaseChef } from '../lib/feature-flags'
 import StarRating from './StarRating'
@@ -33,7 +33,7 @@ export default function ChefCard({
       <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
       {showcase ? (
         <span className="absolute right-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-[0.65rem] tracking-[0.14em] uppercase text-white/85 backdrop-blur-sm">
-          <Instagram size={12} aria-hidden="true" />
+          <ExternalLink size={12} aria-hidden="true" />
           Featured
         </span>
       ) : null}

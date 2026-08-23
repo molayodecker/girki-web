@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
-import { Check, Instagram, MapPin, MessageCircle } from 'lucide-react'
+import { Check, ExternalLink, MapPin, MessageCircle } from 'lucide-react'
 import DirectInquiryForm from '../../components/DirectInquiryForm'
 import PageShell from '../../components/layout/PageShell'
 import StarRating from '../../components/StarRating'
@@ -64,7 +64,7 @@ function ChefProfilePage() {
                   rel="noopener noreferrer"
                   className="btn btn-primary min-h-12 px-7"
                 >
-                  <Instagram size={16} aria-hidden="true" />
+                  <ExternalLink size={16} aria-hidden="true" />
                   {showcaseLabel}
                 </a>
               ) : (
