@@ -1,4 +1,5 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useEffect, useState } from 'react'
+import { Link, useNavigate } from '@tanstack/react-router'
 import {
   ArrowRight,
   CalendarDays,
@@ -7,10 +8,18 @@ import {
   MapPin,
   UtensilsCrossed,
 } from 'lucide-react'
+import AuthLoginPanel from '../components/auth/AuthLoginPanel'
 import { getChef } from '../data/marketplace'
+import { ensureAuthProfileFn } from '../lib/auth.functions'
+import {
+  signInWithEmailPassword,
+  signUpWithEmailPassword,
+} from '../lib/auth-client'
+import { createSupabaseBrowserClient } from '../lib/supabase/browser'
 import {
   chefLoginFn,
   chefLogoutFn,
+  establishChefPortalSessionFn,
   getChefSessionFn,
   marketplaceRepository,
 } from '../lib/marketplace.functions'
@@ -35,74 +44,73 @@ function statusLabel(status: string) {
 
 function ChefLogin({
   onSignedIn,
+  portalError,
 }: {
   onSignedIn: (session: ChefSession) => void
+  portalError?: string
 }) {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
+  const navigate = useNavigate()
 
-  async function submit(event: FormEvent) {
-    event.preventDefault()
-    setBusy(true)
-    setError('')
-    try {
-      const session = await chefLoginFn({ data: { email, password } })
-      onSignedIn(session)
-    } catch (loginError) {
-      setError(loginError instanceof Error ? loginError.message : 'Unable to sign in.')
-    } finally {
-      setBusy(false)
-    }
+  async function openPortalFromSupabase() {
+    await ensureAuthProfileFn({ data: {} })
+    const session = await establishChefPortalSessionFn()
+    onSignedIn(session)
   }
 
   return (
-    <div className="mx-auto max-w-md px-5 py-24">
+    <div className="mx-auto max-w-md px-5 py-16 sm:py-24">
       <p className="typography-eyebrow">Chef portal</p>
       <h1 className="display-title mt-4 text-4xl">Sign in to your kitchen.</h1>
       <p className="mt-4 text-ploy-text-secondary">
-        Use the email Girki has on file for your chef profile. Quotes and bookings stay tied to
-        your account.
+        Use your phone, Google, Facebook, or email. Portal access still requires an approved Girki
+        chef profile.
       </p>
-      <form onSubmit={(event) => void submit(event)} className="mt-10 space-y-4">
-        <label className="block">
-          <span className="text-sm text-ploy-text-secondary">Email</span>
-          <input
-            type="email"
-            autoComplete="username"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="mt-2 min-h-11 w-full rounded-xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none focus:border-ploy-accent-tertiary"
-          />
-        </label>
-        <label className="block">
-          <span className="text-sm text-ploy-text-secondary">Password</span>
-          <input
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="mt-2 min-h-11 w-full rounded-xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none focus:border-ploy-accent-tertiary"
-          />
-        </label>
-        {error ? <p className="text-sm text-ploy-accent-secondary">{error}</p> : null}
-        <button type="submit" className="btn btn-primary min-h-11 w-full" disabled={busy}>
-          {busy ? 'Signing in…' : 'Sign in'}
-        </button>
-      </form>
+      {portalError ? (
+        <p className="mt-4 text-sm text-ploy-accent-secondary">{portalError}</p>
+      ) : null}
+      <div className="mt-10 rounded-[1.8rem] border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-6 sm:p-8">
+        <AuthLoginPanel
+          intent="chef-portal"
+          phoneSubmitLabel="Continue to verification"
+          onPhoneContinue={async () => {
+            await navigate({ to: '/verify-phone' })
+          }}
+          onSessionReady={openPortalFromSupabase}
+          onEmailSignIn={async ({ email, password }) => {
+            try {
+              await signInWithEmailPassword(email, password)
+              await openPortalFromSupabase()
+            } catch {
+              const session = await chefLoginFn({ data: { email, password } })
+              onSignedIn(session)
+            }
+          }}
+          onEmailSignUp={async ({ email, password }) => {
+            const data = await signUpWithEmailPassword(email, password)
+            if (!data.session) {
+              throw new Error('Check your email to confirm your account, then sign in.')
+            }
+            await openPortalFromSupabase()
+          }}
+        />
+      </div>
+      <p className="mt-6 text-sm text-ploy-text-secondary">
+        Not a chef yet?{' '}
+        <Link to="/sign-in" search={{ intent: 'chef' }} className="underline underline-offset-4">
+          Apply as a chef
+        </Link>
+      </p>
     </div>
   )
 }
 
 export default function ChefDashboard() {
-  const [session, setSession] = useState<ChefSession | null | undefined>(undefined)
+  const [session, setSession] = useState<ChefSession | null>(null)
   const [data, setData] = useState<ChefDashboardData | null>(null)
   const [quoteDrafts, setQuoteDrafts] = useState<Record<string, string>>({})
   const [busyId, setBusyId] = useState('')
   const [error, setError] = useState('')
+  const [portalError, setPortalError] = useState('')
 
   const chef = session ? getChef(session.slug) : null
   const displayName = chef?.name ?? session?.displayName ?? 'Chef'
@@ -112,9 +120,33 @@ export default function ChefDashboard() {
   }
 
   useEffect(() => {
-    void getChefSessionFn()
-      .then((next) => setSession(next))
-      .catch(() => setSession(null))
+    let cancelled = false
+    void (async () => {
+      try {
+        const existing = await getChefSessionFn()
+        if (cancelled) return
+        if (existing) {
+          setSession(existing)
+          return
+        }
+
+        const supabase = createSupabaseBrowserClient()
+        const { data: auth } = await supabase.auth.getSession()
+        if (!auth.session) return
+
+        const established = await establishChefPortalSessionFn()
+        if (!cancelled) setSession(established)
+      } catch (err) {
+        if (cancelled) return
+        const message = err instanceof Error ? err.message : ''
+        if (message && !message.toLowerCase().includes('unauthorized')) {
+          setPortalError(message)
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   useEffect(() => {
@@ -130,16 +162,16 @@ export default function ChefDashboard() {
       })
   }, [session])
 
-  if (session === undefined) {
-    return (
-      <div className="mx-auto max-w-7xl px-5 py-24 text-ploy-text-secondary">
-        Checking chef session…
-      </div>
-    )
-  }
-
   if (!session) {
-    return <ChefLogin onSignedIn={setSession} />
+    return (
+      <ChefLogin
+        portalError={portalError || undefined}
+        onSignedIn={(next) => {
+          setPortalError('')
+          setSession(next)
+        }}
+      />
+    )
   }
 
   if (!data) {
@@ -207,6 +239,11 @@ export default function ChefDashboard() {
 
   async function signOut() {
     await chefLogoutFn()
+    try {
+      await createSupabaseBrowserClient().auth.signOut()
+    } catch {
+      // Cookie clear is enough for portal access.
+    }
     setSession(null)
     setData(null)
   }

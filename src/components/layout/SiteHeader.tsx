@@ -68,10 +68,17 @@ export default function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             className={`btn btn-outline hidden sm:inline-flex ${
               light ? 'border-white/30 text-white hover:bg-white/10' : ''
             }`}
-            to="/"
-            hash="become-a-chef"
+            to="/become-a-chef"
           >
             Become a chef
+          </Link>
+          <Link
+            className={`btn btn-outline hidden md:inline-flex ${
+              light ? 'border-white/30 text-white hover:bg-white/10' : ''
+            }`}
+            to="/sign-in"
+          >
+            Sign in
           </Link>
           <Link className="btn btn-primary" to="/request">
             Find a chef

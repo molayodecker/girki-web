@@ -16,9 +16,9 @@
   --color-ploy-neutral-inverse-s0: #120d10;
   --color-ploy-neutral-inverse-s1: #1c1418;
 
-  --color-ploy-accent-primary: #2a1a24;
-  --color-ploy-accent-secondary: #c24b32;
-  --color-ploy-accent-tertiary: #b8956a;
+  --color-ploy-accent-primary: #6b2f45;
+  --color-ploy-accent-secondary: #b4462b;
+  --color-ploy-accent-tertiary: #e0a02e;
 
   --color-ploy-text-primary: #1c1418;
   --color-ploy-text-secondary: #6b5e56;
@@ -32,6 +32,13 @@
   --color-ploy-background-secondary: #ebe3d8;
   --color-ploy-background-inverse: #1c1418;
   --color-ploy-border-primary: color-mix(in oklch, #1c1418 10%, transparent);
+
+  --color-girki-terracotta: #b4462b;
+  --color-girki-saffron: #e0a02e;
+  --color-girki-palm: #2e5340;
+  --color-girki-charcoal: #201a16;
+  --color-girki-cream: #f5ecde;
+  --color-girki-plum: #6b2f45;
 
   --shadow-soft: 0 24px 60px -28px rgb(28 20 24 / 0.28);
   --shadow-lift: 0 40px 80px -32px rgb(28 20 24 / 0.38);
@@ -52,7 +59,7 @@
   }
 
   ::selection {
-    background: #c24b32;
+    background: #b4462b;
     color: #fffaf4;
   }
 
@@ -126,7 +133,7 @@
   color: var(--color-ploy-text-on-accent-secondary);
 
   &:hover {
-    background: color-mix(in oklch, #c24b32 88%, black);
+    background: color-mix(in oklch, #b4462b 88%, black);
   }
 }
 
@@ -135,7 +142,7 @@
   color: var(--color-ploy-text-on-accent-primary);
 
   &:hover {
-    background: color-mix(in oklch, #2a1a24 88%, white);
+    background: color-mix(in oklch, #6b2f45 88%, white);
   }
 }
 
@@ -169,4 +176,38 @@
     padding-inline: 2rem;
     padding-block: 7.5rem;
   }
+}
+
+@utility field {
+  min-height: 2.75rem;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-ploy-border-primary);
+  background: var(--color-ploy-background-primary);
+  padding-inline: 1rem;
+  outline: none;
+
+  &:focus {
+    border-color: var(--color-ploy-accent-tertiary);
+  }
+}
+
+.PhoneInputGirki {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.PhoneInputGirki .PhoneInputInput {
+  flex: 1;
+  min-height: 2.5rem;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+}
+
+.PhoneInputGirki .PhoneInputCountryIcon {
+  width: 1.4rem;
+  height: 1rem;
 }

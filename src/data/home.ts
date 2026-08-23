@@ -13,9 +13,8 @@ export const images = {
     'https://storage.googleapis.com/ployai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-celebration-experience-260814033400.webp',
   corporateEvents: '/images/corporate-events.png',
   vacationChef: '/images/vacation-chef.png',
-  nana: 'https://cdn.ploy.ai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-chef-portrait-nana-260813050743.webp',
-  youssef:
-    'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=1200&q=80',
+  selasieAtadika: '/images/chef-selasie-atadika.png',
+  lukeDaleRoberts: '/images/chef-luke-dale-roberts.png',
   amani: '/images/chef-stephanie.jpg',
   cuisine:
     'https://cdn.ploy.ai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-african-cuisine-table-260813050738.webp',
@@ -64,20 +63,20 @@ export const experiences = [
 
 export const chefs = [
   {
-    name: 'Chef Nana K.',
+    name: 'Chef Selasie Atadika',
     location: 'Accra, Ghana',
-    specialties: 'Ghanaian · Continental · Fine dining',
+    specialties: 'Ghanaian · Pan-African · New African cuisine',
     pricing: 'From GH₵450',
-    image: images.nana,
-    alt: 'Chef Nana K., private chef in Accra, Ghana',
+    image: images.selasieAtadika,
+    alt: 'Chef Selasie Atadika, private chef in Accra, Ghana',
   },
   {
-    name: 'Chef Youssef B.',
-    location: 'Casablanca, Morocco',
-    specialties: 'Moroccan · North African · Grill',
+    name: 'Chef Luke Dale-Roberts',
+    location: 'Cape Town, South Africa',
+    specialties: 'South African · Fine dining · Contemporary',
     pricing: 'Pricing by experience',
-    image: images.youssef,
-    alt: 'Chef Youssef B., private chef in Casablanca, Morocco',
+    image: images.lukeDaleRoberts,
+    alt: 'Chef Luke Dale-Roberts, private chef in Cape Town, South Africa',
   },
   {
     name: 'Chef Stephanie K.',

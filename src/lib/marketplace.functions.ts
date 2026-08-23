@@ -208,6 +208,15 @@ export const chefLoginFn = createServerFn({ method: 'POST' })
     return session
   })
 
+export const establishChefPortalSessionFn = createServerFn({ method: 'POST' }).handler(
+  async () => {
+    const auth = await import('./auth-session.server')
+    const session = await auth.authenticateChefFromSupabaseUser()
+    auth.issueChefSession(session)
+    return session
+  },
+)
+
 export const chefLogoutFn = createServerFn({ method: 'POST' }).handler(async () => {
   const { clearChefSession } = await import('./auth-session.server')
   clearChefSession()

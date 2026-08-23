@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CalendarDays, House, Search, UserRound, Utensils } from 'lucide-react'
+import GirkiComposition from '../patterns/GirkiComposition'
 
 const columns = [
   {
@@ -20,7 +21,7 @@ const columns = [
   },
   {
     title: 'Chefs',
-    links: [{ label: 'Become a chef', to: '/', hash: 'become-a-chef' }],
+    links: [{ label: 'Become a chef', to: '/become-a-chef' }],
   },
   {
     title: 'Company',
@@ -34,6 +35,9 @@ const columns = [
 export default function SiteFooter() {
   return (
     <>
+      <div className="relative h-36 overflow-hidden sm:h-44" aria-hidden="true">
+        <GirkiComposition composition="celebration" scale={0.9} />
+      </div>
       <footer className="bg-ploy-neutral-inverse px-5 pb-28 pt-20 text-ploy-text-inverse lg:px-8 lg:pb-12">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-14 border-b border-white/10 pb-16 lg:grid-cols-[1.4fr_2.2fr]">
@@ -85,7 +89,7 @@ export default function SiteFooter() {
           { to: '/', hash: 'experiences', label: 'Explore', Icon: Search },
           { to: '/request', label: 'Request', Icon: CalendarDays },
           { to: '/chefs', label: 'Chefs', Icon: Utensils },
-          { to: '/', hash: 'become-a-chef', label: 'Join', Icon: UserRound },
+          { to: '/become-a-chef', label: 'Join', Icon: UserRound },
         ].map(({ to, hash, label, Icon }) => (
           <Link
             key={label}

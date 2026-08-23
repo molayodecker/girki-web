@@ -10,18 +10,30 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BecomeAChefRouteImport } from './routes/become-a-chef'
 import { Route as ChefDashboardRouteImport } from './routes/chef-dashboard'
 import { Route as ChefsRouteRouteImport } from './routes/chefs/route'
 import { Route as RequestRouteRouteImport } from './routes/request/route'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as VerifyPhoneRouteImport } from './routes/verify-phone'
 import { Route as ApiWhatsappRouteImport } from './routes/api/whatsapp'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as ChefOnboardingRouteImport } from './routes/chef/onboarding'
 import { Route as ChefsIndexRouteImport } from './routes/chefs/index'
 import { Route as ChefsChefIdRouteImport } from './routes/chefs/$chefId'
 import { Route as RequestIndexRouteImport } from './routes/request/index'
 import { Route as RequestProposalsRouteImport } from './routes/request/proposals'
+import { Route as ApiSumsubAccessTokenRouteImport } from './routes/api/sumsub/access-token'
+import { Route as ApiSumsubWebhookRouteImport } from './routes/api/sumsub/webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BecomeAChefRoute = BecomeAChefRouteImport.update({
+  id: '/become-a-chef',
+  path: '/become-a-chef',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChefDashboardRoute = ChefDashboardRouteImport.update({
@@ -39,9 +51,29 @@ const RequestRouteRoute = RequestRouteRouteImport.update({
   path: '/request',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyPhoneRoute = VerifyPhoneRouteImport.update({
+  id: '/verify-phone',
+  path: '/verify-phone',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiWhatsappRoute = ApiWhatsappRouteImport.update({
   id: '/api/whatsapp',
   path: '/api/whatsapp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChefOnboardingRoute = ChefOnboardingRouteImport.update({
+  id: '/chef/onboarding',
+  path: '/chef/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChefsIndexRoute = ChefsIndexRouteImport.update({
@@ -64,38 +96,69 @@ const RequestProposalsRoute = RequestProposalsRouteImport.update({
   path: '/proposals',
   getParentRoute: () => RequestRouteRoute,
 } as any)
+const ApiSumsubAccessTokenRoute = ApiSumsubAccessTokenRouteImport.update({
+  id: '/api/sumsub/access-token',
+  path: '/api/sumsub/access-token',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSumsubWebhookRoute = ApiSumsubWebhookRouteImport.update({
+  id: '/api/sumsub/webhook',
+  path: '/api/sumsub/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/chefs': typeof ChefsRouteRouteWithChildren
   '/request': typeof RequestRouteRouteWithChildren
+  '/become-a-chef': typeof BecomeAChefRoute
   '/chef-dashboard': typeof ChefDashboardRoute
+  '/sign-in': typeof SignInRoute
+  '/verify-phone': typeof VerifyPhoneRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
   '/chefs/': typeof ChefsIndexRoute
   '/request/': typeof RequestIndexRoute
+  '/api/sumsub/access-token': typeof ApiSumsubAccessTokenRoute
+  '/api/sumsub/webhook': typeof ApiSumsubWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/become-a-chef': typeof BecomeAChefRoute
   '/chef-dashboard': typeof ChefDashboardRoute
+  '/sign-in': typeof SignInRoute
+  '/verify-phone': typeof VerifyPhoneRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
   '/chefs': typeof ChefsIndexRoute
   '/request': typeof RequestIndexRoute
+  '/api/sumsub/access-token': typeof ApiSumsubAccessTokenRoute
+  '/api/sumsub/webhook': typeof ApiSumsubWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/chefs': typeof ChefsRouteRouteWithChildren
   '/request': typeof RequestRouteRouteWithChildren
+  '/become-a-chef': typeof BecomeAChefRoute
   '/chef-dashboard': typeof ChefDashboardRoute
+  '/sign-in': typeof SignInRoute
+  '/verify-phone': typeof VerifyPhoneRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
+  '/auth/callback': typeof AuthCallbackRoute
+  '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
   '/chefs/': typeof ChefsIndexRoute
   '/request/': typeof RequestIndexRoute
+  '/api/sumsub/access-token': typeof ApiSumsubAccessTokenRoute
+  '/api/sumsub/webhook': typeof ApiSumsubWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -103,40 +166,68 @@ export interface FileRouteTypes {
     | '/'
     | '/chefs'
     | '/request'
+    | '/become-a-chef'
     | '/chef-dashboard'
+    | '/sign-in'
+    | '/verify-phone'
     | '/api/whatsapp'
+    | '/auth/callback'
+    | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
     | '/chefs/'
     | '/request/'
+    | '/api/sumsub/access-token'
+    | '/api/sumsub/webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/become-a-chef'
     | '/chef-dashboard'
+    | '/sign-in'
+    | '/verify-phone'
     | '/api/whatsapp'
+    | '/auth/callback'
+    | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
     | '/chefs'
     | '/request'
+    | '/api/sumsub/access-token'
+    | '/api/sumsub/webhook'
   id:
     | '__root__'
     | '/'
     | '/chefs'
     | '/request'
+    | '/become-a-chef'
     | '/chef-dashboard'
+    | '/sign-in'
+    | '/verify-phone'
     | '/api/whatsapp'
+    | '/auth/callback'
+    | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
     | '/chefs/'
     | '/request/'
+    | '/api/sumsub/access-token'
+    | '/api/sumsub/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ChefsRouteRoute: typeof ChefsRouteRouteWithChildren
   RequestRouteRoute: typeof RequestRouteRouteWithChildren
+  BecomeAChefRoute: typeof BecomeAChefRoute
   ChefDashboardRoute: typeof ChefDashboardRoute
+  SignInRoute: typeof SignInRoute
+  VerifyPhoneRoute: typeof VerifyPhoneRoute
   ApiWhatsappRoute: typeof ApiWhatsappRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
+  ChefOnboardingRoute: typeof ChefOnboardingRoute
+  ApiSumsubAccessTokenRoute: typeof ApiSumsubAccessTokenRoute
+  ApiSumsubWebhookRoute: typeof ApiSumsubWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -146,6 +237,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/become-a-chef': {
+      id: '/become-a-chef'
+      path: '/become-a-chef'
+      fullPath: '/become-a-chef'
+      preLoaderRoute: typeof BecomeAChefRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chef-dashboard': {
@@ -169,11 +267,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-phone': {
+      id: '/verify-phone'
+      path: '/verify-phone'
+      fullPath: '/verify-phone'
+      preLoaderRoute: typeof VerifyPhoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/whatsapp': {
       id: '/api/whatsapp'
       path: '/api/whatsapp'
       fullPath: '/api/whatsapp'
       preLoaderRoute: typeof ApiWhatsappRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/chef/onboarding': {
+      id: '/chef/onboarding'
+      path: '/chef/onboarding'
+      fullPath: '/chef/onboarding'
+      preLoaderRoute: typeof ChefOnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chefs/': {
@@ -203,6 +329,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/request/proposals'
       preLoaderRoute: typeof RequestProposalsRouteImport
       parentRoute: typeof RequestRouteRoute
+    }
+    '/api/sumsub/access-token': {
+      id: '/api/sumsub/access-token'
+      path: '/api/sumsub/access-token'
+      fullPath: '/api/sumsub/access-token'
+      preLoaderRoute: typeof ApiSumsubAccessTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/sumsub/webhook': {
+      id: '/api/sumsub/webhook'
+      path: '/api/sumsub/webhook'
+      fullPath: '/api/sumsub/webhook'
+      preLoaderRoute: typeof ApiSumsubWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -239,8 +379,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ChefsRouteRoute: ChefsRouteRouteWithChildren,
   RequestRouteRoute: RequestRouteRouteWithChildren,
+  BecomeAChefRoute: BecomeAChefRoute,
   ChefDashboardRoute: ChefDashboardRoute,
+  SignInRoute: SignInRoute,
+  VerifyPhoneRoute: VerifyPhoneRoute,
   ApiWhatsappRoute: ApiWhatsappRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
+  ChefOnboardingRoute: ChefOnboardingRoute,
+  ApiSumsubAccessTokenRoute: ApiSumsubAccessTokenRoute,
+  ApiSumsubWebhookRoute: ApiSumsubWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

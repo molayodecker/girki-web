@@ -140,7 +140,7 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           <input
             value={budget}
             onChange={(event) => setBudget(event.target.value)}
-            placeholder="e.g. GH₵2,500–3,500"
+            placeholder="e.g. GH₵2,500-3,500"
             className={inputClass}
           />
         </label>
