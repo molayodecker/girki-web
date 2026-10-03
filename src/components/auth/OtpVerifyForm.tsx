@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { otpSchema, type OtpFormValues } from '../../lib/validation/auth'
+import { isMockPhoneLoginEnabled, MOCK_OTP } from '../../lib/auth-mock'
 
 export default function OtpVerifyForm({
   onSubmit,
@@ -43,6 +44,8 @@ export default function OtpVerifyForm({
         />
         {errors.otp ? (
           <p className="mt-2 text-sm text-ploy-accent-secondary">{errors.otp.message}</p>
+        ) : isMockPhoneLoginEnabled() ? (
+          <p className="mt-2 text-sm text-ploy-text-secondary">Mock code: {MOCK_OTP}</p>
         ) : null}
       </label>
 

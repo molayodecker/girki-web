@@ -44,7 +44,7 @@ export default function AuthLoginPanel({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       <PhoneContinueForm
         submitLabel={phoneSubmitLabel}
         onSubmit={async ({ phone }) => {
@@ -54,16 +54,16 @@ export default function AuthLoginPanel({
         }}
       />
 
-      <div className="flex items-center gap-3 text-xs uppercase tracking-[0.14em] text-ploy-text-secondary">
+      <div className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.16em] text-ploy-text-secondary">
         <span className="h-px flex-1 bg-ploy-border-primary" />
-        or
+        <span>or</span>
         <span className="h-px flex-1 bg-ploy-border-primary" />
       </div>
 
-      <div className="grid gap-3">
+      <div className="grid gap-2.5">
         <button
           type="button"
-          className="btn btn-outline min-h-11 w-full gap-2"
+          className="btn btn-outline min-h-11 w-full gap-2.5"
           disabled={oauthBusy !== null}
           onClick={() => void startOAuth('google')}
         >
@@ -72,7 +72,7 @@ export default function AuthLoginPanel({
         </button>
         <button
           type="button"
-          className="btn btn-outline min-h-11 w-full gap-2"
+          className="btn btn-outline min-h-11 w-full gap-2.5"
           disabled={oauthBusy !== null}
           onClick={() => void startOAuth('facebook')}
         >
@@ -83,7 +83,7 @@ export default function AuthLoginPanel({
 
       <button
         type="button"
-        className="w-full text-sm text-ploy-text-secondary underline-offset-4 hover:underline"
+        className="mx-auto block text-sm text-ploy-text-secondary underline-offset-4 hover:underline"
         onClick={() => {
           setShowEmail((open) => !open)
           setMessage('')
@@ -121,8 +121,8 @@ export default function AuthLoginPanel({
         />
       ) : null}
 
-      {message ? <p className="text-sm text-ploy-text-secondary">{message}</p> : null}
-      {altError ? <p className="text-sm text-ploy-accent-secondary">{altError}</p> : null}
+      {message ? <p className="text-center text-sm text-ploy-text-secondary">{message}</p> : null}
+      {altError ? <p className="text-center text-sm text-ploy-accent-secondary">{altError}</p> : null}
     </div>
   )
 }

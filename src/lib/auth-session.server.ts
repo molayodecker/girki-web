@@ -156,11 +156,21 @@ export function requireChefSession(): ChefSession {
 
 /** Validates signature and that the chef is still allowed to act. */
 export async function requireActiveChefSession(): Promise<ChefSession> {
+  const { readMockAuth } = await import('./auth-mock.server')
+  if (readMockAuth()) {
+    const { MOCK_CHEF_SESSION } = await import('./auth-mock')
+    return { ...MOCK_CHEF_SESSION }
+  }
   const session = requireChefSession()
   return assertChefStillAuthorized(session)
 }
 
 export async function getActiveChefSession(): Promise<ChefSession | null> {
+  const { readMockAuth } = await import('./auth-mock.server')
+  if (readMockAuth()) {
+    const { MOCK_CHEF_SESSION } = await import('./auth-mock')
+    return { ...MOCK_CHEF_SESSION }
+  }
   const session = readChefSession()
   if (!session) return null
   try {

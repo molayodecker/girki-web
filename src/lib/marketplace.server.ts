@@ -2,6 +2,7 @@ import { sql } from './db.server'
 import type {
   Booking,
   BookingStatus,
+  CustomerDashboardData,
   ChefDashboardData,
   ChefProposal,
   ChefRequestRecord,
@@ -647,6 +648,103 @@ export async function listChefDashboard(chefSlug: string): Promise<ChefDashboard
       lifetime: available + pending,
       currency: 'GHS',
     },
+  }
+}
+
+export async function listCustomerDashboard(identity: {
+  email: string
+  phone: string
+}): Promise<CustomerDashboardData> {
+  const email = identity.email.trim().toLowerCase()
+  const phone = identity.phone.trim()
+
+  if (!email && !phone) {
+    return { bookings: [], requests: [], inquiries: [] }
+  }
+
+  const inquiries = await sql<InquiryRow[]>`
+    select
+      i.id,
+      c.slug as chef_slug,
+      i.customer_name,
+      i.email,
+      i.phone,
+      i.event_date,
+      i.guest_count,
+      i.occasion,
+      i.location_label,
+      i.budget,
+      i.message,
+      i.status,
+      i.quoted_price,
+      i.currency,
+      i.created_at
+    from public.inquiries i
+    join public.chef_profiles c on c.id = i.chef_id
+    where
+      (${email} <> '' and lower(i.email) = ${email})
+      or (${phone} <> '' and i.phone = ${phone})
+    order by i.created_at desc
+  `
+
+  const requests = await sql<RequestRow[]>`
+    select
+      id,
+      customer_name,
+      email,
+      phone,
+      city,
+      cuisine,
+      occasion,
+      service_type,
+      guest_summary,
+      meal_time,
+      event_date,
+      budget,
+      restrictions,
+      notes,
+      status,
+      created_at
+    from public.chef_requests
+    where
+      (${email} <> '' and lower(email) = ${email} and email <> 'guest@girki.app')
+      or (${phone} <> '' and phone = ${phone})
+    order by created_at desc
+  `
+
+  const bookings = await sql<BookingRow[]>`
+    select
+      b.id,
+      b.booking_number,
+      b.customer_name,
+      b.email,
+      c.slug as chef_slug,
+      b.booking_source,
+      b.inquiry_id,
+      b.request_id,
+      b.proposal_id,
+      b.event_date,
+      b.guest_summary,
+      b.occasion,
+      b.location_label,
+      b.subtotal,
+      b.service_fee,
+      b.total,
+      b.chef_payout,
+      b.currency,
+      b.payment_status,
+      b.booking_status,
+      b.created_at
+    from public.bookings b
+    join public.chef_profiles c on c.id = b.chef_id
+    where ${email} <> '' and lower(b.email) = ${email}
+    order by b.created_at desc
+  `
+
+  return {
+    inquiries: inquiries.map(mapInquiry),
+    requests: requests.map(mapRequest),
+    bookings: bookings.map(mapBooking),
   }
 }
 

@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { CalendarDays, House, Search, UserRound, Utensils } from 'lucide-react'
+import GirkiMark from '../brand/GirkiMark'
 import GirkiComposition from '../patterns/GirkiComposition'
 
 const columns = [
@@ -42,7 +43,8 @@ export default function SiteFooter() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-14 border-b border-white/10 pb-16 lg:grid-cols-[1.4fr_2.2fr]">
             <div>
-              <Link to="/" className="font-heading text-5xl tracking-tight">
+              <Link to="/" className="inline-flex items-center gap-3 font-heading text-4xl tracking-tight">
+                <GirkiMark size={48} />
                 Girki
               </Link>
               <p className="mt-6 max-w-xs text-[0.95rem] leading-relaxed text-white/55">

@@ -24,6 +24,7 @@ export const Route = createRootRoute({
       {
         title: 'Girki: Private Chefs Across Africa',
       },
+      { name: 'theme-color', content: '#e85c32' },
       {
         name: 'description',
         content:
@@ -52,6 +53,8 @@ export const Route = createRootRoute({
       },
     ],
     links: [
+      { rel: 'icon', href: '/brand/girki-mark-terracotta.png', type: 'image/png' },
+      { rel: 'apple-touch-icon', href: '/brand/girki-mark-terracotta.png' },
       {
         rel: 'stylesheet',
         href: appCss,

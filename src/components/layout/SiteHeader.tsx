@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Menu, X } from 'lucide-react'
+import GirkiMark from '../brand/GirkiMark'
 
 const links = [
   { to: '/', hash: 'how-it-works', label: 'How it works' },
   { to: '/chefs', label: 'Chefs' },
   { to: '/', hash: 'experiences', label: 'Experiences' },
   { to: '/', hash: 'menus', label: 'Menus' },
+  { to: '/account', label: 'My table' },
   { to: '/chef-dashboard', label: 'Chef portal' },
 ] as const
 
@@ -38,9 +40,10 @@ export default function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         <Link
           to="/"
           aria-label="Girki home"
-          className="font-heading text-[1.7rem] tracking-tight"
+          className="flex items-center gap-2.5 font-heading text-[1.45rem] tracking-tight"
         >
-          Girki
+          <GirkiMark size={36} />
+          <span>Girki</span>
         </Link>
 
         <nav

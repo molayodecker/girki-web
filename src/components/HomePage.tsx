@@ -39,16 +39,16 @@ const guestSearchMap: Record<string, string> = {
 
 const howItWorks = [
   {
-    title: 'Tell us what you want',
-    copy: 'City, date, guests, and the kind of table you have in mind. No commitment.',
+    title: 'Tell us the table',
+    copy: 'City, date, guests, diet notes, kitchen. The chef plans from there.',
   },
   {
-    title: 'Compare and customize',
-    copy: 'Chefs propose menus around your evening. You refine every course.',
+    title: 'See the menu first',
+    copy: 'Chefs send a plan and a price in the open. You approve before anyone shops.',
   },
   {
-    title: 'Host, and do nothing else',
-    copy: 'Groceries, cooking, service, and cleanup are theirs. The table is yours.',
+    title: 'Eat. That’s it.',
+    copy: 'They arrive, cook, serve, and leave the kitchen clean. You keep the table.',
   },
 ]
 
@@ -88,55 +88,28 @@ export default function HomePage() {
               alt="A private chef plating a meal in a modern home kitchen"
               className="absolute inset-0 h-full w-full object-cover object-[66%_center] scale-105"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,13,16,0.88)_0%,rgba(18,13,16,0.55)_42%,rgba(18,13,16,0.12)_78%,transparent_100%)]" />
-            <GirkiCroppedShape
-              shape="conversationArc"
-              anchor="center-right"
-              size="min(90vw, 56rem)"
-              opacity={0.5}
-              blend="screen"
-              className="hidden sm:block"
-            />
-            <GirkiCroppedShape
-              shape="plate"
-              anchor="bottom-right"
-              size="min(70vw, 38rem)"
-              opacity={0.35}
-              blend="screen"
-              className="hidden md:block"
-            />
-            <GirkiCroppedShape
-              shape="cloche"
-              anchor="bottom-left"
-              size="min(58vw, 32rem)"
-              opacity={0.42}
-              blend="screen"
-              rotate={-8}
-              className="hidden sm:block"
-            />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,13,16,0.78)_0%,rgba(18,13,16,0.38)_48%,rgba(18,13,16,0.08)_78%,transparent_100%)]" />
             <div className="relative z-10 mx-auto flex min-h-svh max-w-7xl items-end px-5 pb-28 pt-32 lg:items-center lg:px-8 lg:pb-24 lg:pt-24">
               <div className="grid w-full items-end gap-12 lg:grid-cols-[1.1fr_.9fr]">
                 <div className="max-w-2xl">
                   <p className="typography-eyebrow text-ploy-accent-tertiary">
-                    Private chefs across Africa
+                    Private chefs · Accra, Lagos, and across Africa
                   </p>
-                  <h1 className="display-title mt-6 text-5xl sm:text-6xl lg:text-[5.4rem]">
-                    Unforgettable <HeroHeadlineAccent>meals</HeroHeadlineAccent>, at your
-                    table.
+                  <h1 className="display-title mt-6 text-5xl sm:text-6xl lg:text-[5.2rem]">
+                    Tonight, you’re <HeroHeadlineAccent>eating</HeroHeadlineAccent>.
                   </h1>
-                  <p className="mt-7 max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
-                    Book a private chef for date night, celebrations, weekly meals,
-                    and villa stays, without leaving home.
+                  <p className="mt-7 max-w-lg text-base leading-relaxed text-white/75 sm:text-lg">
+                    A verified chef shops, cooks, serves, and cleans in the kitchen you’re in — date night, Sunday pots, villa stays.
                   </p>
                   <div className="mt-9 flex flex-wrap items-center gap-3">
                     <Link className="btn btn-primary min-h-12 px-7 text-[0.78rem]" to="/request">
-                      Start a request
+                      Book a chef
                     </Link>
                     <Link
                       className="btn btn-ghost min-h-12 border border-white/20 px-6"
-                      to="/become-a-chef"
+                      to="/chefs"
                     >
-                      Become a chef
+                      Browse chefs
                     </Link>
                   </div>
                 </div>
@@ -231,12 +204,11 @@ export default function HomePage() {
                 <div>
                   <p className="typography-eyebrow text-girki-saffron">The experience</p>
                   <h2 className="display-title mt-5 text-4xl text-girki-cream sm:text-5xl">
-                    A restaurant, without leaving home.
+                    A chef, wherever you’re staying.
                   </h2>
                 </div>
                 <p className="max-w-xl text-lg leading-relaxed text-girki-cream/70 lg:justify-self-end">
-                  Girki brings chef discovery, a tailored menu, and African
-                  hospitality into one quiet booking.
+                  Share the night. Approve the menu. Meet them in your kitchen. No hidden fees — the price you see is the price you pay.
                 </p>
               </div>
               <div className="mt-16 grid gap-10 border-t border-girki-cream/10 pt-12 md:grid-cols-3 md:gap-8">
@@ -265,7 +237,7 @@ export default function HomePage() {
           <GirkiBorderStrip />
         </section>
 
-        <section id="experiences" className="section-pad bg-ploy-background-secondary">
+        <section id="experiences" className="section-pad bg-[#FFE394]">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -490,7 +462,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="trust" className="relative overflow-hidden bg-girki-cream">
+        <section id="trust" className="relative overflow-hidden bg-[#FFE394]">
           <GirkiCroppedShape
             shape="wovenDiamond"
             anchor="top-right"

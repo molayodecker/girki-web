@@ -6,6 +6,12 @@ import {
   phoneSchema,
   type PhoneFormValues,
 } from '../../lib/validation/auth'
+import {
+  isMockPhoneLoginEnabled,
+  MOCK_PHONE,
+  MOCK_PHONE_DISPLAY,
+  MOCK_OTP,
+} from '../../lib/auth-mock'
 
 export default function PhoneContinueForm({
   submitLabel = 'Continue',
@@ -21,12 +27,12 @@ export default function PhoneContinueForm({
     setError,
   } = useForm<PhoneFormValues>({
     resolver: zodResolver(phoneSchema),
-    defaultValues: { phone: '' },
+    defaultValues: { phone: isMockPhoneLoginEnabled() ? MOCK_PHONE : '' },
   })
 
   return (
     <form
-      className="space-y-5"
+      className="space-y-4"
       onSubmit={handleSubmit(async (values) => {
         try {
           await onSubmit(values)
@@ -38,8 +44,8 @@ export default function PhoneContinueForm({
       })}
     >
       <label className="block">
-        <span className="text-sm text-ploy-text-secondary">Mobile number</span>
-        <div className="mt-2 rounded-xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-3 py-2 focus-within:border-ploy-accent-tertiary">
+        <span className="mb-2 block text-sm text-ploy-text-secondary">Mobile number</span>
+        <div className="phone-field flex min-h-12 items-center rounded-xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-3.5 focus-within:border-ploy-accent-tertiary">
           <Controller
             control={control}
             name="phone"
@@ -50,17 +56,21 @@ export default function PhoneContinueForm({
                 value={field.value}
                 onChange={(value) => field.onChange(value ?? '')}
                 onBlur={field.onBlur}
-                className="PhoneInputGirki"
+                className="PhoneInputGirki w-full"
               />
             )}
           />
         </div>
         {errors.phone ? (
           <p className="mt-2 text-sm text-ploy-accent-secondary">{errors.phone.message}</p>
+        ) : isMockPhoneLoginEnabled() ? (
+          <p className="mt-2 text-xs leading-relaxed text-ploy-text-secondary">
+            Mock login: use {MOCK_PHONE_DISPLAY}. The code is {MOCK_OTP}.
+          </p>
         ) : null}
       </label>
 
-      <button type="submit" className="btn btn-primary min-h-11 w-full" disabled={isSubmitting}>
+      <button type="submit" className="btn btn-primary min-h-12 w-full" disabled={isSubmitting}>
         {isSubmitting ? 'Sending code…' : submitLabel}
       </button>
     </form>

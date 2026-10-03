@@ -1,6 +1,12 @@
 import { createSupabaseBrowserClient } from '../lib/supabase/browser'
 import { normalizePhone } from '../lib/phone'
 import {
+  isMockOtp,
+  isMockPhoneLoginEnabled,
+  isMockPhoneNumber,
+  MOCK_PHONE,
+} from './auth-mock'
+import {
   PENDING_PHONE_KEY,
   SIGNUP_INTENT_KEY,
   type SignupIntent,
@@ -38,11 +44,19 @@ export function clearPendingPhone() {
 export function postAuthPath(intent: SignupIntent = getSignupIntent()) {
   if (intent === 'chef') return '/chef/onboarding'
   if (intent === 'chef-portal') return '/chef-dashboard'
-  return '/request'
+  return '/account'
 }
 
 export async function sendPhoneOtp(rawPhone: string) {
-  const phone = normalizePhone(rawPhone)
+  const phone = isMockPhoneLoginEnabled() && isMockPhoneNumber(rawPhone)
+    ? MOCK_PHONE
+    : normalizePhone(rawPhone)
+
+  if (isMockPhoneLoginEnabled() && isMockPhoneNumber(phone)) {
+    setPendingPhone(phone)
+    return phone
+  }
+
   const supabase = createSupabaseBrowserClient()
   const { error } = await supabase.auth.signInWithOtp({ phone })
   if (error) throw new Error(error.message)
@@ -51,7 +65,22 @@ export async function sendPhoneOtp(rawPhone: string) {
 }
 
 export async function verifyPhoneOtp(rawPhone: string, token: string) {
-  const phone = normalizePhone(rawPhone)
+  const phone = isMockPhoneLoginEnabled() && isMockPhoneNumber(rawPhone)
+    ? MOCK_PHONE
+    : normalizePhone(rawPhone)
+
+  if (isMockPhoneLoginEnabled() && isMockPhoneNumber(phone)) {
+    if (!isMockOtp(token)) {
+      throw new Error('Use the mock code 000000.')
+    }
+    const { completeMockPhoneLoginFn } = await import('./auth.functions')
+    await completeMockPhoneLoginFn({ data: { intent: getSignupIntent() } })
+    return {
+      session: { access_token: 'mock' },
+      user: { id: 'mock', phone },
+    }
+  }
+
   const supabase = createSupabaseBrowserClient()
   const { data, error } = await supabase.auth.verifyOtp({
     phone,

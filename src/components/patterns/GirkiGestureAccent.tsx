@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react'
 import type { GirkiShapeId } from '../../data/patterns'
-import { girkiBrand } from '../../data/patterns'
+import { girkiBrand, girkiShapes } from '../../data/patterns'
 
 type CropAnchor =
   | 'top-left'
@@ -89,40 +89,34 @@ export default function GirkiGestureAccent({
 
   if (shape === 'conversationArc') {
     return shell(
-      <div
-        className="h-full w-full rounded-t-full"
-        style={{ borderTop: `${stroke} solid ${color}` }}
+      <img
+        src={girkiShapes.conversationArc}
+        alt=""
+        draggable={false}
+        className="h-full w-full object-contain"
       />,
-      '2.4 / 1',
     )
   }
 
   if (shape === 'plate') {
     return shell(
-      <div
-        className="h-full w-full rounded-full"
-        style={{ border: `${stroke} solid ${color}` }}
+      <img
+        src={girkiShapes.plate}
+        alt=""
+        draggable={false}
+        className="h-full w-full object-contain"
       />,
     )
   }
 
   if (shape === 'tableArch') {
     return shell(
-      <div className="flex h-full w-full flex-col items-center justify-end pb-[2%]">
-        <div
-          className="w-[88%] rounded-t-full"
-          style={{
-            height: '72%',
-            borderTop: `${stroke} solid ${color}`,
-            borderLeft: `${stroke} solid transparent`,
-            borderRight: `${stroke} solid transparent`,
-          }}
-        />
-        <div
-          className="w-full rounded-full"
-          style={{ height: stroke, backgroundColor: color }}
-        />
-      </div>,
+      <img
+        src={girkiShapes.tableArch}
+        alt=""
+        draggable={false}
+        className="h-full w-full object-contain"
+      />,
     )
   }
 

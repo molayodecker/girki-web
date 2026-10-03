@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap");
+@import "./styles/portal-fonts.css";
 @import "tailwindcss";
 
 @theme {
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Fraunces", "Times New Roman", Georgia, serif;
+  --font-portal: Inter, system-ui, sans-serif;
+  --font-icons: Phosphor, sans-serif;
 
   --color-ploy-neutral-primary: #f4efe8;
   --color-ploy-neutral-secondary: #e8dfd3;
@@ -17,7 +20,7 @@
   --color-ploy-neutral-inverse-s1: #1c1418;
 
   --color-ploy-accent-primary: #6b2f45;
-  --color-ploy-accent-secondary: #b4462b;
+  --color-ploy-accent-secondary: #e85c32;
   --color-ploy-accent-tertiary: #e0a02e;
 
   --color-ploy-text-primary: #1c1418;
@@ -28,17 +31,26 @@
   --color-ploy-text-on-accent-secondary: #fffaf4;
   --color-ploy-text-on-accent-tertiary: #1c1418;
 
-  --color-ploy-background-primary: #f4efe8;
-  --color-ploy-background-secondary: #ebe3d8;
+  --color-ploy-background-primary: #ffe394;
+  --color-ploy-background-secondary: #ffe394;
   --color-ploy-background-inverse: #1c1418;
   --color-ploy-border-primary: color-mix(in oklch, #1c1418 10%, transparent);
 
-  --color-girki-terracotta: #b4462b;
+  --color-girki-terracotta: #e85c32;
   --color-girki-saffron: #e0a02e;
   --color-girki-palm: #2e5340;
   --color-girki-charcoal: #201a16;
   --color-girki-cream: #f5ecde;
   --color-girki-plum: #6b2f45;
+
+  --color-portal-bg: #121015;
+  --color-portal-sidebar: #17141b;
+  --color-portal-surface: #1e1a22;
+  --color-portal-surface-2: #262129;
+  --color-portal-border: rgb(255 255 255 / 0.08);
+  --color-portal-text: #f4efe8;
+  --color-portal-muted: #9a9088;
+  --color-portal-accent: #c45c3d;
 
   --shadow-soft: 0 24px 60px -28px rgb(28 20 24 / 0.28);
   --shadow-lift: 0 40px 80px -32px rgb(28 20 24 / 0.38);
@@ -59,7 +71,7 @@
   }
 
   ::selection {
-    background: #b4462b;
+    background: #e85c32;
     color: #fffaf4;
   }
 
@@ -133,7 +145,7 @@
   color: var(--color-ploy-text-on-accent-secondary);
 
   &:hover {
-    background: color-mix(in oklch, #b4462b 88%, black);
+    background: color-mix(in oklch, #e85c32 88%, black);
   }
 }
 
@@ -168,6 +180,23 @@
   border: 1px solid var(--color-ploy-border-primary);
 }
 
+@utility portal-card {
+  border-radius: 1.15rem;
+  border: 1px solid var(--color-portal-border);
+  background: var(--color-portal-surface);
+}
+
+@utility portal-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 @utility section-pad {
   padding-inline: 1.25rem;
   padding-block: 5.5rem;
@@ -195,19 +224,126 @@
 .PhoneInputGirki {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
+  width: 100%;
 }
 
 .PhoneInputGirki .PhoneInputInput {
   flex: 1;
+  min-width: 0;
   min-height: 2.5rem;
   border: 0;
   background: transparent;
   outline: none;
   font: inherit;
+  color: inherit;
+}
+
+.PhoneInputGirki .PhoneInputCountry {
+  margin-right: 0;
 }
 
 .PhoneInputGirki .PhoneInputCountryIcon {
   width: 1.4rem;
   height: 1rem;
+  box-shadow: none;
+}
+
+.PhoneInputGirki .PhoneInputCountrySelectArrow {
+  opacity: 0.55;
+  border-color: currentColor;
+}
+
+.portal-app {
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-heading: Inter, system-ui, sans-serif;
+  font-family: Inter, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.portal-app .font-heading,
+.portal-app .display-title {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.portal-app .field {
+  border-color: var(--color-portal-border);
+  background: var(--color-portal-bg);
+  color: var(--color-portal-text);
+}
+
+.portal-app .btn-primary {
+  background: var(--color-portal-accent);
+  color: #fffaf4;
+}
+
+.portal-app .btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.portal-app .btn-outline {
+  border-color: rgb(255 255 255 / 0.16);
+  color: var(--color-portal-text);
+}
+
+.portal-app .btn-outline:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+
+.portal-app .portal-auth-form .text-ploy-text-secondary,
+.portal-app .portal-auth-form .text-ploy-accent-secondary {
+  color: var(--color-portal-muted);
+}
+
+.portal-app .portal-auth-form .bg-ploy-border-primary,
+.portal-app .portal-auth-form .border-ploy-border-primary {
+  border-color: var(--color-portal-border);
+}
+
+.portal-app .portal-auth-form .bg-ploy-border-primary {
+  background: var(--color-portal-border);
+}
+
+.portal-app .phone-field {
+  border-color: var(--color-portal-border);
+  background: var(--color-portal-bg);
+  color: var(--color-portal-text);
+}
+
+.portal-app .phone-field:focus-within {
+  border-color: color-mix(in srgb, var(--color-portal-accent) 70%, white);
+}
+
+.portal-app .PhoneInputGirki,
+.portal-app .PhoneInputGirki .PhoneInputInput {
+  color: var(--color-portal-text);
+}
+
+.portal-app .PhoneInputGirki .PhoneInputInput::placeholder {
+  color: color-mix(in srgb, var(--color-portal-muted) 80%, transparent);
+}
+
+.portal-app .PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border {
+  box-shadow: none;
+}
+
+.portal-app .portal-auth-form input[type='email'],
+.portal-app .portal-auth-form input[type='password'] {
+  border-color: var(--color-portal-border);
+  background: var(--color-portal-bg);
+  color: var(--color-portal-text);
+}
+
+.portal-app .portal-auth-form input[type='email']:focus,
+.portal-app .portal-auth-form input[type='password']:focus {
+  border-color: color-mix(in srgb, var(--color-portal-accent) 70%, white);
+}
+
+@utility font-icons {
+  font-family: var(--font-icons);
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  speak: never;
 }

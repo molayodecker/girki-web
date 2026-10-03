@@ -14,6 +14,18 @@ function requiredString(value: unknown, label: string) {
 }
 
 async function upsertAuthProfile(phoneInput = '') {
+  const { readMockAuth } = await import('./auth-mock.server')
+  if (readMockAuth()) {
+    const { MOCK_DISPLAY_NAME, MOCK_EMAIL, MOCK_PHONE, MOCK_USER_ID } = await import('./auth-mock')
+    return {
+      userId: MOCK_USER_ID,
+      phone: phoneInput || MOCK_PHONE,
+      email: MOCK_EMAIL,
+      accountRole: 'customer' as const,
+      displayName: MOCK_DISPLAY_NAME,
+    }
+  }
+
   const { requireSupabaseUser } = await import('./supabase/server')
   const { user } = await requireSupabaseUser()
 
@@ -71,6 +83,28 @@ export const syncPhoneProfileFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => upsertAuthProfile(data.phone))
 
 export const getAuthProfileFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const { readMockAuth } = await import('./auth-mock.server')
+  if (readMockAuth()) {
+    const mock = await import('./auth-mock')
+    return {
+      userId: mock.MOCK_USER_ID,
+      phone: mock.MOCK_PHONE,
+      email: mock.MOCK_EMAIL,
+      profile: {
+        displayName: mock.MOCK_DISPLAY_NAME,
+        accountRole: 'customer',
+        accountStatus: 'active',
+      },
+      chefApplication: {
+        id: mock.MOCK_CHEF_SESSION.chefId,
+        slug: mock.MOCK_CHEF_SESSION.slug,
+        onboardingStatus: 'complete',
+        verificationState: 'verified',
+        profileStatus: 'active',
+      },
+    }
+  }
+
   const { createSupabaseServerClient } = await import('./supabase/server')
   const supabase = createSupabaseServerClient()
   const { data } = await supabase.auth.getUser()
@@ -80,12 +114,13 @@ export const getAuthProfileFn = createServerFn({ method: 'POST' }).handler(async
     Array<{
       id: string
       phone: string | null
+      email: string | null
       display_name: string
       account_role: string
       account_status: string
     }>
   >`
-    select id, phone, display_name, account_role, account_status
+    select id, phone, email, display_name, account_role, account_status
     from public.profiles
     where id = ${data.user.id}
     limit 1
@@ -109,6 +144,7 @@ export const getAuthProfileFn = createServerFn({ method: 'POST' }).handler(async
   return {
     userId: data.user.id,
     phone: data.user.phone ?? rows[0]?.phone ?? null,
+    email: data.user.email ?? rows[0]?.email ?? null,
     profile: rows[0]
       ? {
           displayName: rows[0].display_name,
@@ -337,8 +373,38 @@ export const submitChefApplicationFn = createServerFn({ method: 'POST' }).handle
 })
 
 export const signOutFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const { clearMockAuth } = await import('./auth-mock.server')
+  clearMockAuth()
   const { createSupabaseServerClient } = await import('./supabase/server')
   const supabase = createSupabaseServerClient()
   await supabase.auth.signOut()
   return { ok: true as const }
 })
+
+export const completeMockPhoneLoginFn = createServerFn({ method: 'POST' })
+  .validator((data: unknown) => {
+    const input = asRecord(data)
+    const intent =
+      input.intent === 'chef' || input.intent === 'chef-portal' || input.intent === 'customer'
+        ? input.intent
+        : 'customer'
+    return { intent }
+  })
+  .handler(async ({ data }) => {
+    const { isMockPhoneLoginEnabled } = await import('./auth-mock')
+    if (!isMockPhoneLoginEnabled()) {
+      throw new Error('Mock phone login is disabled.')
+    }
+    const { issueMockAuth } = await import('./auth-mock.server')
+    issueMockAuth()
+    if (data.intent === 'chef-portal') {
+      try {
+        const { issueChefSession } = await import('./auth-session.server')
+        const { MOCK_CHEF_SESSION } = await import('./auth-mock')
+        issueChefSession({ ...MOCK_CHEF_SESSION })
+      } catch {
+        // Mock cookie is enough for chef portal access in dev.
+      }
+    }
+    return { ok: true as const }
+  })

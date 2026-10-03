@@ -10,14 +10,37 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AccountRouteRouteImport } from './routes/account/route'
 import { Route as BecomeAChefRouteImport } from './routes/become-a-chef'
-import { Route as ChefDashboardRouteImport } from './routes/chef-dashboard'
+import { Route as ChefDashboardRouteRouteImport } from './routes/chef-dashboard/route'
 import { Route as ChefsRouteRouteImport } from './routes/chefs/route'
 import { Route as RequestRouteRouteImport } from './routes/request/route'
 import { Route as SignInRouteImport } from './routes/sign-in'
 import { Route as VerifyPhoneRouteImport } from './routes/verify-phone'
+import { Route as AccountIndexRouteImport } from './routes/account/index'
+import { Route as AccountBookingsRouteImport } from './routes/account/bookings'
+import { Route as AccountMenusRouteImport } from './routes/account/menus'
+import { Route as AccountMessagesRouteImport } from './routes/account/messages'
+import { Route as AccountPaymentsRouteImport } from './routes/account/payments'
+import { Route as AccountProfileRouteImport } from './routes/account/profile'
+import { Route as AccountRequestsRouteImport } from './routes/account/requests'
+import { Route as AccountReviewsRouteImport } from './routes/account/reviews'
+import { Route as AccountSettingsRouteImport } from './routes/account/settings'
 import { Route as ApiWhatsappRouteImport } from './routes/api/whatsapp'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
+import { Route as ChefDashboardIndexRouteImport } from './routes/chef-dashboard/index'
+import { Route as ChefDashboardBookingsRouteRouteImport } from './routes/chef-dashboard/bookings/route'
+import { Route as ChefDashboardCalendarRouteImport } from './routes/chef-dashboard/calendar'
+import { Route as ChefDashboardEarningsRouteImport } from './routes/chef-dashboard/earnings'
+import { Route as ChefDashboardGuestsRouteImport } from './routes/chef-dashboard/guests'
+import { Route as ChefDashboardInboxRouteImport } from './routes/chef-dashboard/inbox'
+import { Route as ChefDashboardMenusRouteImport } from './routes/chef-dashboard/menus'
+import { Route as ChefDashboardMessagesRouteImport } from './routes/chef-dashboard/messages'
+import { Route as ChefDashboardOpportunitiesRouteImport } from './routes/chef-dashboard/opportunities'
+import { Route as ChefDashboardPaymentsRouteImport } from './routes/chef-dashboard/payments'
+import { Route as ChefDashboardProposalsRouteImport } from './routes/chef-dashboard/proposals'
+import { Route as ChefDashboardReviewsRouteImport } from './routes/chef-dashboard/reviews'
+import { Route as ChefDashboardSettingsRouteImport } from './routes/chef-dashboard/settings'
 import { Route as ChefOnboardingRouteImport } from './routes/chef/onboarding'
 import { Route as ChefsIndexRouteImport } from './routes/chefs/index'
 import { Route as ChefsChefIdRouteImport } from './routes/chefs/$chefId'
@@ -25,10 +48,17 @@ import { Route as RequestIndexRouteImport } from './routes/request/index'
 import { Route as RequestProposalsRouteImport } from './routes/request/proposals'
 import { Route as ApiSumsubAccessTokenRouteImport } from './routes/api/sumsub/access-token'
 import { Route as ApiSumsubWebhookRouteImport } from './routes/api/sumsub/webhook'
+import { Route as ChefDashboardBookingsIndexRouteImport } from './routes/chef-dashboard/bookings/index'
+import { Route as ChefDashboardBookingsBookingIdRouteImport } from './routes/chef-dashboard/bookings/$bookingId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRouteRoute = AccountRouteRouteImport.update({
+  id: '/account',
+  path: '/account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BecomeAChefRoute = BecomeAChefRouteImport.update({
@@ -36,7 +66,7 @@ const BecomeAChefRoute = BecomeAChefRouteImport.update({
   path: '/become-a-chef',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ChefDashboardRoute = ChefDashboardRouteImport.update({
+const ChefDashboardRouteRoute = ChefDashboardRouteRouteImport.update({
   id: '/chef-dashboard',
   path: '/chef-dashboard',
   getParentRoute: () => rootRouteImport,
@@ -61,6 +91,51 @@ const VerifyPhoneRoute = VerifyPhoneRouteImport.update({
   path: '/verify-phone',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AccountIndexRoute = AccountIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountBookingsRoute = AccountBookingsRouteImport.update({
+  id: '/bookings',
+  path: '/bookings',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountMenusRoute = AccountMenusRouteImport.update({
+  id: '/menus',
+  path: '/menus',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountMessagesRoute = AccountMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountPaymentsRoute = AccountPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountProfileRoute = AccountProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountRequestsRoute = AccountRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountReviewsRoute = AccountReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
+const AccountSettingsRoute = AccountSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AccountRouteRoute,
+} as any)
 const ApiWhatsappRoute = ApiWhatsappRouteImport.update({
   id: '/api/whatsapp',
   path: '/api/whatsapp',
@@ -70,6 +145,73 @@ const AuthCallbackRoute = AuthCallbackRouteImport.update({
   id: '/auth/callback',
   path: '/auth/callback',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ChefDashboardIndexRoute = ChefDashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardBookingsRouteRoute =
+  ChefDashboardBookingsRouteRouteImport.update({
+    id: '/bookings',
+    path: '/bookings',
+    getParentRoute: () => ChefDashboardRouteRoute,
+  } as any)
+const ChefDashboardCalendarRoute = ChefDashboardCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardEarningsRoute = ChefDashboardEarningsRouteImport.update({
+  id: '/earnings',
+  path: '/earnings',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardGuestsRoute = ChefDashboardGuestsRouteImport.update({
+  id: '/guests',
+  path: '/guests',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardInboxRoute = ChefDashboardInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardMenusRoute = ChefDashboardMenusRouteImport.update({
+  id: '/menus',
+  path: '/menus',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardMessagesRoute = ChefDashboardMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardOpportunitiesRoute =
+  ChefDashboardOpportunitiesRouteImport.update({
+    id: '/opportunities',
+    path: '/opportunities',
+    getParentRoute: () => ChefDashboardRouteRoute,
+  } as any)
+const ChefDashboardPaymentsRoute = ChefDashboardPaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardProposalsRoute = ChefDashboardProposalsRouteImport.update({
+  id: '/proposals',
+  path: '/proposals',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardReviewsRoute = ChefDashboardReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => ChefDashboardRouteRoute,
+} as any)
+const ChefDashboardSettingsRoute = ChefDashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => ChefDashboardRouteRoute,
 } as any)
 const ChefOnboardingRoute = ChefOnboardingRouteImport.update({
   id: '/chef/onboarding',
@@ -106,121 +248,278 @@ const ApiSumsubWebhookRoute = ApiSumsubWebhookRouteImport.update({
   path: '/api/sumsub/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChefDashboardBookingsIndexRoute =
+  ChefDashboardBookingsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ChefDashboardBookingsRouteRoute,
+  } as any)
+const ChefDashboardBookingsBookingIdRoute =
+  ChefDashboardBookingsBookingIdRouteImport.update({
+    id: '/$bookingId',
+    path: '/$bookingId',
+    getParentRoute: () => ChefDashboardBookingsRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRouteRouteWithChildren
+  '/chef-dashboard': typeof ChefDashboardRouteRouteWithChildren
   '/chefs': typeof ChefsRouteRouteWithChildren
   '/request': typeof RequestRouteRouteWithChildren
   '/become-a-chef': typeof BecomeAChefRoute
-  '/chef-dashboard': typeof ChefDashboardRoute
   '/sign-in': typeof SignInRoute
   '/verify-phone': typeof VerifyPhoneRoute
+  '/chef-dashboard/bookings': typeof ChefDashboardBookingsRouteRouteWithChildren
+  '/account/bookings': typeof AccountBookingsRoute
+  '/account/menus': typeof AccountMenusRoute
+  '/account/messages': typeof AccountMessagesRoute
+  '/account/payments': typeof AccountPaymentsRoute
+  '/account/profile': typeof AccountProfileRoute
+  '/account/requests': typeof AccountRequestsRoute
+  '/account/reviews': typeof AccountReviewsRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/chef-dashboard/calendar': typeof ChefDashboardCalendarRoute
+  '/chef-dashboard/earnings': typeof ChefDashboardEarningsRoute
+  '/chef-dashboard/guests': typeof ChefDashboardGuestsRoute
+  '/chef-dashboard/inbox': typeof ChefDashboardInboxRoute
+  '/chef-dashboard/menus': typeof ChefDashboardMenusRoute
+  '/chef-dashboard/messages': typeof ChefDashboardMessagesRoute
+  '/chef-dashboard/opportunities': typeof ChefDashboardOpportunitiesRoute
+  '/chef-dashboard/payments': typeof ChefDashboardPaymentsRoute
+  '/chef-dashboard/proposals': typeof ChefDashboardProposalsRoute
+  '/chef-dashboard/reviews': typeof ChefDashboardReviewsRoute
+  '/chef-dashboard/settings': typeof ChefDashboardSettingsRoute
   '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
+  '/account/': typeof AccountIndexRoute
+  '/chef-dashboard/': typeof ChefDashboardIndexRoute
   '/chefs/': typeof ChefsIndexRoute
   '/request/': typeof RequestIndexRoute
   '/api/sumsub/access-token': typeof ApiSumsubAccessTokenRoute
   '/api/sumsub/webhook': typeof ApiSumsubWebhookRoute
+  '/chef-dashboard/bookings/$bookingId': typeof ChefDashboardBookingsBookingIdRoute
+  '/chef-dashboard/bookings/': typeof ChefDashboardBookingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/become-a-chef': typeof BecomeAChefRoute
-  '/chef-dashboard': typeof ChefDashboardRoute
   '/sign-in': typeof SignInRoute
   '/verify-phone': typeof VerifyPhoneRoute
+  '/account/bookings': typeof AccountBookingsRoute
+  '/account/menus': typeof AccountMenusRoute
+  '/account/messages': typeof AccountMessagesRoute
+  '/account/payments': typeof AccountPaymentsRoute
+  '/account/profile': typeof AccountProfileRoute
+  '/account/requests': typeof AccountRequestsRoute
+  '/account/reviews': typeof AccountReviewsRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/chef-dashboard/calendar': typeof ChefDashboardCalendarRoute
+  '/chef-dashboard/earnings': typeof ChefDashboardEarningsRoute
+  '/chef-dashboard/guests': typeof ChefDashboardGuestsRoute
+  '/chef-dashboard/inbox': typeof ChefDashboardInboxRoute
+  '/chef-dashboard/menus': typeof ChefDashboardMenusRoute
+  '/chef-dashboard/messages': typeof ChefDashboardMessagesRoute
+  '/chef-dashboard/opportunities': typeof ChefDashboardOpportunitiesRoute
+  '/chef-dashboard/payments': typeof ChefDashboardPaymentsRoute
+  '/chef-dashboard/proposals': typeof ChefDashboardProposalsRoute
+  '/chef-dashboard/reviews': typeof ChefDashboardReviewsRoute
+  '/chef-dashboard/settings': typeof ChefDashboardSettingsRoute
   '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
+  '/account': typeof AccountIndexRoute
+  '/chef-dashboard': typeof ChefDashboardIndexRoute
   '/chefs': typeof ChefsIndexRoute
   '/request': typeof RequestIndexRoute
   '/api/sumsub/access-token': typeof ApiSumsubAccessTokenRoute
   '/api/sumsub/webhook': typeof ApiSumsubWebhookRoute
+  '/chef-dashboard/bookings/$bookingId': typeof ChefDashboardBookingsBookingIdRoute
+  '/chef-dashboard/bookings': typeof ChefDashboardBookingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRouteRouteWithChildren
+  '/chef-dashboard': typeof ChefDashboardRouteRouteWithChildren
   '/chefs': typeof ChefsRouteRouteWithChildren
   '/request': typeof RequestRouteRouteWithChildren
   '/become-a-chef': typeof BecomeAChefRoute
-  '/chef-dashboard': typeof ChefDashboardRoute
   '/sign-in': typeof SignInRoute
   '/verify-phone': typeof VerifyPhoneRoute
+  '/chef-dashboard/bookings': typeof ChefDashboardBookingsRouteRouteWithChildren
+  '/account/bookings': typeof AccountBookingsRoute
+  '/account/menus': typeof AccountMenusRoute
+  '/account/messages': typeof AccountMessagesRoute
+  '/account/payments': typeof AccountPaymentsRoute
+  '/account/profile': typeof AccountProfileRoute
+  '/account/requests': typeof AccountRequestsRoute
+  '/account/reviews': typeof AccountReviewsRoute
+  '/account/settings': typeof AccountSettingsRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
   '/auth/callback': typeof AuthCallbackRoute
+  '/chef-dashboard/calendar': typeof ChefDashboardCalendarRoute
+  '/chef-dashboard/earnings': typeof ChefDashboardEarningsRoute
+  '/chef-dashboard/guests': typeof ChefDashboardGuestsRoute
+  '/chef-dashboard/inbox': typeof ChefDashboardInboxRoute
+  '/chef-dashboard/menus': typeof ChefDashboardMenusRoute
+  '/chef-dashboard/messages': typeof ChefDashboardMessagesRoute
+  '/chef-dashboard/opportunities': typeof ChefDashboardOpportunitiesRoute
+  '/chef-dashboard/payments': typeof ChefDashboardPaymentsRoute
+  '/chef-dashboard/proposals': typeof ChefDashboardProposalsRoute
+  '/chef-dashboard/reviews': typeof ChefDashboardReviewsRoute
+  '/chef-dashboard/settings': typeof ChefDashboardSettingsRoute
   '/chef/onboarding': typeof ChefOnboardingRoute
   '/chefs/$chefId': typeof ChefsChefIdRoute
   '/request/proposals': typeof RequestProposalsRoute
+  '/account/': typeof AccountIndexRoute
+  '/chef-dashboard/': typeof ChefDashboardIndexRoute
   '/chefs/': typeof ChefsIndexRoute
   '/request/': typeof RequestIndexRoute
   '/api/sumsub/access-token': typeof ApiSumsubAccessTokenRoute
   '/api/sumsub/webhook': typeof ApiSumsubWebhookRoute
+  '/chef-dashboard/bookings/$bookingId': typeof ChefDashboardBookingsBookingIdRoute
+  '/chef-dashboard/bookings/': typeof ChefDashboardBookingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
+    | '/chef-dashboard'
     | '/chefs'
     | '/request'
     | '/become-a-chef'
-    | '/chef-dashboard'
     | '/sign-in'
     | '/verify-phone'
+    | '/chef-dashboard/bookings'
+    | '/account/bookings'
+    | '/account/menus'
+    | '/account/messages'
+    | '/account/payments'
+    | '/account/profile'
+    | '/account/requests'
+    | '/account/reviews'
+    | '/account/settings'
     | '/api/whatsapp'
     | '/auth/callback'
+    | '/chef-dashboard/calendar'
+    | '/chef-dashboard/earnings'
+    | '/chef-dashboard/guests'
+    | '/chef-dashboard/inbox'
+    | '/chef-dashboard/menus'
+    | '/chef-dashboard/messages'
+    | '/chef-dashboard/opportunities'
+    | '/chef-dashboard/payments'
+    | '/chef-dashboard/proposals'
+    | '/chef-dashboard/reviews'
+    | '/chef-dashboard/settings'
     | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
+    | '/account/'
+    | '/chef-dashboard/'
     | '/chefs/'
     | '/request/'
     | '/api/sumsub/access-token'
     | '/api/sumsub/webhook'
+    | '/chef-dashboard/bookings/$bookingId'
+    | '/chef-dashboard/bookings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/become-a-chef'
-    | '/chef-dashboard'
     | '/sign-in'
     | '/verify-phone'
+    | '/account/bookings'
+    | '/account/menus'
+    | '/account/messages'
+    | '/account/payments'
+    | '/account/profile'
+    | '/account/requests'
+    | '/account/reviews'
+    | '/account/settings'
     | '/api/whatsapp'
     | '/auth/callback'
+    | '/chef-dashboard/calendar'
+    | '/chef-dashboard/earnings'
+    | '/chef-dashboard/guests'
+    | '/chef-dashboard/inbox'
+    | '/chef-dashboard/menus'
+    | '/chef-dashboard/messages'
+    | '/chef-dashboard/opportunities'
+    | '/chef-dashboard/payments'
+    | '/chef-dashboard/proposals'
+    | '/chef-dashboard/reviews'
+    | '/chef-dashboard/settings'
     | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
+    | '/account'
+    | '/chef-dashboard'
     | '/chefs'
     | '/request'
     | '/api/sumsub/access-token'
     | '/api/sumsub/webhook'
+    | '/chef-dashboard/bookings/$bookingId'
+    | '/chef-dashboard/bookings'
   id:
     | '__root__'
     | '/'
+    | '/account'
+    | '/chef-dashboard'
     | '/chefs'
     | '/request'
     | '/become-a-chef'
-    | '/chef-dashboard'
     | '/sign-in'
     | '/verify-phone'
+    | '/chef-dashboard/bookings'
+    | '/account/bookings'
+    | '/account/menus'
+    | '/account/messages'
+    | '/account/payments'
+    | '/account/profile'
+    | '/account/requests'
+    | '/account/reviews'
+    | '/account/settings'
     | '/api/whatsapp'
     | '/auth/callback'
+    | '/chef-dashboard/calendar'
+    | '/chef-dashboard/earnings'
+    | '/chef-dashboard/guests'
+    | '/chef-dashboard/inbox'
+    | '/chef-dashboard/menus'
+    | '/chef-dashboard/messages'
+    | '/chef-dashboard/opportunities'
+    | '/chef-dashboard/payments'
+    | '/chef-dashboard/proposals'
+    | '/chef-dashboard/reviews'
+    | '/chef-dashboard/settings'
     | '/chef/onboarding'
     | '/chefs/$chefId'
     | '/request/proposals'
+    | '/account/'
+    | '/chef-dashboard/'
     | '/chefs/'
     | '/request/'
     | '/api/sumsub/access-token'
     | '/api/sumsub/webhook'
+    | '/chef-dashboard/bookings/$bookingId'
+    | '/chef-dashboard/bookings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRouteRoute: typeof AccountRouteRouteWithChildren
+  ChefDashboardRouteRoute: typeof ChefDashboardRouteRouteWithChildren
   ChefsRouteRoute: typeof ChefsRouteRouteWithChildren
   RequestRouteRoute: typeof RequestRouteRouteWithChildren
   BecomeAChefRoute: typeof BecomeAChefRoute
-  ChefDashboardRoute: typeof ChefDashboardRoute
   SignInRoute: typeof SignInRoute
   VerifyPhoneRoute: typeof VerifyPhoneRoute
   ApiWhatsappRoute: typeof ApiWhatsappRoute
@@ -239,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/become-a-chef': {
       id: '/become-a-chef'
       path: '/become-a-chef'
@@ -250,7 +556,7 @@ declare module '@tanstack/react-router' {
       id: '/chef-dashboard'
       path: '/chef-dashboard'
       fullPath: '/chef-dashboard'
-      preLoaderRoute: typeof ChefDashboardRouteImport
+      preLoaderRoute: typeof ChefDashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/chefs': {
@@ -281,6 +587,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VerifyPhoneRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/account/': {
+      id: '/account/'
+      path: '/'
+      fullPath: '/account/'
+      preLoaderRoute: typeof AccountIndexRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/bookings': {
+      id: '/account/bookings'
+      path: '/bookings'
+      fullPath: '/account/bookings'
+      preLoaderRoute: typeof AccountBookingsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/menus': {
+      id: '/account/menus'
+      path: '/menus'
+      fullPath: '/account/menus'
+      preLoaderRoute: typeof AccountMenusRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/messages': {
+      id: '/account/messages'
+      path: '/messages'
+      fullPath: '/account/messages'
+      preLoaderRoute: typeof AccountMessagesRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/payments': {
+      id: '/account/payments'
+      path: '/payments'
+      fullPath: '/account/payments'
+      preLoaderRoute: typeof AccountPaymentsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/profile': {
+      id: '/account/profile'
+      path: '/profile'
+      fullPath: '/account/profile'
+      preLoaderRoute: typeof AccountProfileRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/requests': {
+      id: '/account/requests'
+      path: '/requests'
+      fullPath: '/account/requests'
+      preLoaderRoute: typeof AccountRequestsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/reviews': {
+      id: '/account/reviews'
+      path: '/reviews'
+      fullPath: '/account/reviews'
+      preLoaderRoute: typeof AccountReviewsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
+    '/account/settings': {
+      id: '/account/settings'
+      path: '/settings'
+      fullPath: '/account/settings'
+      preLoaderRoute: typeof AccountSettingsRouteImport
+      parentRoute: typeof AccountRouteRoute
+    }
     '/api/whatsapp': {
       id: '/api/whatsapp'
       path: '/api/whatsapp'
@@ -294,6 +663,97 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/chef-dashboard/': {
+      id: '/chef-dashboard/'
+      path: '/'
+      fullPath: '/chef-dashboard/'
+      preLoaderRoute: typeof ChefDashboardIndexRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/bookings': {
+      id: '/chef-dashboard/bookings'
+      path: '/bookings'
+      fullPath: '/chef-dashboard/bookings'
+      preLoaderRoute: typeof ChefDashboardBookingsRouteRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/calendar': {
+      id: '/chef-dashboard/calendar'
+      path: '/calendar'
+      fullPath: '/chef-dashboard/calendar'
+      preLoaderRoute: typeof ChefDashboardCalendarRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/earnings': {
+      id: '/chef-dashboard/earnings'
+      path: '/earnings'
+      fullPath: '/chef-dashboard/earnings'
+      preLoaderRoute: typeof ChefDashboardEarningsRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/guests': {
+      id: '/chef-dashboard/guests'
+      path: '/guests'
+      fullPath: '/chef-dashboard/guests'
+      preLoaderRoute: typeof ChefDashboardGuestsRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/inbox': {
+      id: '/chef-dashboard/inbox'
+      path: '/inbox'
+      fullPath: '/chef-dashboard/inbox'
+      preLoaderRoute: typeof ChefDashboardInboxRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/menus': {
+      id: '/chef-dashboard/menus'
+      path: '/menus'
+      fullPath: '/chef-dashboard/menus'
+      preLoaderRoute: typeof ChefDashboardMenusRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/messages': {
+      id: '/chef-dashboard/messages'
+      path: '/messages'
+      fullPath: '/chef-dashboard/messages'
+      preLoaderRoute: typeof ChefDashboardMessagesRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/opportunities': {
+      id: '/chef-dashboard/opportunities'
+      path: '/opportunities'
+      fullPath: '/chef-dashboard/opportunities'
+      preLoaderRoute: typeof ChefDashboardOpportunitiesRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/payments': {
+      id: '/chef-dashboard/payments'
+      path: '/payments'
+      fullPath: '/chef-dashboard/payments'
+      preLoaderRoute: typeof ChefDashboardPaymentsRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/proposals': {
+      id: '/chef-dashboard/proposals'
+      path: '/proposals'
+      fullPath: '/chef-dashboard/proposals'
+      preLoaderRoute: typeof ChefDashboardProposalsRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/reviews': {
+      id: '/chef-dashboard/reviews'
+      path: '/reviews'
+      fullPath: '/chef-dashboard/reviews'
+      preLoaderRoute: typeof ChefDashboardReviewsRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
+    }
+    '/chef-dashboard/settings': {
+      id: '/chef-dashboard/settings'
+      path: '/settings'
+      fullPath: '/chef-dashboard/settings'
+      preLoaderRoute: typeof ChefDashboardSettingsRouteImport
+      parentRoute: typeof ChefDashboardRouteRoute
     }
     '/chef/onboarding': {
       id: '/chef/onboarding'
@@ -344,8 +804,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSumsubWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/chef-dashboard/bookings/': {
+      id: '/chef-dashboard/bookings/'
+      path: '/'
+      fullPath: '/chef-dashboard/bookings/'
+      preLoaderRoute: typeof ChefDashboardBookingsIndexRouteImport
+      parentRoute: typeof ChefDashboardBookingsRouteRoute
+    }
+    '/chef-dashboard/bookings/$bookingId': {
+      id: '/chef-dashboard/bookings/$bookingId'
+      path: '/$bookingId'
+      fullPath: '/chef-dashboard/bookings/$bookingId'
+      preLoaderRoute: typeof ChefDashboardBookingsBookingIdRouteImport
+      parentRoute: typeof ChefDashboardBookingsRouteRoute
+    }
   }
 }
+
+interface AccountRouteRouteChildren {
+  AccountBookingsRoute: typeof AccountBookingsRoute
+  AccountMenusRoute: typeof AccountMenusRoute
+  AccountMessagesRoute: typeof AccountMessagesRoute
+  AccountPaymentsRoute: typeof AccountPaymentsRoute
+  AccountProfileRoute: typeof AccountProfileRoute
+  AccountRequestsRoute: typeof AccountRequestsRoute
+  AccountReviewsRoute: typeof AccountReviewsRoute
+  AccountSettingsRoute: typeof AccountSettingsRoute
+  AccountIndexRoute: typeof AccountIndexRoute
+}
+
+const AccountRouteRouteChildren: AccountRouteRouteChildren = {
+  AccountBookingsRoute: AccountBookingsRoute,
+  AccountMenusRoute: AccountMenusRoute,
+  AccountMessagesRoute: AccountMessagesRoute,
+  AccountPaymentsRoute: AccountPaymentsRoute,
+  AccountProfileRoute: AccountProfileRoute,
+  AccountRequestsRoute: AccountRequestsRoute,
+  AccountReviewsRoute: AccountReviewsRoute,
+  AccountSettingsRoute: AccountSettingsRoute,
+  AccountIndexRoute: AccountIndexRoute,
+}
+
+const AccountRouteRouteWithChildren = AccountRouteRoute._addFileChildren(
+  AccountRouteRouteChildren,
+)
+
+interface ChefDashboardBookingsRouteRouteChildren {
+  ChefDashboardBookingsBookingIdRoute: typeof ChefDashboardBookingsBookingIdRoute
+  ChefDashboardBookingsIndexRoute: typeof ChefDashboardBookingsIndexRoute
+}
+
+const ChefDashboardBookingsRouteRouteChildren: ChefDashboardBookingsRouteRouteChildren =
+  {
+    ChefDashboardBookingsBookingIdRoute: ChefDashboardBookingsBookingIdRoute,
+    ChefDashboardBookingsIndexRoute: ChefDashboardBookingsIndexRoute,
+  }
+
+const ChefDashboardBookingsRouteRouteWithChildren =
+  ChefDashboardBookingsRouteRoute._addFileChildren(
+    ChefDashboardBookingsRouteRouteChildren,
+  )
+
+interface ChefDashboardRouteRouteChildren {
+  ChefDashboardBookingsRouteRoute: typeof ChefDashboardBookingsRouteRouteWithChildren
+  ChefDashboardCalendarRoute: typeof ChefDashboardCalendarRoute
+  ChefDashboardEarningsRoute: typeof ChefDashboardEarningsRoute
+  ChefDashboardGuestsRoute: typeof ChefDashboardGuestsRoute
+  ChefDashboardInboxRoute: typeof ChefDashboardInboxRoute
+  ChefDashboardMenusRoute: typeof ChefDashboardMenusRoute
+  ChefDashboardMessagesRoute: typeof ChefDashboardMessagesRoute
+  ChefDashboardOpportunitiesRoute: typeof ChefDashboardOpportunitiesRoute
+  ChefDashboardPaymentsRoute: typeof ChefDashboardPaymentsRoute
+  ChefDashboardProposalsRoute: typeof ChefDashboardProposalsRoute
+  ChefDashboardReviewsRoute: typeof ChefDashboardReviewsRoute
+  ChefDashboardSettingsRoute: typeof ChefDashboardSettingsRoute
+  ChefDashboardIndexRoute: typeof ChefDashboardIndexRoute
+}
+
+const ChefDashboardRouteRouteChildren: ChefDashboardRouteRouteChildren = {
+  ChefDashboardBookingsRouteRoute: ChefDashboardBookingsRouteRouteWithChildren,
+  ChefDashboardCalendarRoute: ChefDashboardCalendarRoute,
+  ChefDashboardEarningsRoute: ChefDashboardEarningsRoute,
+  ChefDashboardGuestsRoute: ChefDashboardGuestsRoute,
+  ChefDashboardInboxRoute: ChefDashboardInboxRoute,
+  ChefDashboardMenusRoute: ChefDashboardMenusRoute,
+  ChefDashboardMessagesRoute: ChefDashboardMessagesRoute,
+  ChefDashboardOpportunitiesRoute: ChefDashboardOpportunitiesRoute,
+  ChefDashboardPaymentsRoute: ChefDashboardPaymentsRoute,
+  ChefDashboardProposalsRoute: ChefDashboardProposalsRoute,
+  ChefDashboardReviewsRoute: ChefDashboardReviewsRoute,
+  ChefDashboardSettingsRoute: ChefDashboardSettingsRoute,
+  ChefDashboardIndexRoute: ChefDashboardIndexRoute,
+}
+
+const ChefDashboardRouteRouteWithChildren =
+  ChefDashboardRouteRoute._addFileChildren(ChefDashboardRouteRouteChildren)
 
 interface ChefsRouteRouteChildren {
   ChefsChefIdRoute: typeof ChefsChefIdRoute
@@ -377,10 +930,11 @@ const RequestRouteRouteWithChildren = RequestRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRouteRoute: AccountRouteRouteWithChildren,
+  ChefDashboardRouteRoute: ChefDashboardRouteRouteWithChildren,
   ChefsRouteRoute: ChefsRouteRouteWithChildren,
   RequestRouteRoute: RequestRouteRouteWithChildren,
   BecomeAChefRoute: BecomeAChefRoute,
-  ChefDashboardRoute: ChefDashboardRoute,
   SignInRoute: SignInRoute,
   VerifyPhoneRoute: VerifyPhoneRoute,
   ApiWhatsappRoute: ApiWhatsappRoute,
