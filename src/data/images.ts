@@ -26,10 +26,9 @@ export const images = {
   trustPayments: mediaUrl('web/trust/payments.png'),
   trustQuality: mediaUrl('web/trust/quality.png'),
   trustSupport: mediaUrl('web/trust/support.png'),
-  /** Local app UI captures; upload to R2 under web/marketing/app/* when ready. */
-  appHomeUi: '/images/marketing/girki-app-home.jpg',
-  appOrderUi: '/images/marketing/girki-app-order.jpg',
-  appCheckout: '/images/marketing/app/checkout.png',
-  appChefProfile: '/images/marketing/app/chef-profile.jpg',
-  appBookingDetail: '/images/marketing/app/booking-detail.jpg',
+  appHomeUi: mediaUrl('web/marketing/girki-app-home.jpg'),
+  appOrderUi: mediaUrl('web/marketing/girki-app-order.jpg'),
+  appCheckout: mediaUrl('web/marketing/app/checkout.png'),
+  appChefProfile: mediaUrl('web/marketing/app/chef-profile.jpg'),
+  appBookingDetail: mediaUrl('web/marketing/app/booking-detail.jpg'),
 } as const

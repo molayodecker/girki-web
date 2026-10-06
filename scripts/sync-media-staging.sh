@@ -16,7 +16,7 @@ mkdir -p "$DEST"
 
 rsync -a "$MOBILE/media/" "$DEST/"
 
-mkdir -p "$DEST/web/onboarding" "$DEST/web/home" "$DEST/web/experiences" "$DEST/web/marketing" "$DEST/web/videos" "$DEST/web/trust"
+mkdir -p "$DEST/web/onboarding" "$DEST/web/home" "$DEST/web/experiences" "$DEST/web/marketing/app" "$DEST/web/videos" "$DEST/web/trust"
 
 # Mobile app bundles (onboarding, mode tiles, fried-rice banner)
 if [ -d "$MOBILE/assets/images/onboarding" ]; then
@@ -41,6 +41,15 @@ for f in \
 done
 if [ -f "$ROOT/public/images/how-it-works/chef-kitchen.jpg" ]; then
   cp "$ROOT/public/images/how-it-works/chef-kitchen.jpg" "$DEST/web/marketing/chef-kitchen.jpg"
+fi
+if [ -d "$ROOT/public/images/marketing" ]; then
+  cp "$ROOT/public/images/marketing/"*.jpg "$DEST/web/marketing/" 2>/dev/null || true
+  if [ -d "$ROOT/public/images/marketing/app" ]; then
+    cp "$ROOT/public/images/marketing/app/"* "$DEST/web/marketing/app/" 2>/dev/null || true
+  fi
+fi
+if [ -d "$ROOT/public/images/experiences" ]; then
+  cp "$ROOT/public/images/experiences/"* "$DEST/web/experiences/" 2>/dev/null || true
 fi
 if [ -d "$ROOT/public/images/trust" ]; then
   cp "$ROOT/public/images/trust/"*.png "$DEST/web/trust/" 2>/dev/null || true

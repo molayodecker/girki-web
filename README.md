@@ -41,12 +41,14 @@ Health check (after deploy): `GET /api/health` → `{ "ok": true }`.
 
 ### Media (Cloudflare R2)
 
-Marketing and chef photos are served from the public **`girki-media`** bucket (shared with the girki mobile app).
+Marketing images, videos, chef photos, and app screenshots are served from the public **`girki-media`** bucket (shared with the girki mobile app). The app resolves URLs via `VITE_MEDIA_CDN` (see `src/lib/media.ts`).
 
-- **`VITE_MEDIA_CDN`** on Vercel when using a custom CDN domain
-- **`media/`** is gitignored; sync with `pnpm media:sync && pnpm media:upload`
+```bash
+pnpm media:sync    # stage mobile + web assets into ./media
+pnpm media:upload  # wrangler r2 object put girki-media/... (requires wrangler login)
+```
 
-Set **`GIRKI_MOBILE_ROOT`** if the mobile app is not at `../girki/girki`.
+Set **`GIRKI_MOBILE_ROOT`** if the mobile app is not at `../girki/girki`. Large files under `public/images/marketing`, `public/videos`, etc. are gitignored once uploaded; keep sources locally or in R2 only.
 
 ## Stack
 
