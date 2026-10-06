@@ -43,10 +43,9 @@ export default function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         <Link
           to="/"
           aria-label="Girki home"
-          className="flex min-w-0 shrink items-center gap-2 font-heading text-2xl tracking-tight sm:gap-3 sm:text-[2.15rem]"
+          className="flex shrink-0 items-center"
         >
           <GirkiMark size={48} />
-          <span className="truncate">Girki</span>
         </Link>
 
         <nav
