@@ -1,6 +1,7 @@
 import type {
   Booking,
   BookingStatus,
+  CustomerDashboardData,
   ChefDashboardData,
   ChefProposal,
   ChefRequestRecord,
@@ -28,5 +29,6 @@ export interface MarketplaceRepository {
   acceptProposal(proposalId: string, accessToken: string): Promise<Booking>
   quoteInquiry(inquiryId: string, quotedPrice: number): Promise<DirectInquiry>
   listChefDashboard(): Promise<ChefDashboardData>
+  listCustomerDashboard(): Promise<CustomerDashboardData>
   updateBookingStatus(bookingId: string, status: BookingStatus): Promise<Booking>
 }

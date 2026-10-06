@@ -90,7 +90,7 @@ function ProposalsPage() {
     void marketplaceRepository
       .createRequest({
         customerName: storedRequest.name || 'Girki guest',
-        email: storedRequest.email || 'guest@girki.app',
+        email: storedRequest.email || 'guest@girki.com',
         phone: storedRequest.phone,
         city: storedRequest.city,
         cuisine: storedRequest.cuisine,
@@ -201,9 +201,19 @@ function ProposalsPage() {
           />
 
           {booking ? (
-            <section className="mt-12 rounded-[2rem] border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-7 sm:p-9">
-              <p className="typography-eyebrow">Chef selected</p>
-              <h2 className="display-title mt-4 text-3xl">
+            <section className="relative mt-12">
+              <div
+                className="absolute inset-0 translate-x-2 translate-y-2 bg-girki-saffron"
+                aria-hidden="true"
+              />
+              <div className="relative border-4 border-[#1c1418] bg-white p-7 sm:p-9">
+              <p className="font-heading text-[0.65rem] font-semibold tracking-[0.42em] text-[#1c1418]/55 uppercase">
+                Chef selected
+              </p>
+              <h2
+                className="mt-4 font-display-heavy text-ploy-text-primary"
+                style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)' }}
+              >
                 Booking {getChef(booking.chefId)?.name ?? 'your chef'} order #{booking.bookingNumber} is
                 ready for payment.
               </h2>
@@ -215,6 +225,7 @@ function ProposalsPage() {
                 <span>Total: {money(booking.total)}</span>
                 <span>Status: {booking.bookingStatus.replaceAll('_', ' ')}</span>
                 <span>{booking.eventDate}</span>
+              </div>
               </div>
             </section>
           ) : (
@@ -241,8 +252,10 @@ function ProposalsPage() {
                     chef={chef}
                     distanceKm={origin ? distanceKm(origin, chef) : undefined}
                   />
-                  <div className="mt-4 rounded-2xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-5">
-                    <p className="typography-eyebrow">{quote ? 'Chef quote' : 'Awaiting quote'}</p>
+                  <div className="mt-4 border-2 border-[#1c1418]/20 bg-white p-5">
+                    <p className="font-heading text-[0.65rem] font-semibold tracking-[0.28em] text-ploy-accent-secondary uppercase">
+                      {quote ? 'Chef quote' : 'Awaiting quote'}
+                    </p>
                     <p className="mt-3 font-heading text-2xl">
                       {quote ? money(quote.proposedPrice) : 'Waiting for quote'}
                     </p>

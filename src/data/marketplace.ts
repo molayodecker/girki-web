@@ -1,15 +1,16 @@
-import { images } from './home'
+import { images } from './images'
+import { chefPhotoUrl } from '../lib/media'
+import { isChefBookable } from '../lib/feature-flags'
+
+/** Girki launch market — widen cities and `chefs` export when new countries go live. */
+export const launchCountry = 'Ghana'
 
 export const cities = [
   { slug: 'accra', name: 'Accra', country: 'Ghana' },
-  { slug: 'lagos', name: 'Lagos', country: 'Nigeria' },
-  { slug: 'casablanca', name: 'Casablanca', country: 'Morocco' },
-  { slug: 'nairobi', name: 'Nairobi', country: 'Kenya' },
-  { slug: 'cape-town', name: 'Cape Town', country: 'South Africa' },
-  { slug: 'kigali', name: 'Kigali', country: 'Rwanda' },
-  { slug: 'abidjan', name: 'Abidjan', country: 'Côte d’Ivoire' },
-  { slug: 'dakar', name: 'Dakar', country: 'Senegal' },
-  { slug: 'kampala', name: 'Kampala', country: 'Uganda' },
+  { slug: 'kumasi', name: 'Kumasi', country: 'Ghana' },
+  { slug: 'tema', name: 'Tema', country: 'Ghana' },
+  { slug: 'cape-coast', name: 'Cape Coast', country: 'Ghana' },
+  { slug: 'takoradi', name: 'Takoradi', country: 'Ghana' },
 ] as const
 
 export const occasions = [
@@ -54,9 +55,6 @@ export const mealTimes = [
 
 export const cuisineOptions = [
   'Ghanaian',
-  'Nigerian',
-  'Moroccan',
-  'East African',
   'West African',
   'Continental',
   'Seafood',
@@ -100,22 +98,22 @@ export type Chef = {
   included: string[]
 }
 
-export const chefs: Chef[] = [
+const allChefs: Chef[] = [
   {
-    id: 'nana',
-    name: 'Chef Nana K.',
+    id: 'ama',
+    name: 'Chef Ama Mensah',
     location: 'Accra, Ghana',
     city: 'Accra',
     lat: 5.6037,
     lng: -0.187,
-    specialties: 'Ghanaian · Continental · Fine dining',
+    specialties: 'Coastal Ghanaian · Charcoal grills · Sharing plates',
     cuisines: ['Ghanaian', 'Continental', "Chef's special"],
-    pricing: 'From GH₵450',
+    pricing: 'From GH₵650',
     rating: 4.9,
-    services: 24,
-    image: images.nana,
-    alt: 'Chef Nana K., private chef in Accra, Ghana',
-    bio: 'Nana builds tasting menus around Ghanaian produce, coastal seafood, and the kind of hospitality that makes a home feel like the best table in Accra.',
+    services: 38,
+    image: chefPhotoUrl('ama'),
+    alt: 'Chef Ama Mensah, private chef in Accra, Ghana',
+    bio: 'Ama cooks coastal Ghanaian food at home: smoked fish, palm-nut, and charcoal grills served as relaxed sharing plates.',
     included: [
       'Menu design',
       'Grocery sourcing',
@@ -124,89 +122,20 @@ export const chefs: Chef[] = [
     ],
   },
   {
-    id: 'youssef',
-    name: 'Chef Youssef B.',
-    location: 'Casablanca, Morocco',
-    city: 'Casablanca',
-    lat: 33.5731,
-    lng: -7.5898,
-    specialties: 'Moroccan · North African · Grill',
-    cuisines: ['Moroccan', 'Seafood', "Chef's special"],
-    pricing: 'Pricing by experience',
-    rating: 4.8,
-    services: 18,
-    image:
-      'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=1200&q=80',
-    alt: 'Chef Youssef B., private chef in Casablanca, Morocco',
-    bio: 'Youssef cooks with fire and spice from the Maghreb: tagines, charcoal grill, and plating that feels like a Casablanca restaurant brought home.',
-    included: [
-      'Menu design',
-      'Grocery sourcing',
-      'Cooking and table service',
-      'Kitchen cleanup',
-    ],
-  },
-  {
-    id: 'amani',
-    name: 'Chef Stephanie K.',
-    location: 'Nairobi, Kenya',
-    city: 'Nairobi',
-    lat: -1.2921,
-    lng: 36.8219,
-    specialties: 'East African · Coastal · Family meals',
-    cuisines: ['East African', 'Seafood', 'Vegetarian'],
-    pricing: 'Pricing by experience',
-    rating: 4.8,
-    services: 21,
-    image: images.amani,
-    alt: 'Chef Stephanie K. in Nairobi, Kenya',
-    bio: 'Stephanie cooks coastal and highland Kenyan food with a light, seasonal hand, ideal for families, friends, and unhurried Sunday lunches.',
-    included: [
-      'Menu design',
-      'Grocery sourcing',
-      'Cooking and table service',
-      'Kitchen cleanup',
-    ],
-  },
-  {
-    id: 'zuri',
-    name: 'Chef Zuri M.',
-    location: 'Cape Town, South Africa',
-    city: 'Cape Town',
-    lat: -33.9249,
-    lng: 18.4241,
-    specialties: 'Cape Malay · Seafood · Wine-country dining',
-    cuisines: ['Seafood', 'Continental', "Chef's special"],
-    pricing: 'Pricing by experience',
-    rating: 4.7,
-    services: 16,
-    image:
-      'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=1200&q=80',
-    alt: 'Chef Zuri M., private chef in Cape Town, South Africa',
-    bio: 'Zuri brings Cape Malay spice, Atlantic seafood, and wine-country pacing into private homes and villa kitchens.',
-    included: [
-      'Menu design',
-      'Grocery sourcing',
-      'Cooking and table service',
-      'Kitchen cleanup',
-    ],
-  },
-  {
-    id: 'kofi',
-    name: 'Chef Kofi B.',
+    id: 'chidinma',
+    name: 'Chef Chidinma Eze',
     location: 'Accra, Ghana',
     city: 'Accra',
     lat: 5.56,
-    lng: -0.2057,
-    specialties: 'Plant-forward · Vegetarian · Celebration menus',
-    cuisines: ['Vegetarian', 'Ghanaian', 'West African'],
-    pricing: 'From GH₵380',
-    rating: 4.6,
-    services: 12,
-    image:
-      'https://images.unsplash.com/photo-1600565193348-f74bd3ec5f5c?auto=format&fit=crop&w=1200&q=80',
-    alt: 'Chef Kofi B., private chef in Accra, Ghana',
-    bio: 'Kofi designs plant-forward Ghanaian menus that still feel abundant, for date nights, birthdays, and thoughtful corporate lunches.',
+    lng: -0.187,
+    specialties: 'Owambe classics · Pepper soups · Big tables',
+    cuisines: ['Ghanaian', 'West African', "Chef's special"],
+    pricing: 'From GH₵560',
+    rating: 4.9,
+    services: 61,
+    image: chefPhotoUrl('chidinma'),
+    alt: 'Chef Chidinma Eze, private chef in Accra, Ghana',
+    bio: 'Chidinma runs busy celebration kitchens in Accra: generous pots, deep pepper soups, and smoky party rice.',
     included: [
       'Menu design',
       'Grocery sourcing',
@@ -215,21 +144,64 @@ export const chefs: Chef[] = [
     ],
   },
   {
-    id: 'ibrahim',
-    name: 'Chef Ibrahim S.',
-    location: 'Dakar, Senegal',
-    city: 'Dakar',
-    lat: 14.7167,
-    lng: -17.4677,
-    specialties: 'Senegalese · Thieboudienne · Coastal feasts',
-    cuisines: ['West African', 'Seafood', "Chef's special"],
-    pricing: 'Pricing by experience',
-    rating: 4.9,
-    services: 31,
-    image:
-      'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80',
-    alt: 'Chef Ibrahim S., private chef in Dakar, Senegal',
-    bio: 'Ibrahim cooks the Atlantic with patience: thieboudienne, grilled fish, and celebration tables that linger long after dessert.',
+    id: 'kwame',
+    name: 'Chef Kwame Ofori',
+    location: 'Accra, Ghana',
+    city: 'Accra',
+    lat: 5.6037,
+    lng: -0.167,
+    specialties: 'Fresh pasta · Seasonal produce · Plated courses',
+    cuisines: ['Continental', 'Ghanaian', "Chef's special"],
+    pricing: 'From GH₵900',
+    rating: 4.8,
+    services: 52,
+    image: chefPhotoUrl('kwame'),
+    alt: 'Chef Kwame Ofori, private chef in Accra, Ghana',
+    bio: 'Kwame makes fresh pasta at your counter and finishes plates with Ghanaian produce for long, generous dinners.',
+    included: [
+      'Menu design',
+      'Grocery sourcing',
+      'Cooking and table service',
+      'Kitchen cleanup',
+    ],
+  },
+  {
+    id: 'yaw',
+    name: 'Chef Yaw Darko',
+    location: 'Accra, Ghana',
+    city: 'Accra',
+    lat: 5.5557,
+    lng: -0.1825,
+    specialties: 'Plant-forward · Meal prep · Local grains',
+    cuisines: ['Vegetarian', 'Ghanaian', 'Healthy'],
+    pricing: 'From GH₵480',
+    rating: 4.7,
+    services: 23,
+    image: chefPhotoUrl('yaw'),
+    alt: 'Chef Yaw Darko, private chef in Accra, Ghana',
+    bio: 'Yaw cooks bright, plant-forward food built on local grains and vegetables, popular for weekly meal prep.',
+    included: [
+      'Menu design',
+      'Grocery sourcing',
+      'Cooking and table service',
+      'Kitchen cleanup',
+    ],
+  },
+  {
+    id: 'sophie',
+    name: 'Chef Sophie Laryea',
+    location: 'Accra, Ghana',
+    city: 'Accra',
+    lat: 5.6393,
+    lng: -0.1624,
+    specialties: 'Italian · Wine pairings · Long dinners',
+    cuisines: ['Continental', 'Ghanaian', "Chef's special"],
+    pricing: 'From GH₵1,200',
+    rating: 4.8,
+    services: 30,
+    image: chefPhotoUrl('sophie'),
+    alt: 'Chef Sophie Laryea, private chef in Accra, Ghana',
+    bio: 'Sophie cooks generous Italian dinners with a Ghanaian accent: suya-spiced arancini, cocoa tagliatelle, mango panna cotta.',
     included: [
       'Menu design',
       'Grocery sourcing',
@@ -258,7 +230,7 @@ export const sampleMenus: SampleMenu[] = [
   {
     id: 'accra-table',
     title: 'Accra table',
-    chefId: 'nana',
+    chefId: 'ama',
     image: images.cuisine,
     blurb: 'A generous Ghanaian dinner built around market produce and coastal fish.',
     courses: [
@@ -285,114 +257,111 @@ export const sampleMenus: SampleMenu[] = [
     ],
   },
   {
-    id: 'casablanca-grill',
-    title: 'Casablanca grill',
-    chefId: 'youssef',
+    id: 'party-jollof',
+    title: 'Party jollof night',
+    chefId: 'chidinma',
     image: images.privateDinner,
-    blurb: 'Charcoal-led Moroccan cooking for nights that should feel like a restaurant at home.',
+    blurb: 'Generous pots, smoky rice, and the energy of a celebration at home.',
     courses: [
       {
         title: 'Starter',
-        note: 'Choose 1',
-        dishes: ['Zaalouk with warm khobz', 'Harira, lemon, dates'],
+        note: 'Sharing',
+        dishes: ['Pepper soup shots', 'Fried plantain and shito'],
       },
       {
         title: 'Main',
-        note: 'Choose 1',
-        dishes: [
-          'Lamb tagine, prunes, toasted almonds, saffron couscous',
-          'Chermoula grilled sea bream, preserved lemon, herb salad',
-        ],
+        note: 'All inclusive',
+        dishes: ['Party jollof, beef suya, garden salad'],
       },
       {
         title: 'Dessert',
         note: 'All inclusive',
-        dishes: ['Orange blossom milk cake, pistachios'],
+        dishes: ['Puff-puff with honey'],
       },
     ],
   },
   {
-    id: 'nairobi-coast',
-    title: 'Nairobi coast',
-    chefId: 'amani',
+    id: 'pasta-supper',
+    title: 'Handmade pasta supper',
+    chefId: 'kwame',
     image: images.mealPrep,
-    blurb: 'Coastal Kenyan flavors with a calm, family-style rhythm.',
+    blurb: 'Fresh pasta rolled at your counter, finished with Ghanaian produce.',
     courses: [
       {
         title: 'Starter',
-        note: 'All inclusive',
-        dishes: ['Coconut bean salad, mango, chili oil'],
+        note: 'Choose 1',
+        dishes: ['Burrata with roasted garden eggs', 'Seasonal salad, citrus dressing'],
       },
       {
         title: 'Main',
         note: 'Choose 1',
         dishes: [
-          'Swahili coconut fish, coconut rice, kachumbari',
-          'Nyama choma platter, ugali, sukuma wiki',
+          'Hand-cut tagliatelle, beef ragù',
+          'Grilled prawns, lemon butter, herbs',
         ],
       },
       {
         title: 'Dessert',
-        note: 'Choose 1',
-        dishes: ['Mandazi with cardamom cream', 'Passion fruit posset'],
+        note: 'All inclusive',
+        dishes: ['Tiramisu'],
       },
     ],
   },
   {
-    id: 'cape-evening',
-    title: 'Cape evening',
-    chefId: 'zuri',
+    id: 'osteria-night',
+    title: 'Osteria night',
+    chefId: 'sophie',
     image: images.dateNight,
-    blurb: 'A slower Cape Town menu for date nights and small celebrations.',
+    blurb: 'A slower Italian menu for date nights and small celebrations.',
     courses: [
       {
         title: 'Starter',
         note: 'Choose 1',
-        dishes: ['Cape Malay samosa, apricot chutney', 'Cured yellowtail, citrus, fennel'],
+        dishes: ['Suya-spiced arancini', 'Focaccia, olives, whipped butter'],
       },
       {
         title: 'Main',
         note: 'Choose 1',
         dishes: [
-          'Line fish, browned butter, new potatoes, seasonal greens',
-          'Bobotie, yellow rice, cucumber salad',
+          'Cocoa tagliatelle, wild mushrooms',
+          'Slow-roast lamb shoulder, herbs',
         ],
       },
       {
         title: 'Dessert',
         note: 'All inclusive',
-        dishes: ['Malva pudding, crème anglaise'],
+        dishes: ['Mango panna cotta'],
       },
     ],
   },
   {
-    id: 'celebration-feast',
-    title: 'Celebration feast',
-    chefId: 'ibrahim',
+    id: 'sunday-family',
+    title: 'Sunday family table',
+    chefId: 'ama',
     image: images.partiesCelebrations,
     blurb: 'A long table for birthdays, graduations, and the nights you want remembered.',
     courses: [
       {
         title: 'Starter',
         note: 'Sharing',
-        dishes: ['Yassa chicken bites', 'Pastels, lime, chili'],
+        dishes: ['Garden egg and smoked mackerel dip', 'Kelewele with groundnut'],
       },
       {
         title: 'Main',
         note: 'All inclusive',
-        dishes: ['Thieboudienne, grilled vegetables, extra fish for the table'],
+        dishes: ['Jollof, grilled chicken, shito, fried plantain'],
       },
       {
         title: 'Dessert',
         note: 'All inclusive',
-        dishes: ['Thiéré sweet couscous, mango, toasted coconut'],
+        dishes: ['Pineapple and mint', 'Bofrot with lime caramel'],
       },
     ],
   },
   {
     id: 'garden-plate',
     title: 'Garden plate',
-    chefId: 'kofi',
+    chefId: 'yaw',
     image:
       'https://images.unsplash.com/photo-1467003909585-2f8a72700288?auto=format&fit=crop&w=1200&q=80',
     blurb: 'Plant-forward West African cooking that still feels like a feast.',
@@ -421,36 +390,36 @@ export const sampleMenus: SampleMenu[] = [
 
 export const reviews = [
   {
-    id: 'ama',
-    name: 'Ama Boateng',
+    id: 'review-1',
+    name: 'Nana K.',
     date: 'Aug 12, 2026',
     rating: 5,
     city: 'Accra',
-    copy: 'Nana cooked a birthday dinner that felt like a restaurant without any of the fuss. The menu was personal, the pacing was perfect, and the kitchen was left better than she found it.',
+    copy: 'Chef Ama cooked a birthday dinner that felt like a restaurant without any of the fuss. The snapper is still being talked about.',
   },
   {
-    id: 'chidi',
-    name: 'Amira Benali',
+    id: 'review-2',
+    name: 'Dzifa A.',
     date: 'Aug 9, 2026',
     rating: 4.8,
-    city: 'Casablanca',
-    copy: 'We booked Youssef for a date night at home. The lamb tagine was extraordinary, and he was easy to talk to while still giving us the evening to ourselves.',
+    city: 'Accra',
+    copy: 'Felt like a restaurant at home. Every course was explained and the pacing stayed relaxed.',
   },
   {
-    id: 'wambui',
-    name: 'Wambui Kariuki',
+    id: 'review-3',
+    name: 'Kojo B.',
     date: 'Aug 4, 2026',
     rating: 4.7,
-    city: 'Nairobi',
-    copy: 'Stephanie handled a family lunch with kids, dietary notes, and last-minute guests. Every plate landed, and cleanup was complete before dessert conversations ended.',
+    city: 'Accra',
+    copy: 'Chidinma fed twenty of us without breaking a sweat. The asun disappeared in minutes.',
   },
   {
-    id: 'leila',
-    name: 'Leila Ndiaye',
+    id: 'review-4',
+    name: 'Esi O.',
     date: 'Jul 28, 2026',
     rating: 5,
-    city: 'Dakar',
-    copy: 'Ibrahim’s thieboudienne was the best we have had outside a family kitchen. Guests are still talking about the table, the stories, and the calm way he ran the night.',
+    city: 'Accra',
+    copy: 'Yaw’s weekly prep kept our fridge full through Friday. Everything tasted fresh and thoughtful.',
   },
 ]
 
@@ -505,6 +474,8 @@ export const emptyRequest: ChefRequest = {
   phone: '',
 }
 
+export const chefs = allChefs.filter((chef) => chef.location.endsWith(launchCountry))
+
 export function getChef(id: string) {
   return chefs.find((chef) => chef.id === id)
 }
@@ -536,6 +507,7 @@ export function matchChefs(request: Partial<ChefRequest>, limit = 3) {
       : null
 
   const scored = chefs
+    .filter((chef) => isChefBookable(chef.id))
     .map((chef) => {
       let score = 0
       const km = origin ? distanceKm(origin, chef) : undefined
@@ -559,7 +531,6 @@ export function matchChefs(request: Partial<ChefRequest>, limit = 3) {
       ) {
         score += 3
       }
-      if (request.occasion === 'date-night' && chef.id === 'nana') score += 1
       return { chef, score, km }
     })
     .sort((a, b) => {

@@ -83,7 +83,7 @@ export const createRequestFn = createServerFn({ method: 'POST' })
     const input = asRecord(data)
     return {
       customerName: requiredString(input.customerName, 'Name'),
-      email: optionalString(input.email).trim() || 'guest@girki.app',
+      email: optionalString(input.email).trim() || 'guest@girki.com',
       phone: optionalString(input.phone),
       city: requiredString(input.city, 'City'),
       cuisine: optionalString(input.cuisine),
@@ -185,7 +185,45 @@ export const listChefDashboardFn = createServerFn({ method: 'POST' }).handler(as
   const { requireActiveChefSession } = await import('./auth-session.server')
   const session = await requireActiveChefSession()
   const live = await import('./marketplace.server')
-  return live.listChefDashboard(session.slug)
+  try {
+    return await live.listChefDashboard(session.slug)
+  } catch (error) {
+    const { readMockAuth } = await import('./auth-mock.server')
+    if (readMockAuth()) {
+      return {
+        inquiries: [],
+        openRequests: [],
+        proposals: [],
+        bookings: [],
+        revenue: { available: 0, pending: 0, lifetime: 0, currency: 'GHS' as const },
+      }
+    }
+    throw error
+  }
+})
+
+export const listCustomerDashboardFn = createServerFn({ method: 'POST' }).handler(async () => {
+  const { readMockAuth } = await import('./auth-mock.server')
+  if (readMockAuth()) {
+    const mock = await import('./auth-mock')
+    const live = await import('./marketplace.server')
+    return live.listCustomerDashboard({
+      email: mock.MOCK_EMAIL,
+      phone: mock.MOCK_PHONE,
+    })
+  }
+
+  const { requireSupabaseUser } = await import('./supabase/server')
+  const { user } = await requireSupabaseUser()
+  const { sql } = await import('./db.server')
+  const rows = await sql<Array<{ email: string | null; phone: string | null }>>`
+    select email, phone from public.profiles where id = ${user.id} limit 1
+  `
+  const live = await import('./marketplace.server')
+  return live.listCustomerDashboard({
+    email: user.email ?? rows[0]?.email ?? '',
+    phone: user.phone ?? rows[0]?.phone ?? '',
+  })
 })
 
 export const getChefSessionFn = createServerFn({ method: 'POST' }).handler(async () => {
@@ -208,9 +246,28 @@ export const chefLoginFn = createServerFn({ method: 'POST' })
     return session
   })
 
+export const establishChefPortalSessionFn = createServerFn({ method: 'POST' }).handler(
+  async () => {
+    const { readMockAuth } = await import('./auth-mock.server')
+    if (readMockAuth()) {
+      const auth = await import('./auth-session.server')
+      const { MOCK_CHEF_SESSION } = await import('./auth-mock')
+      const session = { ...MOCK_CHEF_SESSION }
+      auth.issueChefSession(session)
+      return session
+    }
+    const auth = await import('./auth-session.server')
+    const session = await auth.authenticateChefFromSupabaseUser()
+    auth.issueChefSession(session)
+    return session
+  },
+)
+
 export const chefLogoutFn = createServerFn({ method: 'POST' }).handler(async () => {
   const { clearChefSession } = await import('./auth-session.server')
+  const { clearMockAuth } = await import('./auth-mock.server')
   clearChefSession()
+  clearMockAuth()
   return { ok: true as const }
 })
 
@@ -244,6 +301,7 @@ export const marketplaceRepository: MarketplaceRepository = {
   quoteInquiry: (inquiryId, quotedPrice) =>
     quoteInquiryFn({ data: { inquiryId, quotedPrice } }),
   listChefDashboard: () => listChefDashboardFn(),
+  listCustomerDashboard: () => listCustomerDashboardFn(),
   updateBookingStatus: (bookingId, status) =>
     updateBookingStatusFn({ data: { bookingId, status } }),
 }

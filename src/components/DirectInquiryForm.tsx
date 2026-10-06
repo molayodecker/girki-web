@@ -78,11 +78,11 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
 
       <div className="mt-8 grid gap-5 sm:grid-cols-2">
         <label>
-          <span className="typography-eyebrow mb-2 block">Name</span>
+          <span className="typography-label mb-2 block">Name</span>
           <input value={name} onChange={(event) => setName(event.target.value)} className={inputClass} />
         </label>
         <label>
-          <span className="typography-eyebrow mb-2 block">Email</span>
+          <span className="typography-label mb-2 block">Email</span>
           <input
             type="email"
             value={email}
@@ -91,7 +91,7 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           />
         </label>
         <label>
-          <span className="typography-eyebrow mb-2 block">Phone</span>
+          <span className="typography-label mb-2 block">Phone</span>
           <input
             type="tel"
             value={phone}
@@ -100,7 +100,7 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           />
         </label>
         <label>
-          <span className="typography-eyebrow mb-2 block">Event date</span>
+          <span className="typography-label mb-2 block">Event date</span>
           <input
             type="date"
             value={eventDate}
@@ -109,7 +109,7 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           />
         </label>
         <label>
-          <span className="typography-eyebrow mb-2 block">Guests</span>
+          <span className="typography-label mb-2 block">Guests</span>
           <input
             type="number"
             min="1"
@@ -119,7 +119,7 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           />
         </label>
         <label>
-          <span className="typography-eyebrow mb-2 block">Occasion</span>
+          <span className="typography-label mb-2 block">Occasion</span>
           <input
             value={occasion}
             onChange={(event) => setOccasion(event.target.value)}
@@ -127,7 +127,7 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           />
         </label>
         <label className="sm:col-span-2">
-          <span className="typography-eyebrow mb-2 block">Location</span>
+          <span className="typography-label mb-2 block">Location</span>
           <input
             value={location}
             onChange={(event) => setLocation(event.target.value)}
@@ -136,16 +136,16 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
           />
         </label>
         <label className="sm:col-span-2">
-          <span className="typography-eyebrow mb-2 block">Budget</span>
+          <span className="typography-label mb-2 block">Budget</span>
           <input
             value={budget}
             onChange={(event) => setBudget(event.target.value)}
-            placeholder="e.g. GH₵2,500–3,500"
+            placeholder="e.g. GH₵2,500-3,500"
             className={inputClass}
           />
         </label>
         <label className="sm:col-span-2">
-          <span className="typography-eyebrow mb-2 block">Notes</span>
+          <span className="typography-label mb-2 block">Notes</span>
           <textarea
             rows={5}
             value={message}

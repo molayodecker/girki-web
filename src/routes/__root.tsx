@@ -22,36 +22,39 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Girki: Private Chefs Across Africa',
+        title: 'Girki: Private Chefs in Ghana',
       },
+      { name: 'theme-color', content: '#e85c32' },
       {
         name: 'description',
         content:
-          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Africa.',
+          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Ghana.',
       },
       { name: 'robots', content: 'index, follow' },
       { property: 'og:type', content: 'website' },
       {
         property: 'og:title',
-        content: 'Girki: Private Chefs Across Africa',
+        content: 'Girki: Private Chefs in Ghana',
       },
       {
         property: 'og:description',
         content:
-          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Africa.',
+          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Ghana.',
       },
       { name: 'twitter:card', content: 'summary' },
       {
         name: 'twitter:title',
-        content: 'Girki: Private Chefs Across Africa',
+        content: 'Girki: Private Chefs in Ghana',
       },
       {
         name: 'twitter:description',
         content:
-          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Africa.',
+          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Ghana.',
       },
     ],
     links: [
+      { rel: 'icon', href: '/brand/girki-mark-terracotta.png', type: 'image/png' },
+      { rel: 'apple-touch-icon', href: '/brand/girki-mark-terracotta.png' },
       {
         rel: 'stylesheet',
         href: appCss,

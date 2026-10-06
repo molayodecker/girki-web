@@ -137,3 +137,9 @@ export type ChefDashboardData = {
     currency: Currency
   }
 }
+
+export type CustomerDashboardData = {
+  bookings: Booking[]
+  requests: ChefRequestRecord[]
+  inquiries: DirectInquiry[]
+}

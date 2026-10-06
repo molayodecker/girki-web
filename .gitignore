@@ -1,3 +1,14 @@
+# Staged for `pnpm media:upload` (sources live in girki mobile + public/)
+media/
+
+# Marketing media served from Cloudflare R2 (pnpm media:sync && pnpm media:upload)
+public/videos/
+public/images/marketing/
+public/images/experiences/
+public/images/trust/
+public/images/parties-celebrations.jpg
+public/images/how-it-works/chef-kitchen.jpg
+
 node_modules
 .DS_Store
 dist
@@ -14,3 +25,7 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

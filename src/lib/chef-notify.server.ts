@@ -20,7 +20,7 @@ function appUrl() {
 }
 
 function mailFrom() {
-  return process.env.MAIL_FROM ?? 'Girki <hello@trygirki.com>'
+  return process.env.MAIL_FROM ?? 'Girki <hello@girki.com>'
 }
 
 export function normalizeE164(value: string) {
@@ -431,7 +431,7 @@ export async function applyWhatsAppReply(from: string, body: string) {
     const { quoteInquiry } = await import('./marketplace.server')
     await quoteInquiry(target.inquiryId, parsed.amount, chef.slug)
     return {
-      reply: `Got it — GH₵${parsed.amount} is now live for the guest. You can still update it from ${appUrl()}/chef-dashboard`,
+      reply: `Got it. GH₵${parsed.amount} is now live for the guest. You can still update it from ${appUrl()}/chef-dashboard`,
       ignored: false as const,
     }
   }
@@ -451,7 +451,7 @@ export async function applyWhatsAppReply(from: string, body: string) {
       chef.slug,
     )
     return {
-      reply: `Got it — GH₵${parsed.amount} is now live for the guest. You can still update it from ${appUrl()}/chef-dashboard`,
+      reply: `Got it. GH₵${parsed.amount} is now live for the guest. You can still update it from ${appUrl()}/chef-dashboard`,
       ignored: false as const,
     }
   }

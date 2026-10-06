@@ -33,7 +33,7 @@ const occasionImages: Record<string, string> = {
 const stages = [
   {
     id: 'table',
-    eyebrow: '01',
+    kicker: 'Request a chef',
     title: 'Set the table',
     copy: 'Where, when, and for whom. We’ll match chefs around this.',
     image: images.privateDinner,
@@ -41,7 +41,7 @@ const stages = [
   },
   {
     id: 'evening',
-    eyebrow: '02',
+    kicker: 'Your evening',
     title: 'Shape the evening',
     copy: 'Occasion, service, cuisine, and the kind of menu you want.',
     image: images.dateNight,
@@ -49,7 +49,7 @@ const stages = [
   },
   {
     id: 'details',
-    eyebrow: '03',
+    kicker: 'Almost there',
     title: 'A few details',
     copy: 'Dietary notes and how chefs can reach you. No commitment.',
     image: images.cuisine,
@@ -104,10 +104,10 @@ function Chip({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-full border px-4 py-2.5 text-sm transition-colors ${
+      className={`border-2 px-4 py-2.5 text-sm font-heading font-medium transition-colors ${
         selected
-          ? 'border-ploy-accent-primary bg-ploy-accent-primary text-white'
-          : 'border-ploy-border-primary bg-ploy-neutral-primary-s0 text-ploy-text-primary hover:border-ploy-accent-tertiary'
+          ? 'border-[#1c1418] bg-[#1c1418] text-girki-cream'
+          : 'border-[#1c1418]/20 bg-white text-ploy-text-primary hover:border-[#1c1418]/45'
       }`}
     >
       {children}
@@ -238,40 +238,57 @@ export default function RequestWizard({
     .join(' · ')
 
   const fieldClass =
-    'min-h-12 w-full rounded-2xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none transition-colors focus:border-ploy-accent-tertiary'
+    'min-h-12 w-full border-2 border-[#1c1418]/20 bg-white px-4 outline-none transition-colors focus:border-[#1c1418]'
 
   return (
-    <div className="grid min-h-svh lg:grid-cols-[minmax(18rem,0.86fr)_minmax(0,1.14fr)]">
-      <aside className="relative hidden overflow-hidden bg-ploy-background-inverse lg:sticky lg:top-20 lg:block lg:h-[calc(100svh-5rem)]">
-        <img
-          src={stage.image}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 to-black/20" />
-        <div className="relative flex h-full flex-col justify-end px-10 pb-14 pt-16 text-white">
-          <p className="typography-eyebrow text-ploy-accent-tertiary">{stage.eyebrow} / 03</p>
-          <p className="mt-6 max-w-sm font-heading text-4xl tracking-tight">{stage.caption}</p>
-          {summary ? <p className="mt-8 max-w-sm text-sm text-white/70">{summary}</p> : null}
+    <div className="grid min-h-svh border-b-4 border-[#1c1418] lg:grid-cols-[minmax(18rem,0.9fr)_minmax(0,1.1fr)]">
+      <aside className="relative hidden lg:sticky lg:top-20 lg:block lg:h-[calc(100svh-5rem)] lg:p-6 lg:pr-3">
+        <div className="relative h-full">
+          <div
+            className="absolute inset-0 translate-x-3 translate-y-3 bg-girki-saffron"
+            aria-hidden="true"
+          />
+          <div className="relative h-full overflow-hidden border-4 border-[#1c1418] bg-[#1c1418]">
+            <img src={stage.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-linear-to-t from-[#1c1418]/95 via-[#1c1418]/35 to-transparent" />
+            <div className="relative flex h-full flex-col justify-end p-8 text-girki-cream xl:p-10">
+              <p className="font-heading text-[0.65rem] font-semibold tracking-[0.38em] text-girki-saffron uppercase">
+                {stage.kicker}
+              </p>
+              <p
+                className="mt-5 max-w-sm font-display-heavy leading-[1.02]"
+                style={{ fontSize: 'clamp(1.75rem, 3.5vw, 2.5rem)' }}
+              >
+                {stage.caption}
+              </p>
+              {summary ? (
+                <p className="mt-6 max-w-sm border-t border-white/15 pt-4 text-sm leading-relaxed text-girki-cream/75">
+                  {summary}
+                </p>
+              ) : null}
+            </div>
+          </div>
         </div>
       </aside>
 
       <section className="bg-ploy-background-primary">
-        <div className="relative h-44 overflow-hidden lg:hidden">
-          <img src={stage.image} alt="" className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-black/35" />
-          <p className="absolute bottom-5 left-5 font-heading text-2xl text-white">{stage.caption}</p>
+        <div className="relative border-b-4 border-[#1c1418] lg:hidden">
+          <div className="relative h-48 overflow-hidden">
+            <img src={stage.image} alt="" className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-[#1c1418]/45" />
+          </div>
+          <p className="px-5 py-4 font-display-heavy text-xl text-ploy-text-primary">{stage.caption}</p>
         </div>
 
-        <div className="mx-auto max-w-2xl px-5 pb-16 pt-8 lg:px-12 lg:pt-12">
-          <div className="flex items-center gap-2">
+        <div className="mx-auto max-w-2xl px-5 pb-20 pt-8 lg:px-12 lg:pb-16 lg:pt-12">
+          <div className="flex gap-2">
             {stages.map((item, index) => (
               <button
                 key={item.id}
                 type="button"
                 aria-current={index === stageIndex ? 'step' : undefined}
-                className={`h-1.5 flex-1 rounded-full transition-colors ${
-                  index <= stageIndex ? 'bg-ploy-accent-secondary' : 'bg-ploy-border-primary'
+                className={`h-2 flex-1 border-2 border-[#1c1418] transition-colors ${
+                  index <= stageIndex ? 'bg-girki-saffron' : 'bg-transparent'
                 }`}
                 onClick={() => {
                   if (index < stageIndex) setStageIndex(index)
@@ -279,21 +296,30 @@ export default function RequestWizard({
               />
             ))}
           </div>
-          <div className="mt-3 flex justify-between text-xs tracking-[0.14em] uppercase text-ploy-text-secondary">
+          <div className="mt-3 flex justify-between font-heading text-xs font-semibold tracking-[0.14em] text-ploy-text-secondary uppercase">
             <span>{stage.title}</span>
-            <span>No commitment</span>
+            <span className="text-girki-saffron">No commitment</span>
           </div>
 
-          <p className="typography-eyebrow mt-10">{stage.eyebrow} Request a chef</p>
-          <h1 className="display-title mt-4 text-4xl sm:text-5xl">{stage.title}</h1>
-          <p className="mt-4 max-w-lg text-lg leading-relaxed text-ploy-text-secondary">{stage.copy}</p>
+          <p className="mt-10 font-heading text-[0.65rem] font-semibold tracking-[0.42em] text-[#1c1418]/55 uppercase">
+            {stage.kicker}
+          </p>
+          <h1
+            className="mt-4 font-display-heavy text-ploy-text-primary"
+            style={{ fontSize: 'clamp(2.25rem, 5vw, 3.25rem)' }}
+          >
+            {stage.title}
+          </h1>
+          <p className="mt-4 max-w-lg text-base leading-relaxed text-ploy-text-secondary sm:text-lg">
+            {stage.copy}
+          </p>
 
           <div className="mt-10 space-y-10">
             {stage.id === 'table' ? (
               <>
                 <div>
                   <div className="mb-3 flex items-center justify-between gap-3">
-                    <p className="typography-eyebrow">Where</p>
+                    <p className="typography-label">Where</p>
                     <button
                       type="button"
                       className="inline-flex items-center gap-1.5 text-xs tracking-[0.08em] uppercase text-ploy-accent-secondary"
@@ -304,7 +330,7 @@ export default function RequestWizard({
                       {locating ? 'Finding you…' : 'Use my location'}
                     </button>
                   </div>
-                  <label className="block rounded-2xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4">
+                  <label className="block border-2 border-[#1c1418]/20 bg-white px-4">
                     <span className="sr-only">City</span>
                     <LocationAutocomplete
                       compact
@@ -312,7 +338,7 @@ export default function RequestWizard({
                       lng={request.lng}
                       value={request.city}
                       onChange={(city) => update('city', city)}
-                      placeholder="Search Accra, Lagos, Nairobi…"
+                      placeholder="Search Accra, Kumasi, Tema…"
                     />
                   </label>
                   {detectedLabel ? (
@@ -338,13 +364,13 @@ export default function RequestWizard({
 
                 <div className="grid gap-5 sm:grid-cols-2">
                   <div>
-                    <p className="typography-eyebrow mb-3">When</p>
-                    <div className="rounded-2xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4">
+                    <p className="typography-label mb-3">When</p>
+                    <div className="border-2 border-[#1c1418]/20 bg-white px-4">
                       <DatePicker compact value={request.date} onChange={(date) => update('date', date)} />
                     </div>
                   </div>
                   <div>
-                    <p className="typography-eyebrow mb-3">Meal</p>
+                    <p className="typography-label mb-3">Meal</p>
                     <div className="grid grid-cols-2 gap-2">
                       {mealTimes.map((option) => (
                         <Chip
@@ -360,7 +386,7 @@ export default function RequestWizard({
                 </div>
 
                 <div>
-                  <p className="typography-eyebrow mb-3">Guests</p>
+                  <p className="typography-label mb-3">Guests</p>
                   <div className="flex flex-wrap gap-2">
                     {guestOptions.map((option) => (
                       <Chip
@@ -379,7 +405,7 @@ export default function RequestWizard({
             {stage.id === 'evening' ? (
               <>
                 <div>
-                  <p className="typography-eyebrow mb-4">Occasion</p>
+                  <p className="typography-label mb-4">Occasion</p>
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     {occasions.map((occasion) => {
                       const selected = request.occasion === occasion.id
@@ -388,10 +414,10 @@ export default function RequestWizard({
                           key={occasion.id}
                           type="button"
                           onClick={() => chooseOccasion(occasion.id)}
-                          className={`group overflow-hidden rounded-[1.4rem] border text-left transition-all ${
+                          className={`group overflow-hidden border-4 text-left transition-all ${
                             selected
-                              ? 'border-ploy-accent-secondary ring-2 ring-ploy-accent-secondary/30'
-                              : 'border-transparent hover:border-ploy-accent-tertiary'
+                              ? 'border-girki-saffron bg-girki-saffron/10'
+                              : 'border-[#1c1418]/15 hover:border-[#1c1418]/35'
                           }`}
                         >
                           <span className="relative block aspect-4/3 overflow-hidden">
@@ -412,7 +438,7 @@ export default function RequestWizard({
                 </div>
 
                 <div>
-                  <p className="typography-eyebrow mb-3">Service</p>
+                  <p className="typography-label mb-3">Service</p>
                   <div className="grid gap-2">
                     {serviceTypes.map((service) => {
                       const selected = request.serviceType === service.id
@@ -421,10 +447,10 @@ export default function RequestWizard({
                           key={service.id}
                           type="button"
                           onClick={() => update('serviceType', service.id)}
-                          className={`rounded-2xl border px-5 py-4 text-left transition-colors ${
+                          className={`border-2 px-5 py-4 text-left transition-colors ${
                             selected
-                              ? 'border-ploy-accent-primary bg-ploy-accent-primary text-white'
-                              : 'border-ploy-border-primary bg-ploy-neutral-primary-s0 hover:border-ploy-accent-tertiary'
+                              ? 'border-[#1c1418] bg-[#1c1418] text-girki-cream'
+                              : 'border-[#1c1418]/20 bg-white hover:border-[#1c1418]/45'
                           }`}
                         >
                           <span className="block font-heading text-xl tracking-tight">{service.label}</span>
@@ -440,7 +466,7 @@ export default function RequestWizard({
                 </div>
 
                 <div>
-                  <p className="typography-eyebrow mb-3">Cuisine</p>
+                  <p className="typography-label mb-3">Cuisine</p>
                   <div className="flex flex-wrap gap-2">
                     {cuisineOptions.map((cuisine) => (
                       <Chip
@@ -455,7 +481,7 @@ export default function RequestWizard({
                 </div>
 
                 <div>
-                  <p className="typography-eyebrow mb-3">Budget</p>
+                  <p className="typography-label mb-3">Budget</p>
                   <div className="grid gap-2 sm:grid-cols-3">
                     {budgetOptions.map((option) => {
                       const selected = request.budget === option.id
@@ -464,10 +490,10 @@ export default function RequestWizard({
                           key={option.id}
                           type="button"
                           onClick={() => update('budget', option.id)}
-                          className={`rounded-2xl border px-4 py-4 text-left transition-colors ${
+                          className={`border-2 px-4 py-4 text-left transition-colors ${
                             selected
-                              ? 'border-ploy-accent-primary bg-ploy-accent-primary text-white'
-                              : 'border-ploy-border-primary bg-ploy-neutral-primary-s0 hover:border-ploy-accent-tertiary'
+                              ? 'border-[#1c1418] bg-[#1c1418] text-girki-cream'
+                              : 'border-[#1c1418]/20 bg-white hover:border-[#1c1418]/45'
                           }`}
                         >
                           <span className="block font-heading text-xl tracking-tight">{option.label}</span>
@@ -489,7 +515,7 @@ export default function RequestWizard({
             {stage.id === 'details' ? (
               <>
                 <div>
-                  <p className="typography-eyebrow mb-3">Dietary notes</p>
+                  <p className="typography-label mb-3">Dietary notes</p>
                   <div className="flex flex-wrap gap-2">
                     {dietaryOptions.map((option) => (
                       <Chip
@@ -504,7 +530,7 @@ export default function RequestWizard({
                 </div>
 
                 <label className="block">
-                  <span className="typography-eyebrow mb-3 block">Anything the chef should know</span>
+                  <span className="typography-label mb-3 block">Anything the chef should know</span>
                   <textarea
                     value={request.notes}
                     onChange={(event) => update('notes', event.target.value)}
@@ -516,7 +542,7 @@ export default function RequestWizard({
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="sm:col-span-2">
-                    <span className="typography-eyebrow mb-3 block">Name</span>
+                    <span className="typography-label mb-3 block">Name</span>
                     <input
                       value={request.name}
                       onChange={(event) => update('name', event.target.value)}
@@ -525,7 +551,7 @@ export default function RequestWizard({
                     />
                   </label>
                   <label>
-                    <span className="typography-eyebrow mb-3 block">Email</span>
+                    <span className="typography-label mb-3 block">Email</span>
                     <input
                       type="email"
                       value={request.email}
@@ -535,7 +561,7 @@ export default function RequestWizard({
                     />
                   </label>
                   <label>
-                    <span className="typography-eyebrow mb-3 block">Phone</span>
+                    <span className="typography-label mb-3 block">Phone</span>
                     <input
                       type="tel"
                       value={request.phone}
@@ -557,16 +583,20 @@ export default function RequestWizard({
 
           {error ? <p className="mt-6 text-sm text-ploy-accent-secondary">{error}</p> : null}
 
-          <div className="mt-10 flex items-center justify-between gap-4">
+          <div className="mt-10 flex items-center justify-between gap-4 border-t-2 border-[#1c1418]/15 pt-8">
             <button
               type="button"
-              className="text-sm tracking-[0.08em] uppercase disabled:text-ploy-text-secondary"
+              className="font-heading text-sm font-semibold tracking-[0.08em] uppercase disabled:text-ploy-text-secondary"
               disabled={stageIndex === 0}
               onClick={() => setStageIndex((index) => Math.max(0, index - 1))}
             >
               Back
             </button>
-            <button type="button" className="btn btn-primary min-h-12 px-8" onClick={next}>
+            <button
+              type="button"
+              className="inline-flex min-h-12 items-center justify-center bg-girki-saffron px-8 font-heading text-sm font-semibold text-[#1c1418] transition-transform hover:-translate-y-0.5"
+              onClick={next}
+            >
               {stage.id === 'details' ? 'See chefs near you' : 'Continue'}
             </button>
           </div>

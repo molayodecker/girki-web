@@ -1,9 +1,14 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap");
+@import "./styles/portal-fonts.css";
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Fraunces", "Times New Roman", Georgia, serif;
+  --font-sans: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-display-heavy: "Fraunces", Georgia, serif;
+  --font-portal: Inter, system-ui, sans-serif;
+  --font-icons: Phosphor, sans-serif;
 
   --color-ploy-neutral-primary: #f4efe8;
   --color-ploy-neutral-secondary: #e8dfd3;
@@ -16,9 +21,9 @@
   --color-ploy-neutral-inverse-s0: #120d10;
   --color-ploy-neutral-inverse-s1: #1c1418;
 
-  --color-ploy-accent-primary: #2a1a24;
-  --color-ploy-accent-secondary: #c24b32;
-  --color-ploy-accent-tertiary: #b8956a;
+  --color-ploy-accent-primary: #6b2f45;
+  --color-ploy-accent-secondary: #e85c32;
+  --color-ploy-accent-tertiary: #e0a02e;
 
   --color-ploy-text-primary: #1c1418;
   --color-ploy-text-secondary: #6b5e56;
@@ -28,10 +33,26 @@
   --color-ploy-text-on-accent-secondary: #fffaf4;
   --color-ploy-text-on-accent-tertiary: #1c1418;
 
-  --color-ploy-background-primary: #f4efe8;
-  --color-ploy-background-secondary: #ebe3d8;
+  --color-ploy-background-primary: #f4e2b8;
+  --color-ploy-background-secondary: #f4e2b8;
   --color-ploy-background-inverse: #1c1418;
   --color-ploy-border-primary: color-mix(in oklch, #1c1418 10%, transparent);
+
+  --color-girki-terracotta: #e85c32;
+  --color-girki-saffron: #e0a02e;
+  --color-girki-palm: #2e5340;
+  --color-girki-charcoal: #201a16;
+  --color-girki-cream: #f5ecde;
+  --color-girki-plum: #6b2f45;
+
+  --color-portal-bg: #121015;
+  --color-portal-sidebar: #17141b;
+  --color-portal-surface: #1e1a22;
+  --color-portal-surface-2: #262129;
+  --color-portal-border: rgb(255 255 255 / 0.08);
+  --color-portal-text: #f4efe8;
+  --color-portal-muted: #9a9088;
+  --color-portal-accent: #c45c3d;
 
   --shadow-soft: 0 24px 60px -28px rgb(28 20 24 / 0.28);
   --shadow-lift: 0 40px 80px -32px rgb(28 20 24 / 0.38);
@@ -40,19 +61,20 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     margin: 0;
+    overflow-x: clip;
     background: var(--color-ploy-background-primary);
     color: var(--color-ploy-text-primary);
     font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    font-weight: 500;
   }
 
   ::selection {
-    background: #c24b32;
+    background: #e85c32;
     color: #fffaf4;
   }
 
@@ -75,10 +97,30 @@
 
 @utility font-heading {
   font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/** Readable Fraunces for accent lines (replaces thin italic display serifs). */
+@utility font-display-serif {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 32;
+  letter-spacing: -0.02em;
+}
+
+/** Fraunces for hero-scale type. */
+@utility font-display-heavy {
+  font-family: var(--font-display-heavy);
+  font-weight: 650;
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 18;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
 }
 
 @utility typography-button {
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 1.2;
   text-transform: uppercase;
@@ -86,7 +128,23 @@
 }
 
 @utility typography-eyebrow {
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--color-ploy-accent-secondary);
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: #fff;
+}
+
+@utility typography-label {
+  font-weight: 600;
   letter-spacing: 0.22em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -95,10 +153,10 @@
 }
 
 @utility display-title {
-  font-family: var(--font-heading);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 0.95;
+  font-family: var(--font-sans);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -110,7 +168,7 @@
   gap: 0.5rem;
   border-radius: 999px;
   padding: 0.85rem 1.35rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-size: 0.72rem;
@@ -126,7 +184,7 @@
   color: var(--color-ploy-text-on-accent-secondary);
 
   &:hover {
-    background: color-mix(in oklch, #c24b32 88%, black);
+    background: color-mix(in oklch, #e85c32 88%, black);
   }
 }
 
@@ -135,7 +193,7 @@
   color: var(--color-ploy-text-on-accent-primary);
 
   &:hover {
-    background: color-mix(in oklch, #2a1a24 88%, white);
+    background: color-mix(in oklch, #6b2f45 88%, white);
   }
 }
 
@@ -161,12 +219,191 @@
   border: 1px solid var(--color-ploy-border-primary);
 }
 
+@utility portal-card {
+  border-radius: 1.15rem;
+  border: 1px solid var(--color-portal-border);
+  background: var(--color-portal-surface);
+}
+
+@utility portal-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 @utility section-pad {
-  padding-inline: 1.25rem;
-  padding-block: 5.5rem;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block: clamp(3rem, 8vw, 5.5rem);
+
+  @media (width >= 48rem) {
+    padding-block: clamp(3.5rem, 7vw, 6rem);
+  }
 
   @media (width >= 64rem) {
-    padding-inline: 2rem;
-    padding-block: 7.5rem;
+    padding-block: clamp(4.5rem, 6vw, 7.5rem);
+  }
+}
+
+@utility field {
+  min-height: 2.75rem;
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-ploy-border-primary);
+  background: var(--color-ploy-background-primary);
+  padding-inline: 1rem;
+  outline: none;
+
+  &:focus {
+    border-color: var(--color-ploy-accent-tertiary);
+  }
+}
+
+.PhoneInputGirki {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+}
+
+.PhoneInputGirki .PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.5rem;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: inherit;
+  color: inherit;
+}
+
+.PhoneInputGirki .PhoneInputCountry {
+  margin-right: 0;
+}
+
+.PhoneInputGirki .PhoneInputCountryIcon {
+  width: 1.4rem;
+  height: 1rem;
+  box-shadow: none;
+}
+
+.PhoneInputGirki .PhoneInputCountrySelectArrow {
+  opacity: 0.55;
+  border-color: currentColor;
+}
+
+.portal-app {
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-heading: Inter, system-ui, sans-serif;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.portal-app .font-heading,
+.portal-app .display-title {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+.portal-app .field {
+  border-color: var(--color-portal-border);
+  background: var(--color-portal-bg);
+  color: var(--color-portal-text);
+}
+
+.portal-app .btn-primary {
+  background: var(--color-portal-accent);
+  color: #fffaf4;
+}
+
+.portal-app .btn-primary:hover {
+  filter: brightness(1.06);
+}
+
+.portal-app .btn-outline {
+  border-color: rgb(255 255 255 / 0.16);
+  color: var(--color-portal-text);
+}
+
+.portal-app .btn-outline:hover {
+  background: rgb(255 255 255 / 0.06);
+}
+
+.portal-app .portal-auth-form .text-ploy-text-secondary,
+.portal-app .portal-auth-form .text-ploy-accent-secondary {
+  color: var(--color-portal-muted);
+}
+
+.portal-app .portal-auth-form .bg-ploy-border-primary,
+.portal-app .portal-auth-form .border-ploy-border-primary {
+  border-color: var(--color-portal-border);
+}
+
+.portal-app .portal-auth-form .bg-ploy-border-primary {
+  background: var(--color-portal-border);
+}
+
+.portal-app .phone-field {
+  border-color: var(--color-portal-border);
+  background: var(--color-portal-bg);
+  color: var(--color-portal-text);
+}
+
+.portal-app .phone-field:focus-within {
+  border-color: color-mix(in srgb, var(--color-portal-accent) 70%, white);
+}
+
+.portal-app .PhoneInputGirki,
+.portal-app .PhoneInputGirki .PhoneInputInput {
+  color: var(--color-portal-text);
+}
+
+.portal-app .PhoneInputGirki .PhoneInputInput::placeholder {
+  color: color-mix(in srgb, var(--color-portal-muted) 80%, transparent);
+}
+
+.portal-app .PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border {
+  box-shadow: none;
+}
+
+.portal-app .portal-auth-form input[type='email'],
+.portal-app .portal-auth-form input[type='password'] {
+  border-color: var(--color-portal-border);
+  background: var(--color-portal-bg);
+  color: var(--color-portal-text);
+}
+
+.portal-app .portal-auth-form input[type='email']:focus,
+.portal-app .portal-auth-form input[type='password']:focus {
+  border-color: color-mix(in srgb, var(--color-portal-accent) 70%, white);
+}
+
+@utility font-icons {
+  font-family: var(--font-icons);
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  speak: never;
+}
+
+@keyframes girki-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-girki-marquee {
+  animation: girki-marquee 28s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
   }
 }
