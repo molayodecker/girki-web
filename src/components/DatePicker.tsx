@@ -123,12 +123,12 @@ export default function DatePicker({
         className={`flex w-full items-center gap-3 text-left ${compact ? '' : 'min-h-16'}`}
       >
         {compact ? null : (
-          <CalendarDays size={16} className="shrink-0 text-ploy-accent-tertiary" aria-hidden="true" />
+          <CalendarDays size={dark ? 20 : 16} className="shrink-0 text-ploy-accent-tertiary" aria-hidden="true" />
         )}
         <span className="min-w-0 flex-1">
-          {compact ? null : <span className="typography-eyebrow block">When</span>}
+          {compact ? null : <span className="typography-label block">When</span>}
           <span
-            className={`block truncate ${compact ? 'min-h-14 py-4 text-base' : 'mt-1 text-sm'} ${
+            className={`block truncate ${compact ? 'min-h-14 py-4 text-base' : dark ? 'mt-1.5 text-lg' : 'mt-1 text-sm'} ${
               value
                 ? dark
                   ? 'text-white'
@@ -177,7 +177,7 @@ export default function DatePicker({
 
           <div className="grid grid-cols-7 gap-y-1 text-center">
             {WEEKDAYS.map((day) => (
-              <span key={day} className="typography-eyebrow py-1 text-[0.62rem]">
+              <span key={day} className="typography-label py-1 text-[0.62rem]">
                 {day}
               </span>
             ))}

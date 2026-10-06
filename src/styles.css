@@ -1,10 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap");
 @import "./styles/portal-fonts.css";
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-heading: "Fraunces", "Times New Roman", Georgia, serif;
+  --font-sans: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Mona Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-display-heavy: "Fraunces", Georgia, serif;
   --font-portal: Inter, system-ui, sans-serif;
   --font-icons: Phosphor, sans-serif;
 
@@ -31,8 +33,8 @@
   --color-ploy-text-on-accent-secondary: #fffaf4;
   --color-ploy-text-on-accent-tertiary: #1c1418;
 
-  --color-ploy-background-primary: #ffe394;
-  --color-ploy-background-secondary: #ffe394;
+  --color-ploy-background-primary: #f4e2b8;
+  --color-ploy-background-secondary: #f4e2b8;
   --color-ploy-background-inverse: #1c1418;
   --color-ploy-border-primary: color-mix(in oklch, #1c1418 10%, transparent);
 
@@ -59,15 +61,16 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     margin: 0;
+    overflow-x: clip;
     background: var(--color-ploy-background-primary);
     color: var(--color-ploy-text-primary);
     font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    font-weight: 500;
   }
 
   ::selection {
@@ -94,10 +97,30 @@
 
 @utility font-heading {
   font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+/** Readable Fraunces for accent lines (replaces thin italic display serifs). */
+@utility font-display-serif {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 32;
+  letter-spacing: -0.02em;
+}
+
+/** Fraunces for hero-scale type. */
+@utility font-display-heavy {
+  font-family: var(--font-display-heavy);
+  font-weight: 650;
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 18;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
 }
 
 @utility typography-button {
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.04em;
   line-height: 1.2;
   text-transform: uppercase;
@@ -105,7 +128,23 @@
 }
 
 @utility typography-eyebrow {
-  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  background: var(--color-ploy-accent-secondary);
+  padding: 0.4rem 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: #fff;
+}
+
+@utility typography-label {
+  font-weight: 600;
   letter-spacing: 0.22em;
   line-height: 1.4;
   text-transform: uppercase;
@@ -114,10 +153,10 @@
 }
 
 @utility display-title {
-  font-family: var(--font-heading);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 0.95;
+  font-family: var(--font-sans);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
   text-wrap: balance;
 }
 
@@ -129,7 +168,7 @@
   gap: 0.5rem;
   border-radius: 999px;
   padding: 0.85rem 1.35rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   font-size: 0.72rem;
@@ -198,12 +237,15 @@
 }
 
 @utility section-pad {
-  padding-inline: 1.25rem;
-  padding-block: 5.5rem;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  padding-block: clamp(3rem, 8vw, 5.5rem);
+
+  @media (width >= 48rem) {
+    padding-block: clamp(3.5rem, 7vw, 6rem);
+  }
 
   @media (width >= 64rem) {
-    padding-inline: 2rem;
-    padding-block: 7.5rem;
+    padding-block: clamp(4.5rem, 6vw, 7.5rem);
   }
 }
 
@@ -258,6 +300,7 @@
   --font-sans: Inter, system-ui, sans-serif;
   --font-heading: Inter, system-ui, sans-serif;
   font-family: Inter, system-ui, sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -346,4 +389,21 @@
   font-weight: normal;
   line-height: 1;
   speak: never;
+}
+
+@keyframes girki-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@utility animate-girki-marquee {
+  animation: girki-marquee 28s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 }

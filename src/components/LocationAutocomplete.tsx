@@ -84,10 +84,10 @@ export default function LocationAutocomplete({
     <div ref={rootRef} className="relative min-w-0 flex-1">
       <div className={`flex items-center gap-3 ${compact ? '' : 'min-h-16'}`}>
         {compact ? null : (
-          <MapPin size={16} className="shrink-0 text-ploy-accent-tertiary" aria-hidden="true" />
+          <MapPin size={dark ? 20 : 16} className="shrink-0 text-ploy-accent-tertiary" aria-hidden="true" />
         )}
         <span className="min-w-0 flex-1">
-          {compact ? null : <span className="typography-eyebrow block">Where</span>}
+          {compact ? null : <span className="typography-label block">Where</span>}
           <input
             name={name}
             value={query ?? ''}
@@ -101,7 +101,7 @@ export default function LocationAutocomplete({
               dark
                 ? 'text-white placeholder:text-white/45'
                 : 'placeholder:text-ploy-text-secondary'
-            } ${compact ? 'min-h-14 text-base' : 'mt-1 text-sm'}`}
+            } ${compact ? 'min-h-14 text-base' : dark ? 'mt-1.5 text-lg' : 'mt-1 text-sm'}`}
             onFocus={() => setOpen(true)}
             onChange={(event) => {
               const next = event.target.value

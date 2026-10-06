@@ -42,14 +42,14 @@ export default function SearchSelect({
       >
         {icon}
         <span className="min-w-0 flex-1">
-          <span className="typography-eyebrow block">{label}</span>
+          <span className="typography-label block">{label}</span>
           <span
-            className={`mt-1 flex items-center justify-between gap-2 text-sm ${
+            className={`flex items-center justify-between gap-2 ${dark ? 'mt-1.5 text-lg' : 'mt-1 text-sm'} ${
               dark ? 'text-white' : 'text-ploy-text-primary'
             }`}
           >
             <span className="truncate">{value}</span>
-            <ChevronDown size={14} className={dark ? 'text-white/50' : 'text-ploy-text-secondary'} />
+            <ChevronDown size={dark ? 18 : 14} className={dark ? 'text-white/50' : 'text-ploy-text-secondary'} />
           </span>
         </span>
       </button>

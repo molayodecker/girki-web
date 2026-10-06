@@ -31,13 +31,26 @@ function ChefProfilePage() {
     <PageShell>
       <main className="section-pad">
         <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div className="overflow-hidden rounded-[2rem]">
-            <img src={chef.image} alt={chef.alt} className="aspect-3/4 w-full object-cover" />
+          <div className="relative">
+            <div
+              className="absolute inset-0 translate-x-3 translate-y-3 bg-girki-saffron"
+              aria-hidden="true"
+            />
+            <div className="relative overflow-hidden border-4 border-[#1c1418] bg-[#1c1418]">
+              <img src={chef.image} alt={chef.alt} className="aspect-3/4 w-full object-cover" />
+            </div>
           </div>
           <div className="lg:pt-6">
-            <p className="typography-eyebrow">{showcase ? 'Featured chef' : 'Private chef'}</p>
-            <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
-              <h1 className="display-title text-5xl lg:text-6xl">{chef.name}</h1>
+            <p className="font-heading text-[0.65rem] font-semibold tracking-[0.42em] text-[#1c1418]/55 uppercase">
+              {showcase ? 'Featured chef' : 'Private chef'}
+            </p>
+            <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-b-4 border-[#1c1418] pb-8">
+              <h1
+                className="font-display-heavy text-ploy-text-primary"
+                style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}
+              >
+                {chef.name}
+              </h1>
               {!showcase ? <StarRating rating={chef.rating} /> : null}
             </div>
             <p className="mt-5 flex items-center gap-2 text-ploy-text-secondary">
@@ -102,19 +115,30 @@ function ChefProfilePage() {
         ) : null}
 
         {menus.length ? (
-          <div className="mx-auto mt-24 max-w-7xl">
-            <p className="typography-eyebrow">Menus</p>
-            <h2 className="display-title mt-4 text-4xl">A taste of the table</h2>
+          <div className="mx-auto mt-24 max-w-7xl border-t-4 border-[#1c1418] pt-12">
+            <p className="font-heading text-[0.65rem] font-semibold tracking-[0.42em] text-[#1c1418]/55 uppercase">
+              Menus
+            </p>
+            <h2
+              className="mt-4 font-display-heavy text-ploy-text-primary"
+              style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)' }}
+            >
+              A taste of the table
+            </h2>
             <div className="mt-10 grid gap-8 md:grid-cols-2">
               {menus.map((menu) => (
-                <article key={menu.id}>
-                  <img src={menu.image} alt="" className="aspect-16/9 w-full rounded-[1.4rem] object-cover" />
+                <article key={menu.id} className="border-2 border-[#1c1418]/15 bg-white/50 p-4">
+                  <img
+                    src={menu.image}
+                    alt=""
+                    className="aspect-16/9 w-full border-2 border-[#1c1418]/20 object-cover"
+                  />
                   <h3 className="mt-5 font-heading text-2xl tracking-tight">{menu.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-ploy-text-secondary">{menu.blurb}</p>
                   <div className="mt-6 space-y-5">
                     {menu.courses.map((course) => (
                       <div key={course.title}>
-                        <p className="typography-eyebrow">{course.title} · {course.note}</p>
+                        <p className="typography-label">{course.title} · {course.note}</p>
                         <ul className="mt-2 space-y-1 text-sm text-ploy-text-secondary">
                           {course.dishes.map((dish) => <li key={dish}>{dish}</li>)}
                         </ul>

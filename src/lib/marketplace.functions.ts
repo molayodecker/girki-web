@@ -83,7 +83,7 @@ export const createRequestFn = createServerFn({ method: 'POST' })
     const input = asRecord(data)
     return {
       customerName: requiredString(input.customerName, 'Name'),
-      email: optionalString(input.email).trim() || 'guest@girki.app',
+      email: optionalString(input.email).trim() || 'guest@girki.com',
       phone: optionalString(input.phone),
       city: requiredString(input.city, 'City'),
       cuisine: optionalString(input.cuisine),

@@ -707,7 +707,7 @@ export async function listCustomerDashboard(identity: {
       created_at
     from public.chef_requests
     where
-      (${email} <> '' and lower(email) = ${email} and email <> 'guest@girki.app')
+      (${email} <> '' and lower(email) = ${email} and email <> 'guest@girki.com')
       or (${phone} <> '' and phone = ${phone})
     order by created_at desc
   `

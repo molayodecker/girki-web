@@ -25,7 +25,7 @@ function AccountTodayPage() {
   const monthSpend = data.bookings.reduce((sum, booking) => sum + booking.total, 0)
   const q = search.q
   const waitingRows = waiting.filter((item) =>
-    matchesQuery(`${'customerName' in item ? item.occasion : item.occasion} ${item.status}`, q),
+    matchesQuery(`${item.occasion} ${item.status}`, q),
   )
 
   return (

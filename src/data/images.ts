@@ -1,0 +1,35 @@
+import { mediaUrl } from '../lib/media'
+
+/** Marketing and product imagery served from Cloudflare R2 (girki-media). */
+export const images = {
+  hero: mediaUrl('web/marketing/hero.webp'),
+  heroVideo: mediaUrl('web/videos/hero.mp4'),
+  privateDinner: mediaUrl('web/marketing/private-dinner.webp'),
+  mealPrep: mediaUrl('web/marketing/meal-prep.webp'),
+  dateNight: mediaUrl('web/marketing/date-night.webp'),
+  chefWok: mediaUrl('web/marketing/chef-wok-kitchen.jpg'),
+  chefFlour: mediaUrl('web/marketing/chef-flour-portrait.jpg'),
+  partiesCelebrations: mediaUrl('web/marketing/parties-celebrations.jpg'),
+  corporateEvents: mediaUrl('web/experiences/corporate-events.png'),
+  corporateEventsVideo: mediaUrl('web/videos/corporate-events.mp4'),
+  privateDinnerVideo: mediaUrl('web/videos/private-dinner.mp4'),
+  dateNightVideo: mediaUrl('web/videos/date-night.mp4'),
+  vacationChef: mediaUrl('web/experiences/vacation-chef.png'),
+  cuisine: mediaUrl('web/marketing/cuisine-table.webp'),
+  opportunity: mediaUrl('web/marketing/chef-opportunity.webp'),
+  howItWorksKitchen: mediaUrl('web/marketing/chef-kitchen.jpg'),
+  onboardingJollof: mediaUrl('web/onboarding/jollof.jpg'),
+  onboardingPrivateChef: mediaUrl('web/onboarding/private-chef.jpg'),
+  onboardingChefPortrait: mediaUrl('web/onboarding/chef-portrait.jpg'),
+  homeFriedRiceBanner: mediaUrl('web/home/fried-rice-banner.jpg'),
+  trustIdentity: mediaUrl('web/trust/identity.png'),
+  trustPayments: mediaUrl('web/trust/payments.png'),
+  trustQuality: mediaUrl('web/trust/quality.png'),
+  trustSupport: mediaUrl('web/trust/support.png'),
+  /** Local app UI captures; upload to R2 under web/marketing/app/* when ready. */
+  appHomeUi: '/images/marketing/girki-app-home.jpg',
+  appOrderUi: '/images/marketing/girki-app-order.jpg',
+  appCheckout: '/images/marketing/app/checkout.png',
+  appChefProfile: '/images/marketing/app/chef-profile.jpg',
+  appBookingDetail: '/images/marketing/app/booking-detail.jpg',
+} as const

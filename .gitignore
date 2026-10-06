@@ -1,3 +1,6 @@
+# Staged for `pnpm media:upload` (sources live in girki mobile + public/)
+media/
+
 node_modules
 .DS_Store
 dist

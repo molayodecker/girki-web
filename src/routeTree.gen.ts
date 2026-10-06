@@ -26,6 +26,7 @@ import { Route as AccountProfileRouteImport } from './routes/account/profile'
 import { Route as AccountRequestsRouteImport } from './routes/account/requests'
 import { Route as AccountReviewsRouteImport } from './routes/account/reviews'
 import { Route as AccountSettingsRouteImport } from './routes/account/settings'
+import { Route as ApiHealthRouteImport } from './routes/api/health'
 import { Route as ApiWhatsappRouteImport } from './routes/api/whatsapp'
 import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 import { Route as ChefDashboardIndexRouteImport } from './routes/chef-dashboard/index'
@@ -135,6 +136,11 @@ const AccountSettingsRoute = AccountSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => AccountRouteRoute,
+} as any)
+const ApiHealthRoute = ApiHealthRouteImport.update({
+  id: '/api/health',
+  path: '/api/health',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiWhatsappRoute = ApiWhatsappRouteImport.update({
   id: '/api/whatsapp',
@@ -279,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/account/requests': typeof AccountRequestsRoute
   '/account/reviews': typeof AccountReviewsRoute
   '/account/settings': typeof AccountSettingsRoute
+  '/api/health': typeof ApiHealthRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/chef-dashboard/calendar': typeof ChefDashboardCalendarRoute
@@ -317,6 +324,7 @@ export interface FileRoutesByTo {
   '/account/requests': typeof AccountRequestsRoute
   '/account/reviews': typeof AccountReviewsRoute
   '/account/settings': typeof AccountSettingsRoute
+  '/api/health': typeof ApiHealthRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/chef-dashboard/calendar': typeof ChefDashboardCalendarRoute
@@ -361,6 +369,7 @@ export interface FileRoutesById {
   '/account/requests': typeof AccountRequestsRoute
   '/account/reviews': typeof AccountReviewsRoute
   '/account/settings': typeof AccountSettingsRoute
+  '/api/health': typeof ApiHealthRoute
   '/api/whatsapp': typeof ApiWhatsappRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/chef-dashboard/calendar': typeof ChefDashboardCalendarRoute
@@ -406,6 +415,7 @@ export interface FileRouteTypes {
     | '/account/requests'
     | '/account/reviews'
     | '/account/settings'
+    | '/api/health'
     | '/api/whatsapp'
     | '/auth/callback'
     | '/chef-dashboard/calendar'
@@ -444,6 +454,7 @@ export interface FileRouteTypes {
     | '/account/requests'
     | '/account/reviews'
     | '/account/settings'
+    | '/api/health'
     | '/api/whatsapp'
     | '/auth/callback'
     | '/chef-dashboard/calendar'
@@ -487,6 +498,7 @@ export interface FileRouteTypes {
     | '/account/requests'
     | '/account/reviews'
     | '/account/settings'
+    | '/api/health'
     | '/api/whatsapp'
     | '/auth/callback'
     | '/chef-dashboard/calendar'
@@ -522,6 +534,7 @@ export interface RootRouteChildren {
   BecomeAChefRoute: typeof BecomeAChefRoute
   SignInRoute: typeof SignInRoute
   VerifyPhoneRoute: typeof VerifyPhoneRoute
+  ApiHealthRoute: typeof ApiHealthRoute
   ApiWhatsappRoute: typeof ApiWhatsappRoute
   AuthCallbackRoute: typeof AuthCallbackRoute
   ChefOnboardingRoute: typeof ChefOnboardingRoute
@@ -649,6 +662,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/account/settings'
       preLoaderRoute: typeof AccountSettingsRouteImport
       parentRoute: typeof AccountRouteRoute
+    }
+    '/api/health': {
+      id: '/api/health'
+      path: '/api/health'
+      fullPath: '/api/health'
+      preLoaderRoute: typeof ApiHealthRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/whatsapp': {
       id: '/api/whatsapp'
@@ -937,6 +957,7 @@ const rootRouteChildren: RootRouteChildren = {
   BecomeAChefRoute: BecomeAChefRoute,
   SignInRoute: SignInRoute,
   VerifyPhoneRoute: VerifyPhoneRoute,
+  ApiHealthRoute: ApiHealthRoute,
   ApiWhatsappRoute: ApiWhatsappRoute,
   AuthCallbackRoute: AuthCallbackRoute,
   ChefOnboardingRoute: ChefOnboardingRoute,

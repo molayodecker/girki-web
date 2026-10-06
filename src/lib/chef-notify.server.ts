@@ -20,7 +20,7 @@ function appUrl() {
 }
 
 function mailFrom() {
-  return process.env.MAIL_FROM ?? 'Girki <hello@trygirki.com>'
+  return process.env.MAIL_FROM ?? 'Girki <hello@girki.com>'
 }
 
 export function normalizeE164(value: string) {
