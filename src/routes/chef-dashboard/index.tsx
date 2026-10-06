@@ -136,7 +136,7 @@ function ChefTodayPage() {
         <div className="mb-4">
           <h2 className="text-lg font-semibold tracking-tight">Requests waiting on you</h2>
           <p className="mt-1 text-sm text-portal-muted">
-            Guests see a reply time on your profile — answer within 24 hours to keep it.
+            Guests see a reply time on your profile. Answer within 24 hours to keep it.
           </p>
         </div>
         {waitingRows.length === 0 ? (

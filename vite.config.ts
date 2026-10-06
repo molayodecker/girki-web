@@ -7,13 +7,24 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  const isProduction = mode === 'production'
 
   return {
     resolve: { tsconfigPaths: true },
-    plugins: [devtools(), tailwindcss(), tanstackStart(), nitro(), viteReact()],
+    optimizeDeps: {
+      // Vite's prebundle drops seroval's isStream export, which blocks client hydration.
+      exclude: ['seroval'],
+    },
+    plugins: [
+      ...(isProduction ? [] : [devtools()]),
+      tailwindcss(),
+      tanstackStart(),
+      nitro(),
+      viteReact(),
+    ],
     define: {
       'import.meta.env.VITE_SHOWCASE_ONLY_CHEFS': JSON.stringify(
-        env.SHOWCASE_ONLY_CHEFS ?? 'false',
+        env.SHOWCASE_ONLY_CHEFS ?? env.VITE_SHOWCASE_ONLY_CHEFS ?? 'false',
       ),
     },
   }

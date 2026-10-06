@@ -24,7 +24,7 @@ export function matchesQuery(haystack: string, query: string) {
 }
 
 export function eventDateParts(eventDate: string) {
-  if (!eventDate) return { day: '—', month: '' }
+  if (!eventDate) return { day: '-', month: '' }
   const parsed = new Date(`${eventDate}T12:00:00`)
   if (Number.isNaN(parsed.getTime())) return { day: eventDate, month: '' }
   return {

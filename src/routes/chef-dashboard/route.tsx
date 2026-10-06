@@ -84,7 +84,7 @@ function ChefPortalChrome({ children }: { children: ReactNode }) {
       subtitle={isTodayPage ? todaySubtitle : page.subtitle}
       brandLabel="Girki · chef"
       userName={displayName || chefPortalDemo.settings.name}
-      userMeta={chef ? `${chef.city} · Verified` : 'Lagos · Verified'}
+      userMeta={chef ? `${chef.city} · Verified` : 'Accra · Verified'}
       notificationCount={chefPortalDemo.badges.messages}
       searchPlaceholder="Search bookings, guests, menus"
       searchValue={search.q}

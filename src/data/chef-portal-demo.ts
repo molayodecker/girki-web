@@ -128,7 +128,7 @@ export const chefPortalDemo = {
     ],
     notes: {
       from: 'Amara',
-      text: "It's my mother's 60th. Eight of us, one pescatarian and one who can't take pepper at all. We'd love the goat to stay on the menu for everyone else. Kitchen is gas, four burners, no oven — is that workable?",
+      text: "It's my mother's 60th. Eight of us, one pescatarian and one who can't take pepper at all. We'd love the goat to stay on the menu for everyone else. Kitchen is gas, four burners, no oven. Is that workable?",
       tags: ['1 pescatarian', 'No pepper', 'No oven', 'Serveware needed'],
     },
     menuName: 'Harmattan Tasting',
@@ -151,7 +151,7 @@ export const chefPortalDemo = {
       name: 'Amara Okonkwo',
       initials: 'AO',
       meta: '3 dinners booked · joined 2024',
-      note: 'You cooked for Amara in March — rated 5 stars.',
+      note: 'You cooked for Amara in March, rated 5 stars.',
     },
     dayCard: {
       text: 'Nothing else booked on 30 August. Travel from Yaba to Ikoyi is about 45 minutes at that hour.',
@@ -194,7 +194,7 @@ export const chefPortalDemo = {
         name: 'Harmattan Tasting',
         status: 'Published' as const,
         blurb:
-          'A seated tasting built around dry-season produce — catfish pepper soup, yam pave, goat shoulder. Two hours at the table.',
+          'A seated tasting built around dry-season produce: catfish pepper soup, yam pave, goat shoulder. Two hours at the table.',
         courses: '5',
         price: '₦22,500',
         booked: '11 times',
@@ -274,12 +274,12 @@ export const chefPortalDemo = {
     chat: [
       {
         from: 'guest' as const,
-        text: "Hi Kemi — booked you for my mother's 60th. Eight of us, one pescatarian, and one who can't take pepper at all.",
+        text: "Hi Kemi, booked you for my mother's 60th. Eight of us, one pescatarian, and one who can't take pepper at all.",
         time: '4:12 PM',
       },
       {
         from: 'chef' as const,
-        text: "Congratulations to her. Both easy — I'll swap a grilled prawn plate in for the pescatarian and hold the pepper on a separate pot.",
+        text: "Congratulations to her. Both easy. I'll swap a grilled prawn plate in for the pescatarian and hold the pepper on a separate pot.",
         time: '4:31 PM',
       },
       {
@@ -289,7 +289,7 @@ export const chefPortalDemo = {
       },
       {
         from: 'chef' as const,
-        text: "Yes — the whole menu runs on the hob. I'll confirm the table today.",
+        text: "Yes, the whole menu runs on the hob. I'll confirm the table today.",
         time: '5:20 PM',
       },
     ],
@@ -381,7 +381,7 @@ export const chefPortalDemo = {
         name: 'Bola Ige',
         stars: 4,
         meta: 'Sunday Rice Table · 9 Aug',
-        text: 'Excellent food. We would have liked a little more warning about the smoke from the ofada — worth opening a window early.',
+        text: 'Excellent food. We would have liked a little more warning about the smoke from the ofada. Worth opening a window early.',
       },
       {
         name: 'Amara Okonkwo',
