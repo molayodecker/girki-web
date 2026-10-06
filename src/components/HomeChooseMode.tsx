@@ -27,6 +27,8 @@ const modes = [
   },
 ] as const
 
+const pathAccentBase = 'font-display-serif text-[1.45em] leading-none'
+
 export default function HomeChooseMode() {
   return (
     <section
@@ -38,8 +40,15 @@ export default function HomeChooseMode() {
           PICK YOUR PATH
         </p>
         <p className="mt-3 max-w-md text-lg text-[#1c1418]/85">
-          <span className="font-heading font-semibold">Two ways to eat well.</span>{' '}
-          <span className="font-heading font-medium">Same chefs. Different nights.</span>
+          <span className="font-heading font-semibold">
+            <span className={`${pathAccentBase} text-ploy-accent-secondary`}>Two</span> ways to
+            eat well.
+          </span>{' '}
+          <span className="font-heading font-medium">
+            Same{' '}
+            <span className={`${pathAccentBase} text-ploy-accent-primary`}>chefs</span>.{' '}
+            <span className={`${pathAccentBase} text-girki-saffron`}>Different</span> nights.
+          </span>
         </p>
 
         <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-0">
