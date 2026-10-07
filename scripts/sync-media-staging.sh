@@ -52,7 +52,9 @@ if [ -d "$ROOT/public/images/experiences" ]; then
   cp "$ROOT/public/images/experiences/"* "$DEST/web/experiences/" 2>/dev/null || true
 fi
 if [ -d "$ROOT/public/images/trust" ]; then
-  cp "$ROOT/public/images/trust/"*.png "$DEST/web/trust/" 2>/dev/null || true
+  for ext in png jpg jpeg; do
+    cp "$ROOT/public/images/trust/"*."$ext" "$DEST/web/trust/" 2>/dev/null || true
+  done
 fi
 
 for v in hero.mp4 private-dinner.mp4 date-night.mp4 corporate-events.mp4 meal-prep.mp4 parties-celebrations.mp4 vacation-chef.mp4; do
