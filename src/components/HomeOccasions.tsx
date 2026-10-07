@@ -6,19 +6,34 @@ import { experiences } from '../data/home'
 
 export default function HomeOccasions() {
   const [active, setActive] = useState(0)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  )
   const videoRef = useRef<HTMLVideoElement>(null)
   const item = experiences[active]
   const hoverVideo = 'video' in item ? item.video : undefined
+  const shouldShowVideo = Boolean(hoverVideo) && !prefersReducedMotion
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches)
+
+    updatePreference()
+    mediaQuery.addEventListener('change', updatePreference)
+    return () => mediaQuery.removeEventListener('change', updatePreference)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
-    if (!video || !hoverVideo) return
+    if (!video || !shouldShowVideo) return
     void video.play().catch(() => {})
     return () => {
       video.pause()
       video.currentTime = 0
     }
-  }, [active, hoverVideo])
+  }, [active, shouldShowVideo])
 
   return (
     <section id="experiences" className="relative overflow-hidden border-t-4 border-[#1c1418] bg-ploy-background-primary">
@@ -73,7 +88,7 @@ export default function HomeOccasions() {
                       hoverVideo ? 'opacity-100' : 'opacity-100'
                     }`}
                   />
-                  {hoverVideo ? (
+                  {shouldShowVideo && hoverVideo ? (
                     <video
                       ref={videoRef}
                       key={item.title}
