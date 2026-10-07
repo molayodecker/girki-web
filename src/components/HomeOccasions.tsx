@@ -84,9 +84,7 @@ export default function HomeOccasions() {
                     key={item.image}
                     src={item.image}
                     alt=""
-                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-                      hoverVideo ? 'opacity-100' : 'opacity-100'
-                    }`}
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
                   />
                   {shouldShowVideo && hoverVideo ? (
                     <video
