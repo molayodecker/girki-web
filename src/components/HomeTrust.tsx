@@ -1,9 +1,17 @@
 import { useState } from 'react'
 import { trustItems } from '../data/home'
 
+const trustPhotoPillars = new Set([
+  'Identity-minded profiles',
+  'Protected payments',
+  'Quality standards',
+  'Human support',
+])
+
 export default function HomeTrust() {
   const [active, setActive] = useState(0)
   const item = trustItems[active]
+  const iconIsPhoto = trustPhotoPillars.has(item.title)
 
   return (
     <section
@@ -34,12 +42,20 @@ export default function HomeTrust() {
           <div className="min-w-0 lg:col-span-8 xl:col-span-9">
             <div className="relative border-4 border-[#1c1418] bg-[#1c1418]">
               <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-                <div className="flex items-center justify-center border-b-4 border-[#1c1418] bg-girki-cream p-10 sm:p-12 lg:border-b-0 lg:border-r-4">
+                <div
+                  className={`relative min-h-56 border-b-4 border-[#1c1418] bg-girki-cream lg:min-h-full lg:border-b-0 lg:border-r-4 ${
+                    iconIsPhoto ? 'overflow-hidden p-0' : 'flex items-center justify-center p-10 sm:p-12'
+                  }`}
+                >
                   <img
                     key={item.title}
                     src={item.icon}
                     alt=""
-                    className="max-h-40 w-auto object-contain sm:max-h-48"
+                    className={
+                      iconIsPhoto
+                        ? 'absolute inset-0 h-full w-full object-cover object-center'
+                        : 'max-h-40 w-auto object-contain sm:max-h-48'
+                    }
                   />
                 </div>
                 <div className="bg-girki-charcoal p-8 sm:p-10 lg:p-12">

@@ -2,16 +2,15 @@ import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import GirkiCroppedShape from './patterns/GirkiCroppedShape'
-import { cuisines } from '../data/home'
-import { images } from '../data/images'
+import { cuisines, cuisineSpotlightImages } from '../data/home'
 
 const focusByCuisine: Record<(typeof cuisines)[number], string> = {
   Ghanaian: 'object-[42%_center]',
-  'West African': 'object-[55%_38%]',
-  'Coastal & seafood': 'object-[70%_45%]',
-  Continental: 'object-[30%_50%]',
-  'Vegan & vegetarian': 'object-[50%_60%]',
-  'Chef’s tasting menus': 'object-[center_42%]',
+  'West African': 'object-center',
+  'Coastal & seafood': 'object-center',
+  Continental: 'object-center',
+  'Vegan & vegetarian': 'object-center',
+  'Chef’s tasting menus': 'object-center',
 }
 
 export default function HomeCuisine() {
@@ -59,7 +58,8 @@ export default function HomeCuisine() {
               <div className="relative -rotate-2 overflow-hidden border-4 border-[#1c1418] bg-[#1c1418] transition-transform duration-500 hover:rotate-0">
                 <div className="relative aspect-[4/5] sm:aspect-[5/6]">
                   <img
-                    src={images.homeFriedRiceBanner}
+                    key={activeCuisine}
+                    src={cuisineSpotlightImages[activeCuisine]}
                     alt=""
                     className={`absolute inset-0 h-full w-full object-cover transition-all duration-700 ${focusByCuisine[activeCuisine]}`}
                   />

@@ -89,10 +89,7 @@ export default function HomeOccasions() {
                   ) : null}
                   <div className="absolute inset-0 bg-linear-to-t from-[#1c1418]/90 via-[#1c1418]/25 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                    <p className="font-heading text-xs font-semibold uppercase tracking-[0.14em] text-girki-saffron">
-                      Now showing
-                    </p>
-                    <p className="mt-2 font-display-heavy text-3xl text-girki-cream sm:text-4xl">
+                    <p className="font-display-heavy text-3xl text-girki-cream sm:text-4xl">
                       {item.title}
                     </p>
                     <p className="mt-2 max-w-md text-sm leading-relaxed text-girki-cream/80 sm:text-base">
