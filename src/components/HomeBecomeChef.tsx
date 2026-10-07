@@ -20,8 +20,8 @@ export default function HomeBecomeChef() {
             <div className="relative min-h-72 lg:min-h-[28rem]">
               <img
                 src={images.opportunity}
-                alt="A Black professional chef smiling in his chef jacket"
-                className="absolute inset-0 h-full w-full object-cover object-[52%_center]"
+                alt="Chef presenting a gourmet burger in a professional kitchen"
+                className="absolute inset-0 h-full w-full object-cover object-center"
               />
               <div
                 className="absolute inset-0 bg-linear-to-t from-[#2d1827]/80 via-transparent to-transparent lg:bg-linear-to-r lg:from-transparent lg:via-transparent lg:to-[#2d1827]/40"

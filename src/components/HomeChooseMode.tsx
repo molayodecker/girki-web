@@ -47,7 +47,8 @@ export default function HomeChooseMode() {
           <span className="font-heading font-medium">
             Same{' '}
             <span className={`${pathAccentBase} text-ploy-accent-primary`}>chefs</span>.{' '}
-            <span className={`${pathAccentBase} text-girki-saffron`}>Different</span> nights.
+            <span className={`${pathAccentBase} text-girki-saffron`}>Different</span>{' '}
+            <span className={`${pathAccentBase} text-[#1e4d3a]`}>nights</span>.
           </span>
         </p>
 

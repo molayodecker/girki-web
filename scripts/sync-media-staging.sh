@@ -55,7 +55,7 @@ if [ -d "$ROOT/public/images/trust" ]; then
   cp "$ROOT/public/images/trust/"*.png "$DEST/web/trust/" 2>/dev/null || true
 fi
 
-for v in hero.mp4 private-dinner.mp4 date-night.mp4 corporate-events.mp4; do
+for v in hero.mp4 private-dinner.mp4 date-night.mp4 corporate-events.mp4 meal-prep.mp4 parties-celebrations.mp4 vacation-chef.mp4; do
   if [ -f "$ROOT/public/videos/$v" ]; then
     cp "$ROOT/public/videos/$v" "$DEST/web/videos/$v"
   fi

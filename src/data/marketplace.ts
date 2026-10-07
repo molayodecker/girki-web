@@ -112,7 +112,7 @@ const allChefs: Chef[] = [
     rating: 4.9,
     services: 38,
     image: chefPhotoUrl('ama'),
-    alt: 'Chef Ama Mensah, private chef in Accra, Ghana',
+    alt: 'Chef Ama Mensah smiling in a professional kitchen, private chef in Accra, Ghana',
     bio: 'Ama cooks coastal Ghanaian food at home: smoked fish, palm-nut, and charcoal grills served as relaxed sharing plates.',
     included: [
       'Menu design',
@@ -156,7 +156,7 @@ const allChefs: Chef[] = [
     rating: 4.8,
     services: 52,
     image: chefPhotoUrl('kwame'),
-    alt: 'Chef Kwame Ofori, private chef in Accra, Ghana',
+    alt: 'Chef Kwame Ofori in a professional kitchen, private chef in Accra, Ghana',
     bio: 'Kwame makes fresh pasta at your counter and finishes plates with Ghanaian produce for long, generous dinners.',
     included: [
       'Menu design',

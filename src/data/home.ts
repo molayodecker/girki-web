@@ -20,6 +20,7 @@ export const experiences = [
     title: 'Weekly meal prep',
     copy: 'Fresh meals prepared around your week and household.',
     image: images.mealPrep,
+    video: images.mealPrepVideo,
   },
   {
     title: 'Date night',
@@ -31,6 +32,7 @@ export const experiences = [
     title: 'Parties & celebrations',
     copy: 'Birthdays, graduations, anniversaries, and special moments.',
     image: images.partiesCelebrations,
+    video: images.partiesCelebrationsVideo,
   },
   {
     title: 'Corporate events',
@@ -42,6 +44,7 @@ export const experiences = [
     title: 'Vacation chef',
     copy: 'A private chef for your villa, Airbnb, or group trip.',
     image: images.vacationChef,
+    video: images.vacationChefVideo,
   },
 ] as const
 
@@ -53,6 +56,15 @@ export const cuisines = [
   'Vegan & vegetarian',
   'Chef’s tasting menus',
 ] as const
+
+export const cuisineSpotlightImages: Record<(typeof cuisines)[number], string> = {
+  Ghanaian: images.homeFriedRiceBanner,
+  'West African': images.westAfricanCuisine,
+  'Coastal & seafood': images.coastalSeafood,
+  Continental: images.continentalCuisine,
+  'Vegan & vegetarian': images.veganVegetarian,
+  'Chef’s tasting menus': images.chefsTastingMenus,
+}
 
 export const trustItems = [
   {
