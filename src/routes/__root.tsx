@@ -22,34 +22,34 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Girki: Private Chefs in Ghana',
+        title: 'Girki: Bringing Africa’s Best Chefs to Your Table',
       },
       { name: 'theme-color', content: '#e85c32' },
       {
         name: 'description',
         content:
-          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Ghana.',
+          'Order meal plans from talented African chefs or book a private chef for dinners, celebrations, vacations, and special experiences.',
       },
       { name: 'robots', content: 'index, follow' },
       { property: 'og:type', content: 'website' },
       {
         property: 'og:title',
-        content: 'Girki: Private Chefs in Ghana',
+        content: 'Girki: Bringing Africa’s Best Chefs to Your Table',
       },
       {
         property: 'og:description',
         content:
-          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Ghana.',
+          'Order meal plans from talented African chefs or book a private chef for dinners, celebrations, vacations, and special experiences.',
       },
       { name: 'twitter:card', content: 'summary' },
       {
         name: 'twitter:title',
-        content: 'Girki: Private Chefs in Ghana',
+        content: 'Girki: Bringing Africa’s Best Chefs to Your Table',
       },
       {
         name: 'twitter:description',
         content:
-          'Discover and book talented private chefs for everyday meals, intimate dinners, celebrations, vacations, and culinary experiences across Ghana.',
+          'Order meal plans from talented African chefs or book a private chef for dinners, celebrations, vacations, and special experiences.',
       },
     ],
     links: [

@@ -104,7 +104,10 @@ export default function HomeAppOrder() {
                 <ArrowUpRight size={18} aria-hidden="true" />
               </Link>
               <p className="mt-4 text-center text-xs tracking-[0.12em] text-girki-cream/45 uppercase lg:text-left">
-                App stores soon · Web works today
+                App stores soon ·{' '}
+                <span className="animate-girki-baking font-semibold tracking-[0.16em]">
+                  Web Baking
+                </span>
               </p>
             </div>
           </div>

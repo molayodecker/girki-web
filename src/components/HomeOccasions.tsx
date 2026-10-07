@@ -6,19 +6,34 @@ import { experiences } from '../data/home'
 
 export default function HomeOccasions() {
   const [active, setActive] = useState(0)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false,
+  )
   const videoRef = useRef<HTMLVideoElement>(null)
   const item = experiences[active]
   const hoverVideo = 'video' in item ? item.video : undefined
+  const shouldShowVideo = Boolean(hoverVideo) && !prefersReducedMotion
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches)
+
+    updatePreference()
+    mediaQuery.addEventListener('change', updatePreference)
+    return () => mediaQuery.removeEventListener('change', updatePreference)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
-    if (!video || !hoverVideo) return
+    if (!video || !shouldShowVideo) return
     void video.play().catch(() => {})
     return () => {
       video.pause()
       video.currentTime = 0
     }
-  }, [active, hoverVideo])
+  }, [active, shouldShowVideo])
 
   return (
     <section id="experiences" className="relative overflow-hidden border-t-4 border-[#1c1418] bg-ploy-background-primary">
@@ -69,11 +84,9 @@ export default function HomeOccasions() {
                     key={item.image}
                     src={item.image}
                     alt=""
-                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
-                      hoverVideo ? 'opacity-100' : 'opacity-100'
-                    }`}
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-500"
                   />
-                  {hoverVideo ? (
+                  {shouldShowVideo && hoverVideo ? (
                     <video
                       ref={videoRef}
                       key={item.title}
@@ -89,10 +102,7 @@ export default function HomeOccasions() {
                   ) : null}
                   <div className="absolute inset-0 bg-linear-to-t from-[#1c1418]/90 via-[#1c1418]/25 to-transparent" />
                   <div className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                    <p className="font-heading text-xs font-semibold uppercase tracking-[0.14em] text-girki-saffron">
-                      Now showing
-                    </p>
-                    <p className="mt-2 font-display-heavy text-3xl text-girki-cream sm:text-4xl">
+                    <p className="font-display-heavy text-3xl text-girki-cream sm:text-4xl">
                       {item.title}
                     </p>
                     <p className="mt-2 max-w-md text-sm leading-relaxed text-girki-cream/80 sm:text-base">

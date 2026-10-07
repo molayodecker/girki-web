@@ -21,7 +21,7 @@ import type {
   ChefRequestRecord,
   ChefSession,
 } from '../../lib/marketplace/types'
-import PortalAuthScreen from './PortalAuthScreen'
+import PageShell, { PageIntro } from '../layout/PageShell'
 
 type ChefPortalContextValue = {
   session: ChefSession
@@ -225,44 +225,59 @@ function ChefLogin({
   }
 
   return (
-    <PortalAuthScreen
-      eyebrow="Chef portal"
-      title="Sign in to your kitchen"
-      copy="Use your phone, Google, Facebook, or email. Access still requires an approved Girki chef profile."
-      error={portalError}
-      footer={
-        <p>
-          Not a chef yet?{' '}
-          <Link to="/sign-in" search={{ intent: 'chef' }}>
-            Apply as a chef
-          </Link>
-        </p>
-      }
-    >
-      <AuthLoginPanel
-        intent="chef-portal"
-        phoneSubmitLabel="Continue to verification"
-        onPhoneContinue={async () => {
-          await navigate({ to: '/verify-phone' })
-        }}
-        onSessionReady={openPortalFromSupabase}
-        onEmailSignIn={async ({ email, password }) => {
-          try {
-            await signInWithEmailPassword(email, password)
-            await openPortalFromSupabase()
-          } catch {
-            const session = await chefLoginFn({ data: { email, password } })
-            onSignedIn(session)
-          }
-        }}
-        onEmailSignUp={async ({ email, password }) => {
-          const result = await signUpWithEmailPassword(email, password)
-          if (!result.session) {
-            throw new Error('Check your email to confirm your account, then sign in.')
-          }
-          await openPortalFromSupabase()
-        }}
-      />
-    </PortalAuthScreen>
+    <PageShell tone="sand">
+      <main className="section-pad">
+        <div className="mx-auto max-w-md">
+          <PageIntro
+            eyebrow="Chef portal"
+            title="Sign in to your kitchen"
+            copy="Use your phone, Google, Facebook, or email. Access still requires an approved Girki chef profile."
+          />
+          {portalError ? (
+            <p
+              role="alert"
+              className="mt-6 rounded-2xl border-2 border-ploy-accent-secondary bg-ploy-accent-secondary/10 px-4 py-3 text-sm text-ploy-text-primary"
+            >
+              {portalError}
+            </p>
+          ) : null}
+          <div className="mt-10 rounded-[1.8rem] border border-ploy-border-primary bg-ploy-neutral-primary-s0 p-6 sm:p-8">
+            <AuthLoginPanel
+              intent="chef-portal"
+              phoneSubmitLabel="Continue to verification"
+              onPhoneContinue={async () => {
+                await navigate({ to: '/verify-phone' })
+              }}
+              onSessionReady={openPortalFromSupabase}
+              onEmailSignIn={async ({ email, password }) => {
+                try {
+                  await signInWithEmailPassword(email, password)
+                  await openPortalFromSupabase()
+                } catch {
+                  const session = await chefLoginFn({ data: { email, password } })
+                  onSignedIn(session)
+                }
+              }}
+              onEmailSignUp={async ({ email, password }) => {
+                const result = await signUpWithEmailPassword(email, password)
+                if (!result.session) {
+                  throw new Error('Check your email to confirm your account, then sign in.')
+                }
+                await openPortalFromSupabase()
+              }}
+            />
+            <p className="mt-6 text-sm leading-relaxed text-ploy-text-secondary">
+              By continuing you agree to Girki’s terms. SMS rates may apply for phone codes.
+            </p>
+            <p className="mt-4 text-sm text-ploy-text-secondary">
+              Not a chef yet?{' '}
+              <Link to="/become-a-chef" className="underline underline-offset-4">
+                Apply as a chef
+              </Link>
+            </p>
+          </div>
+        </div>
+      </main>
+    </PageShell>
   )
 }
