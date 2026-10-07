@@ -39,6 +39,8 @@ fi
 # Web marketing images currently in public/
 for f in \
   parties-celebrations.jpg \
+  meal-prep.jpg \
+  become-a-chef-hero.jpg \
   chef-wok-kitchen.jpg \
   chef-flour-portrait.jpg \
   date-night.jpg; do
@@ -96,16 +98,10 @@ download \
   'https://cdn.ploy.ai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-private-dinner-experience-260813050741.webp' \
   "$DEST/web/marketing/private-dinner.webp"
 download \
-  'https://cdn.ploy.ai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-weekly-meal-prep-260813050736.webp' \
-  "$DEST/web/marketing/meal-prep.webp"
-download \
   'https://storage.googleapis.com/ployai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-date-night-experience-260814033355.webp' \
   "$DEST/web/marketing/date-night.webp"
 download \
   'https://cdn.ploy.ai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/ai-girki-african-cuisine-table-260813050738.webp' \
   "$DEST/web/marketing/cuisine-table.webp"
-download \
-  'https://cdn.ploy.ai/7fa0b0a2-fa30-47e8-b8d1-487f2abe8b69/user/40cfeae9-girki-real-black-chef-portrait.webp' \
-  "$DEST/web/marketing/chef-opportunity.webp"
 
 echo "Staged $(find "$DEST" -type f | wc -l | tr -d ' ') files under $DEST"
