@@ -16,7 +16,14 @@ mkdir -p "$DEST"
 
 rsync -a "$MOBILE/media/" "$DEST/"
 
-mkdir -p "$DEST/web/onboarding" "$DEST/web/home" "$DEST/web/experiences" "$DEST/web/marketing/app" "$DEST/web/videos" "$DEST/web/trust"
+mkdir -p \
+  "$DEST/web/onboarding" \
+  "$DEST/web/home" \
+  "$DEST/web/experiences" \
+  "$DEST/web/marketing/app" \
+  "$DEST/web/videos" \
+  "$DEST/web/trust" \
+  "$DEST/web/cuisine"
 
 # Mobile app bundles (onboarding, mode tiles, fried-rice banner)
 if [ -d "$MOBILE/assets/images/onboarding" ]; then
@@ -43,7 +50,7 @@ if [ -f "$ROOT/public/images/how-it-works/chef-kitchen.jpg" ]; then
   cp "$ROOT/public/images/how-it-works/chef-kitchen.jpg" "$DEST/web/marketing/chef-kitchen.jpg"
 fi
 if [ -d "$ROOT/public/images/marketing" ]; then
-  cp "$ROOT/public/images/marketing/"*.jpg "$DEST/web/marketing/" 2>/dev/null || true
+  cp "$ROOT/public/images/marketing/"* "$DEST/web/marketing/" 2>/dev/null || true
   if [ -d "$ROOT/public/images/marketing/app" ]; then
     cp "$ROOT/public/images/marketing/app/"* "$DEST/web/marketing/app/" 2>/dev/null || true
   fi
@@ -52,7 +59,10 @@ if [ -d "$ROOT/public/images/experiences" ]; then
   cp "$ROOT/public/images/experiences/"* "$DEST/web/experiences/" 2>/dev/null || true
 fi
 if [ -d "$ROOT/public/images/trust" ]; then
-  cp "$ROOT/public/images/trust/"*.png "$DEST/web/trust/" 2>/dev/null || true
+  cp "$ROOT/public/images/trust/"* "$DEST/web/trust/" 2>/dev/null || true
+fi
+if [ -d "$ROOT/public/images/cuisine" ]; then
+  cp "$ROOT/public/images/cuisine/"* "$DEST/web/cuisine/" 2>/dev/null || true
 fi
 
 for v in hero.mp4 private-dinner.mp4 date-night.mp4 corporate-events.mp4 meal-prep.mp4 parties-celebrations.mp4 vacation-chef.mp4; do
