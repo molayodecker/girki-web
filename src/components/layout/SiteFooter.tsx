@@ -1,7 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight, CalendarDays, House, Search, UserRound, Utensils } from 'lucide-react'
-import GirkiMark from '../brand/GirkiMark'
-
 const columns = [
   {
     title: 'Company',
@@ -46,14 +44,14 @@ export default function SiteFooter() {
         <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 md:py-16 lg:py-20">
           <div className="grid gap-14 lg:grid-cols-12 lg:gap-10">
             <div className="lg:col-span-4 xl:col-span-3">
-              <Link to="/" aria-label="Girki home" className="group inline-flex flex-col gap-4">
-                <GirkiMark size={52} />
-                <span
-                  className="font-display-heavy leading-none text-girki-cream"
-                  style={{ fontSize: 'clamp(3rem, 10vw, 4.5rem)' }}
-                >
-                  Girki
-                </span>
+              <Link to="/" aria-label="Girki home" className="inline-block">
+                <img
+                  src="/brand/girki-wordmark-orange.png"
+                  alt=""
+                  width={300}
+                  height={122}
+                  className="h-12 w-auto sm:h-14 md:h-16"
+                />
               </Link>
               <p className="mt-4 max-w-xs font-heading text-base font-medium leading-relaxed text-girki-cream/85">
                 Private chefs, at your table.
