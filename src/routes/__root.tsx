@@ -53,8 +53,8 @@ export const Route = createRootRoute({
       },
     ],
     links: [
-      { rel: 'icon', href: '/brand/girki-mark-terracotta.png', type: 'image/png' },
-      { rel: 'apple-touch-icon', href: '/brand/girki-mark-terracotta.png' },
+      { rel: 'icon', href: '/brand/girki-favicon.jpg', type: 'image/jpeg' },
+      { rel: 'apple-touch-icon', href: '/brand/girki-favicon.jpg' },
       {
         rel: 'stylesheet',
         href: appCss,
