@@ -35,6 +35,7 @@ Health check (after deploy): `GET /api/health` → `{ "ok": true }`.
    - `APP_URL` (canonical HTTPS origin)
    - `VITE_MEDIA_CDN` (R2 / CDN URL for images)
    - `SHOWCASE_ONLY_CHEFS` / `VITE_SHOWCASE_ONLY_CHEFS` until live booking is on
+   - `VITE_POSTHOG_KEY` (+ optional `VITE_POSTHOG_HOST`) for [PostHog](https://us.posthog.com/project/651890) analytics
    - Integrations as needed: `RESEND_API_KEY`, `MAIL_FROM`, Twilio, Sumsub, Google OAuth for Supabase
 3. Update `public/sitemap.xml` and `public/robots.txt` **Sitemap** URL to match `APP_URL`.
 4. Deploy; CI runs **typecheck + build** on PRs and `main` (`.github/workflows/ci.yml`).

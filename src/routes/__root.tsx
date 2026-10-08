@@ -1,5 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 
+import PostHogAnalytics from '../components/analytics/PostHogAnalytics'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
@@ -53,8 +54,8 @@ export const Route = createRootRoute({
       },
     ],
     links: [
-      { rel: 'icon', href: '/brand/girki-mark-terracotta.png', type: 'image/png' },
-      { rel: 'apple-touch-icon', href: '/brand/girki-mark-terracotta.png' },
+      { rel: 'icon', href: '/brand/girki-favicon.jpg', type: 'image/jpeg' },
+      { rel: 'apple-touch-icon', href: '/brand/girki-favicon.jpg' },
       {
         rel: 'stylesheet',
         href: appCss,
@@ -71,7 +72,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased">
-        {children}
+        <PostHogAnalytics>{children}</PostHogAnalytics>
         <Scripts />
       </body>
     </html>

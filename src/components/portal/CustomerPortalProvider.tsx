@@ -6,6 +6,7 @@ import {
   getAuthProfileFn,
   signOutFn,
 } from '../../lib/auth.functions'
+import { resetPostHogIdentity } from '../../lib/auth-client'
 import { createSupabaseBrowserClient } from '../../lib/supabase/browser'
 import { marketplaceRepository } from '../../lib/marketplace.functions'
 import type { CustomerDashboardData } from '../../lib/marketplace/types'
@@ -97,6 +98,7 @@ export default function CustomerPortalProvider({ children }: { children: ReactNo
         } catch {
           // Cookie clear is enough.
         }
+        resetPostHogIdentity()
         setProfile(null)
         setData(null)
       },

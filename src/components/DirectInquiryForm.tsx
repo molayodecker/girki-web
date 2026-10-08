@@ -1,11 +1,14 @@
 import { type FormEvent, useState } from 'react'
+import { usePostHog } from '@posthog/react'
 import type { Chef } from '../data/marketplace'
 import { marketplaceRepository } from '../lib/marketplace.functions'
+import { posthogLoggerInfo } from '../lib/posthog-logs'
 
 const inputClass =
   'min-h-12 w-full rounded-2xl border border-ploy-border-primary bg-ploy-neutral-primary-s0 px-4 outline-none transition-colors focus:border-ploy-accent-tertiary'
 
 export default function DirectInquiryForm({ chef }: { chef: Chef }) {
+  const posthog = usePostHog()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
@@ -44,6 +47,9 @@ export default function DirectInquiryForm({ chef }: { chef: Chef }) {
         currency: 'GHS',
       })
       setConfirmationId(inquiry.id)
+      const logAttributes = { chef_id: chef.id }
+      posthog.capture('direct_inquiry_submitted', logAttributes)
+      posthogLoggerInfo(posthog, 'direct_inquiry_submitted', logAttributes)
     } catch (submitError) {
       setError(submitError instanceof Error ? submitError.message : 'Unable to send this inquiry.')
     } finally {

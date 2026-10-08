@@ -69,6 +69,11 @@ export const createInquiryFn = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     const live = await import('./marketplace.server')
     const inquiry = await live.createInquiry(data)
+    const { posthogServerLoggerInfo } = await import('./posthog-logs.server')
+    posthogServerLoggerInfo('direct_inquiry_created', {
+      chef_id: inquiry.chefId,
+      currency: inquiry.currency,
+    })
     try {
       const notify = await import('./chef-notify.server')
       await notify.notifyInquiry(inquiry)
