@@ -1,4 +1,5 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
+import { usePostHog } from '@posthog/react'
 import { useEffect, useState, type ReactNode } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -45,6 +46,7 @@ type Step =
 
 function ChefOnboardingPage() {
   const navigate = useNavigate()
+  const posthog = usePostHog()
   const [step, setStep] = useState<Step>('personal')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -221,7 +223,10 @@ function ChefOnboardingPage() {
                   className="btn btn-primary min-h-11"
                   onClick={() => {
                     void submitChefApplicationFn()
-                      .then(() => setStep('done'))
+                      .then(() => {
+                        posthog.capture('chef_application_submitted')
+                        setStep('done')
+                      })
                       .catch((err: unknown) => {
                         setError(err instanceof Error ? err.message : 'Unable to submit.')
                       })

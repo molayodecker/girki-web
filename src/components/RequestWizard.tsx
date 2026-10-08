@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { usePostHog } from '@posthog/react'
 import { LocateFixed, MapPin } from 'lucide-react'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
@@ -19,6 +20,7 @@ import {
   type UserLocation,
 } from '../data/marketplace'
 import { detectUserLocation, geolocationErrorMessage } from '../lib/geolocation'
+import { posthogLoggerInfo } from '../lib/posthog-logs'
 
 const occasionImages: Record<string, string> = {
   'date-night': images.dateNight,
@@ -121,6 +123,7 @@ export default function RequestWizard({
   initial?: Partial<ChefRequest>
 }) {
   const navigate = useNavigate()
+  const posthog = usePostHog()
   const seeded = useMemo(
     () =>
       Object.fromEntries(
@@ -220,11 +223,20 @@ export default function RequestWizard({
       return
     }
     if (stageIndex < stages.length - 1) {
+      posthog.capture('chef_request_step_completed', { step: stage.id })
       setStageIndex((index) => index + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
     window.sessionStorage.setItem(requestStorageKey, JSON.stringify(request))
+    const logAttributes = {
+      cuisine: request.cuisine,
+      service_type: request.serviceType,
+      guest_range: request.guests,
+      budget_range: request.budget,
+    }
+    posthog.capture('chef_request_submitted', logAttributes)
+    posthogLoggerInfo(posthog, 'chef_request_submitted', logAttributes)
     void navigate({ to: '/request/proposals' })
   }
 

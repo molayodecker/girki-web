@@ -1,5 +1,6 @@
 import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
 
+import PostHogAnalytics from '../components/analytics/PostHogAnalytics'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
@@ -71,7 +72,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="font-sans antialiased">
-        {children}
+        <PostHogAnalytics>{children}</PostHogAnalytics>
         <Scripts />
       </body>
     </html>

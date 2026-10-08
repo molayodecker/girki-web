@@ -15,6 +15,9 @@ export default defineConfig(({ mode }) => {
       // Vite's prebundle drops seroval's isStream export, which blocks client hydration.
       exclude: ['seroval'],
     },
+    ssr: {
+      noExternal: ['posthog-js', '@posthog/react'],
+    },
     plugins: [
       ...(isProduction ? [] : [devtools()]),
       tailwindcss(),

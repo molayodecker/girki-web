@@ -12,6 +12,32 @@ import {
   type SignupIntent,
 } from '../lib/validation/auth'
 
+export const POSTHOG_AUTH_IDENTIFIED_EVENT = 'posthog:auth-identified'
+export const POSTHOG_AUTH_RESET_EVENT = 'posthog:auth-reset'
+
+export type PostHogIdentity = {
+  distinctId: string
+  email?: string
+  name?: string
+  role?: string
+}
+
+export function notifyPostHogIdentity(identity?: PostHogIdentity) {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(
+      new CustomEvent<PostHogIdentity | undefined>(POSTHOG_AUTH_IDENTIFIED_EVENT, {
+        detail: identity,
+      }),
+    )
+  }
+}
+
+export function resetPostHogIdentity() {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(POSTHOG_AUTH_RESET_EVENT))
+  }
+}
+
 export function setSignupIntent(intent: SignupIntent) {
   if (typeof window === 'undefined') return
   window.sessionStorage.setItem(SIGNUP_INTENT_KEY, intent)
@@ -75,6 +101,7 @@ export async function verifyPhoneOtp(rawPhone: string, token: string) {
     }
     const { completeMockPhoneLoginFn } = await import('./auth.functions')
     await completeMockPhoneLoginFn({ data: { intent: getSignupIntent() } })
+    notifyPostHogIdentity()
     return {
       session: { access_token: 'mock' },
       user: { id: 'mock', phone },
@@ -89,6 +116,7 @@ export async function verifyPhoneOtp(rawPhone: string, token: string) {
   })
   if (error) throw new Error(error.message)
   if (!data.session || !data.user) throw new Error('Verification failed. Try again.')
+  notifyPostHogIdentity()
   return data
 }
 
@@ -124,6 +152,7 @@ export async function signInWithEmailPassword(email: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) throw new Error(error.message)
   if (!data.session || !data.user) throw new Error('Sign in failed. Try again.')
+  notifyPostHogIdentity()
   return data
 }
 
@@ -136,6 +165,7 @@ export async function signUpWithEmailPassword(email: string, password: string) {
     options: { emailRedirectTo },
   })
   if (error) throw new Error(error.message)
+  if (data.session && data.user) notifyPostHogIdentity()
   return data
 }
 
@@ -146,10 +176,12 @@ export async function exchangeAuthCode(url: string) {
   if (code) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     if (error) throw new Error(error.message)
+    if (data.session && data.user) notifyPostHogIdentity()
     return data
   }
   const { data, error } = await supabase.auth.getSession()
   if (error) throw new Error(error.message)
   if (!data.session) throw new Error('No session returned from provider.')
+  notifyPostHogIdentity()
   return data
 }

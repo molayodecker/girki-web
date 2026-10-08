@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { usePostHog } from '@posthog/react'
 import { ArrowUpRight, Search, Users } from 'lucide-react'
 import DatePicker from './DatePicker'
 import LocationAutocomplete from './LocationAutocomplete'
@@ -15,6 +16,7 @@ const guestSearchMap: Record<string, string> = {
 
 export default function HomeHero() {
   const navigate = useNavigate()
+  const posthog = usePostHog()
   const [city, setCity] = useState('')
   const [date, setDate] = useState('')
   const [guests, setGuests] = useState('2 guests')
@@ -22,6 +24,7 @@ export default function HomeHero() {
 
   function onSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    posthog.capture('chef_search_submitted')
     void navigate({
       to: '/request',
       search: {
