@@ -1,9 +1,12 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link, useNavigate } from '@tanstack/react-router'
+import { usePostHog } from '@posthog/react'
 import AuthLoginPanel from '../auth/AuthLoginPanel'
 import { getChef } from '../../data/marketplace'
 import { ensureAuthProfileFn } from '../../lib/auth.functions'
 import {
+  notifyPostHogIdentity,
+  resetPostHogIdentity,
   signInWithEmailPassword,
   signUpWithEmailPassword,
 } from '../../lib/auth-client'
@@ -22,6 +25,7 @@ import type {
   ChefSession,
 } from '../../lib/marketplace/types'
 import PageShell, { PageIntro } from '../layout/PageShell'
+import { posthogLoggerInfo } from '../../lib/posthog-logs'
 
 type ChefPortalContextValue = {
   session: ChefSession
@@ -46,6 +50,7 @@ export function useChefPortal() {
 }
 
 export default function ChefPortalProvider({ children }: { children: ReactNode }) {
+  const posthog = usePostHog()
   const [session, setSession] = useState<ChefSession | null>(null)
   const [data, setData] = useState<ChefDashboardData | null>(null)
   const [busyId, setBusyId] = useState('')
@@ -67,6 +72,12 @@ export default function ChefPortalProvider({ children }: { children: ReactNode }
         const existing = await getChefSessionFn()
         if (cancelled) return
         if (existing) {
+          notifyPostHogIdentity({
+            distinctId: existing.chefId,
+            email: existing.email,
+            name: existing.displayName,
+            role: 'chef',
+          })
           setSession(existing)
           return
         }
@@ -125,6 +136,9 @@ export default function ChefPortalProvider({ children }: { children: ReactNode }
         try {
           await marketplaceRepository.quoteInquiry(inquiryId, amount)
           await refresh()
+          const logAttributes = { quote_amount: amount, currency: 'GHS' }
+          posthog.capture('chef_quote_sent', logAttributes)
+          posthogLoggerInfo(posthog, 'chef_quote_sent', logAttributes)
         } catch (quoteError) {
           setError(quoteError instanceof Error ? quoteError.message : 'Unable to send quote.')
         } finally {
@@ -172,11 +186,12 @@ export default function ChefPortalProvider({ children }: { children: ReactNode }
         } catch {
           // Cookie clear is enough for portal access.
         }
+        resetPostHogIdentity()
         setSession(null)
         setData(null)
       },
     }
-  }, [busyId, chef, data, displayName, error, session])
+  }, [busyId, chef, data, displayName, error, posthog, session])
 
   if (!session) {
     if (checking) {
@@ -255,6 +270,12 @@ function ChefLogin({
                   await openPortalFromSupabase()
                 } catch {
                   const session = await chefLoginFn({ data: { email, password } })
+                  notifyPostHogIdentity({
+                    distinctId: session.chefId,
+                    email: session.email,
+                    name: session.displayName,
+                    role: 'chef',
+                  })
                   onSignedIn(session)
                 }
               }}
