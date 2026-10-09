@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { images } from '../data/home'
@@ -27,7 +28,96 @@ const modes = [
   },
 ] as const
 
-const pathAccentBase = 'font-display-serif text-[1.45em] leading-none'
+const pathTones = {
+  terracotta: 'path-word--terracotta',
+  plum: 'path-word--plum',
+  palm: 'path-word--palm',
+  amber: 'path-word--amber',
+  wine: 'path-word--wine',
+  forest: 'path-word--forest',
+  teal: 'path-word--teal',
+  navy: 'path-word--navy',
+} as const
+
+function PathWord({
+  children,
+  tone,
+  index,
+  italic = false,
+}: {
+  children: string
+  tone: keyof typeof pathTones
+  index: number
+  italic?: boolean
+}) {
+  return (
+    <span
+      className={`path-word ${pathTones[tone]}${italic ? ' path-word--italic' : ''}`}
+      style={{ '--path-i': index } as CSSProperties}
+    >
+      {children}
+    </span>
+  )
+}
+
+function PathLine() {
+  const lineRef = useRef<HTMLParagraphElement>(null)
+  const [ready, setReady] = useState(false)
+
+  useEffect(() => {
+    const line = lineRef.current
+    if (!line) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+        setReady(true)
+        observer.disconnect()
+      },
+      { threshold: 0.55 },
+    )
+    observer.observe(line)
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <p ref={lineRef} className={`path-line${ready ? ' is-ready' : ''}`}>
+      <span className="path-sentence">
+        <PathWord tone="terracotta" index={0}>
+          Two
+        </PathWord>{' '}
+        <PathWord tone="plum" index={1}>
+          ways
+        </PathWord>{' '}
+        <span className="path-plain">to</span>{' '}
+        <PathWord tone="palm" index={2}>
+          eat
+        </PathWord>{' '}
+        <PathWord tone="forest" index={3} italic>
+          well
+        </PathWord>
+        <span className="path-plain">.</span>
+      </span>
+      <span className="path-sentence">
+        <PathWord tone="wine" index={4}>
+          Same
+        </PathWord>{' '}
+        <PathWord tone="amber" index={5}>
+          chefs
+        </PathWord>
+        <span className="path-plain">.</span>{' '}
+        <PathWord tone="teal" index={6}>
+          Different
+        </PathWord>{' '}
+        <PathWord tone="navy" index={7} italic>
+          nights
+        </PathWord>
+        <span className="path-plain">.</span>
+      </span>
+    </p>
+  )
+}
 
 export default function HomeChooseMode() {
   return (
@@ -39,18 +129,7 @@ export default function HomeChooseMode() {
         <p className="font-heading text-[0.65rem] font-semibold tracking-[0.42em] text-[#1c1418]/55">
           PICK YOUR PATH
         </p>
-        <p className="mt-3 max-w-md text-lg text-[#1c1418]/85">
-          <span className="font-heading font-semibold">
-            <span className={`${pathAccentBase} text-ploy-accent-secondary`}>Two</span> ways to
-            eat well.
-          </span>{' '}
-          <span className="font-heading font-medium">
-            Same{' '}
-            <span className={`${pathAccentBase} text-ploy-accent-primary`}>chefs</span>.{' '}
-            <span className={`${pathAccentBase} text-girki-saffron`}>Different</span>{' '}
-            <span className={`${pathAccentBase} text-[#1e4d3a]`}>nights</span>.
-          </span>
-        </p>
+        <PathLine />
 
         <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-0">
           {modes.map((mode, modeIndex) => (
