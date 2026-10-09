@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap");
 @import "./styles/portal-fonts.css";
 @import "tailwindcss";
 
@@ -389,6 +389,140 @@
   font-weight: normal;
   line-height: 1;
   speak: never;
+}
+
+.path-line {
+  max-width: 38rem;
+  margin-top: 0.85rem;
+  font-size: clamp(1.7rem, 4.4vw, 2.75rem);
+  line-height: 1.15;
+  color: #1c1418;
+  text-wrap: balance;
+}
+
+.path-sentence {
+  display: block;
+}
+
+.path-sentence + .path-sentence {
+  margin-top: 0.12em;
+}
+
+.path-plain {
+  font-family: var(--font-heading);
+  font-size: 0.58em;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  color: rgb(28 20 24 / 0.62);
+}
+
+.path-word {
+  --path-i: 0;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.14em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 72;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+}
+
+.path-word--italic {
+  font-style: italic;
+  font-weight: 600;
+}
+
+.path-word::after {
+  content: "";
+  position: absolute;
+  right: 0.04em;
+  bottom: 0.02em;
+  left: 0.04em;
+  height: 0.09em;
+  border-radius: 999px;
+  background: currentColor;
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+.path-word--terracotta {
+  color: #e85c32;
+}
+
+.path-word--plum {
+  color: #6b2f45;
+}
+
+.path-word--palm {
+  color: #2e5340;
+}
+
+.path-word--amber {
+  color: #8a5608;
+}
+
+.path-word--wine {
+  color: #9b2c4a;
+}
+
+.path-word--forest {
+  color: #1b6b52;
+}
+
+.path-word--teal {
+  color: #0e6e66;
+}
+
+.path-word--navy {
+  color: #243e6a;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .path-line.is-ready .path-word {
+    animation: girki-path-in 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--path-i) * 90ms);
+  }
+
+  .path-line.is-ready .path-word::after {
+    animation:
+      girki-path-mark 0.55s cubic-bezier(0.22, 1, 0.36, 1) both,
+      girki-path-mark-live 2.6s ease-in-out calc(1s + var(--path-i) * 140ms) infinite;
+  }
+}
+
+@keyframes girki-path-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.42em) rotate(-2.5deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes girki-path-mark {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes girki-path-mark-live {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+
+  45% {
+    opacity: 1;
+  }
 }
 
 @keyframes girki-marquee {
